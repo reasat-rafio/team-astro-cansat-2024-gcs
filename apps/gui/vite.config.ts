@@ -5,7 +5,9 @@ export default defineConfig({
 	plugins: [sveltekit()],
 	resolve: {
 		alias: {
-			mqtt: 'mqtt/dist/mqtt.js'
+			mqtt: 'mqtt/dist/mqtt.js',
+			$components: './src/components/*',
+			$store: './src/store/*'
 		}
 	}
 });
