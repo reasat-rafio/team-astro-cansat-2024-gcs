@@ -1,2 +1,14 @@
-<h1>Welcome to SvelteKit</h1>
-<p>Visit <a href="https://kit.svelte.dev">kit.svelte.dev</a> to read the documentation</p>
+<script lang="ts">
+	import mqtt from 'mqtt';
+
+	const mqttClient = mqtt.connect('mqtt://localhost:8080');
+
+	mqttClient.on('error', (err) => {
+		console.log(`ERROR: ${err}`);
+		mqttClient.end();
+	});
+
+	mqttClient.on('connect', function () {
+		console.log('Yo');
+	});
+</script>
