@@ -34,9 +34,7 @@ class MqttHandler {
 			switch (topic) {
 				case 'temperature':
 					try {
-						console.log('=============temperature=======================');
 						console.log(message);
-						console.log('====================================');
 					} catch (error) {
 						console.log(error);
 					}
