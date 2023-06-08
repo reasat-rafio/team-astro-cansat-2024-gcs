@@ -1,27 +1,82 @@
-import mqtt from 'mqtt';
+import mqtt, { MqttClient } from 'mqtt';
 
-const brokerUrl = 'mqtt://localhost:8080';
-// const topic = 'my/topic';
+class MqttHandler {
+	private mqttClient: MqttClient | null;
+	private host: string;
 
-const mqttClient = mqtt.connect(brokerUrl);
+	constructor() {
+		this.mqttClient = null;
+		this.host = 'mqtt://localhost:8080';
+	}
 
-mqttClient.on('connect', () => {
-	console.log('Connected to MQTT broker');
-});
+	connect() {
+		this.mqttClient = mqtt.connect(this.host);
 
-mqttClient.on('error', (err) => {
-	console.log(`MQTT client Error: ${err}`);
-	mqttClient.end();
-});
+		// Mqtt error calback
+		this.mqttClient.on('error', (err) => {
+			console.log(`ERROR: ${err}`);
+			this.mqttClient?.end();
+		});
 
-// Publish a message
-// const message = 'Hello, MQTT!';
-// mqttClient.publish(topic, message, { qos: 1 }, (error?: Error) => {
-// 	if (error) {
-// 		console.error('Failed to publish message:', error);
-// 	} else {
-// 		console.log('Message published successfully');
-// 	}
-// });
+		// Connection callback
+		this.mqttClient.on('connect', () => {
+			console.log(`mqtt client connected`);
+		});
 
-export default mqttClient;
+		this.mqttClient.subscribe('temperature', (err) => {
+			if (err) {
+				console.log(err);
+			}
+		});
+
+		// When a message arrives, do magic
+		this.mqttClient.on('message', async (topic, message) => {
+			switch (topic) {
+				case 'temperature':
+					try {
+						console.log('=============temperature=======================');
+						console.log(message);
+						console.log('====================================');
+					} catch (error) {
+						console.log(error);
+					}
+					break;
+				default:
+					break;
+			}
+		});
+
+		this.mqttClient.on('close', () => {
+			console.log(`mqtt client disconnected`);
+		});
+	}
+
+	// publish temperature
+	sendTemperature() {
+		const body = (50 + Math.random() * 20).toFixed(2);
+		const core = (90 + Math.random() * 10).toFixed(2);
+		const payload = (60 + Math.random() * 30).toFixed(2);
+		const time = new Date().toLocaleTimeString();
+
+		this.mqttClient?.publish(
+			'temperature',
+			JSON.stringify({
+				body,
+				core,
+				payload,
+				time
+			})
+		);
+		console.log(
+			`body temperature = ${body}F, core temperature = ${core}F, payload temperature = ${payload}F successfully published`
+		);
+	}
+	// publish orbitPosition
+	sendOrbitPosition() {
+		const time = new Date().toLocaleString();
+		const data = Math.random() * 200;
+		this.mqttClient?.publish('orbitPosition', JSON.stringify({ time, data }));
+	}
+}
+
+export default MqttHandler;
