@@ -1,8 +1,10 @@
-import mqtt, { MqttClient } from 'mqtt';
+import mqtt from 'mqtt';
+import chalk from 'chalk';
+import type { MqttClient } from 'mqtt';
 
 class MqttHandler {
 	private mqttClient: MqttClient | null;
-	private host: string;
+	private host: string | null = null;
 
 	constructor() {
 		this.mqttClient = null;
@@ -23,20 +25,34 @@ class MqttHandler {
 			console.log(`mqtt client connected`);
 		});
 
-		this.mqttClient.subscribe('temperature', (err) => {
-			if (err) {
-				console.log(err);
-			}
-		});
-
 		// When a message arrives, do magic
 		this.mqttClient.on('message', async (topic, message) => {
+			let decodedMessage: string;
+			const decoder = new TextDecoder('utf8');
+
 			switch (topic) {
 				case 'temperature':
 					try {
-						console.log(message);
+						decodedMessage = decoder.decode(message);
+						console.log(
+							`type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
+								topic
+							)}, message = ${chalk.bold.bgRed(decodedMessage)}`
+						);
 					} catch (error) {
 						console.log(error);
+					}
+					break;
+				case 'orbit':
+					try {
+						decodedMessage = decoder.decode(message);
+						console.log(
+							`type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
+								topic
+							)}, message = ${chalk.bold.bgRed(decodedMessage)}`
+						);
+					} catch (error) {
+						console.log('error');
 					}
 					break;
 				default:
@@ -47,6 +63,22 @@ class MqttHandler {
 		this.mqttClient.on('close', () => {
 			console.log(`mqtt client disconnected`);
 		});
+	}
+
+	subToTemp() {
+		this.mqttClient?.subscribe('temperature', (err) => {
+			if (err) console.log(err);
+		});
+	}
+
+	subToOrbit() {
+		this.mqttClient?.subscribe('orbit', (err) => {
+			if (err) console.log(err);
+		});
+	}
+
+	isConnected() {
+		return this.mqttClient?.connected;
 	}
 
 	// publish temperature
@@ -65,15 +97,25 @@ class MqttHandler {
 				time
 			})
 		);
+
 		console.log(
-			`body temperature = ${body}F, core temperature = ${core}F, payload temperature = ${payload}F successfully published`
+			`type = ${chalk.bold.bgRed('pub')}, topic = ${chalk.bold.bgGreen(
+				'temperature'
+			)}, message = ${chalk.bold.bgBlue(
+				`body temperature = ${body}F, core temperature = ${core}F, payload temperature = ${payload}F successfully published`
+			)}`
 		);
 	}
 	// publish orbitPosition
 	sendOrbitPosition() {
 		const time = new Date().toLocaleString();
 		const data = Math.random() * 200;
-		this.mqttClient?.publish('orbitPosition', JSON.stringify({ time, data }));
+		this.mqttClient?.publish('orbit', JSON.stringify({ time, data }));
+		console.log(
+			`type = ${chalk.bold.bgRed('pub')}, topic = ${chalk.bold.bgGreen(
+				'orbit'
+			)}, message = ${chalk.bold.bgBlue(`time = ${time}s, data = ${data} `)}`
+		);
 	}
 }
 
