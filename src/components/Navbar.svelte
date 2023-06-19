@@ -1,7 +1,7 @@
 <script>
   import { AppBar } from "@skeletonlabs/skeleton";
-    import VisualIcon from "./icons/VisualIcon.svelte";
-    import HomeIcon from "./icons/HomeIcon.svelte";
+  import VisualIcon from "@components/icons/VisualIcon.svelte";
+  import HomeIcon from "@components/icons/HomeIcon.svelte";
 
   const navItems = [
     { name: "Home", icon: HomeIcon, url: "/" },
