@@ -1,4 +1,4 @@
-lockfileVersion: '6.1'
+lockfileVersion: '6.0'
 
 settings:
   autoInstallPeers: true
@@ -36,6 +36,9 @@ importers:
       '@prisma/client':
         specifier: ^4.14.1
         version: 4.14.1(prisma@4.14.1)
+      '@skeletonlabs/skeleton':
+        specifier: ^1.7.1
+        version: 1.7.1
       '@sveltejs/adapter-auto':
         specifier: ^2.0.0
         version: 2.0.0(@sveltejs/kit@1.5.0)
@@ -110,7 +113,7 @@ importers:
         version: 1.10.3(eslint@8.28.0)
       eslint-plugin-svelte3:
         specifier: ^4.0.0
-        version: 4.0.0(eslint@8.28.0)(svelte@3.54.0)
+        version: 4.0.0(eslint@8.28.0)(svelte@3.58.0)
 
 packages:
 
@@ -512,6 +515,13 @@ packages:
   /@prisma/engines@4.14.1:
     resolution: {integrity: sha512-APqFddPVHYmWNKqc+5J5SqrLFfOghKOLZxobmguDUacxOwdEutLsbXPVhNnpFDmuQWQFbXmrTTPoRrrF6B1MWA==}
     requiresBuild: true
+    dev: true
+
+  /@skeletonlabs/skeleton@1.7.1:
+    resolution: {integrity: sha512-464uXRBzKzhZ5UgoBk7JvUDbYvcZpbThuC0ZLEiG8XKQhcabDUEdgZtVUAXmR8+L/vs247iVZZP1OHpW8Uexgg==}
+    dependencies:
+      esm-env: 1.0.0
+      svelte: 3.58.0
     dev: true
 
   /@sveltejs/adapter-auto@2.0.0(@sveltejs/kit@1.5.0):
@@ -1448,14 +1458,14 @@ packages:
       eslint-plugin-turbo: 1.10.3(eslint@8.28.0)
     dev: false
 
-  /eslint-plugin-svelte3@4.0.0(eslint@8.28.0)(svelte@3.54.0):
+  /eslint-plugin-svelte3@4.0.0(eslint@8.28.0)(svelte@3.58.0):
     resolution: {integrity: sha512-OIx9lgaNzD02+MDFNLw0GEUbuovNcglg+wnd/UY0fbZmlQSz7GlQiQ1f+yX0XvC07XPcDOnFcichqI3xCwp71g==}
     peerDependencies:
       eslint: '>=8.0.0'
       svelte: ^3.2.0
     dependencies:
       eslint: 8.28.0
-      svelte: 3.54.0
+      svelte: 3.58.0
     dev: false
 
   /eslint-plugin-svelte@2.26.0(eslint@8.28.0)(svelte@3.54.0):
@@ -3184,6 +3194,11 @@ packages:
 
   /svelte@3.54.0:
     resolution: {integrity: sha512-tdrgeJU0hob0ZWAMoKXkhcxXA7dpTg6lZGxUeko5YqvPdJBiyRspGsCwV27kIrbrqPP2WUoSV9ca0gnLlw8YzQ==}
+    engines: {node: '>= 8'}
+    dev: true
+
+  /svelte@3.58.0:
+    resolution: {integrity: sha512-brIBNNB76mXFmU/Kerm4wFnkskBbluBDCjx/8TcpYRb298Yh2dztS2kQ6bhtjMcvUhd5ynClfwpz5h2gnzdQ1A==}
     engines: {node: '>= 8'}
 
   /swap-case@1.1.2:
