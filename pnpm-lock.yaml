@@ -64,6 +64,9 @@ devDependencies:
   svelte-check:
     specifier: ^3.0.1
     version: 3.4.3(postcss@8.4.24)(svelte@3.59.1)
+  svelte-fusioncharts:
+    specifier: ^1.0.0
+    version: 1.0.0
   tailwindcss:
     specifier: ^3.3.2
     version: 3.3.2
@@ -2166,6 +2169,10 @@ packages:
       postcss: 8.4.24
       postcss-scss: 4.0.6(postcss@8.4.24)
       svelte: 3.59.1
+    dev: true
+
+  /svelte-fusioncharts@1.0.0:
+    resolution: {integrity: sha512-OZk9thwMBHts7TVVIcTT8l9oEgzy6ppXLOtdf7gazobefddW3a0IXqe4mbBDWqLqxXBDyAePmRafZnu8Pc3rng==}
     dev: true
 
   /svelte-hmr@0.15.2(svelte@3.59.1):
