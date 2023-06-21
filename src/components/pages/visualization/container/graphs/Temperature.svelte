@@ -13,7 +13,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import zoomPlugin from 'chartjs-plugin-zoom';
+  import ZoomPlugin from 'chartjs-plugin-zoom';
 
   ChartJS.register(
     Title,
@@ -23,23 +23,20 @@
     LinearScale,
     PointElement,
     CategoryScale,
-    zoomPlugin
+    ZoomPlugin
   );
 
   let labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
   let data = [65, 59, 80, 81, 56, 55, 40];
-  let delayed: boolean;
 
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
 
   onMount(() => {
     if (chart)
       setInterval(() => {
-        chart!!.data.datasets[0].data = [
-          ...chart!!.data.datasets[0].data,
-          Math.random() * 100
-        ];
-        chart!!.data.labels = [...chart!!.data.labels, 'asd'];
+        chart?.data.datasets[0].data.push(Math.random() * 100);
+        chart?.data.labels?.push('asd');
+        chart?.update();
       }, 1000);
   });
 </script>
@@ -73,40 +70,28 @@
       ]
     }}
     options={{
-      //   animation: {
-      //     onComplete: () => {
-      //       delayed = true;
-      //     },
-      //     delay: (context) => {
-      //       let delay = 0;
-      //       if (
-      //         context.type === 'data' &&
-      //         context.mode === 'default' &&
-      //         !delayed
-      //       ) {
-      //         delay = context.dataIndex * 150 + context.datasetIndex * 40;
-      //       }
-      //       return delay;
-      //     }
-      //   },
       responsive: true,
       plugins: {
-        // zoom: {
-        //   pan: {
-        //     enabled: true,
-        //     mode: 'xy',
-        //     threshold: 5
-        //   },
-        //   zoom: {
-        //     wheel: {
-        //       enabled: true
-        //     },
-        //     pinch: {
-        //       enabled: true
-        //     },
-        //     mode: 'xy'
-        //   }
-        // },
+        zoom: {
+          limits: {
+            x: { min: 0.5, max: 2e3, minRange: 100 },
+            y: { min: 0, max: 200, minRange: 10 }
+          },
+          pan: {
+            enabled: true,
+            mode: 'xy',
+            threshold: 5
+          },
+          zoom: {
+            wheel: {
+              enabled: true
+            },
+            pinch: {
+              enabled: true
+            },
+            mode: 'xy'
+          }
+        },
         legend: {
           position: 'top'
         },
