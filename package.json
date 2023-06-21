@@ -37,7 +37,10 @@
   "type": "module",
   "dependencies": {
     "chalk": "^5.2.0",
+    "chart.js": "^4.0.0",
+    "chartjs-plugin-zoom": "^2.0.1",
     "mqtt": "^4.0.1",
-    "prettier-plugin-tailwindcss": "^0.3.0"
+    "prettier-plugin-tailwindcss": "^0.3.0",
+    "svelte-chartjs": "^3.0.0"
   }
 }
