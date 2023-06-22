@@ -1,0 +1,111 @@
+<script lang="ts">
+  import { Line } from 'svelte-chartjs';
+
+  import {
+    Chart as ChartJS,
+    Title,
+    Tooltip,
+    Legend,
+    LineElement,
+    LinearScale,
+    PointElement,
+    CategoryScale
+  } from 'chart.js';
+  import { onMount } from 'svelte';
+  import type { Point } from 'chart.js/dist/core/core.controller';
+  import ZoomPlugin from 'chartjs-plugin-zoom';
+
+  ChartJS.register(
+    Title,
+    Tooltip,
+    Legend,
+    LineElement,
+    LinearScale,
+    PointElement,
+    CategoryScale,
+    ZoomPlugin
+  );
+
+  let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
+
+  // onMount(() => {
+  //   if (chart) {
+  //     $temperature.value.forEach((d) => chart?.data.datasets[0].data.push(d));
+  //     $temperature.time.forEach((d) => chart?.data.labels!!.push(d));
+  //     chart.update();
+  //   }
+  // });
+
+  // function updateGraph() {
+  //   if (chart) {
+  //     chart.data.datasets[0].data.push(
+  //       $temperature.value[$temperature.value.length - 1]
+  //     );
+  //     chart.data.labels?.push($temperature.time[$temperature.time.length - 1]);
+  //     chart.update();
+  //   }
+  // }
+
+  // $: $temperature, updateGraph();
+</script>
+
+<Line
+  bind:chart
+  data={{
+    labels: ['1', '2', '3', '4', '5'],
+    datasets: [
+      {
+        label: 'Temperature',
+        fill: true,
+        backgroundColor: 'rgba(54, 162, 235, 0.3)',
+        borderColor: 'rgb(75, 192, 192)',
+        borderCapStyle: 'butt',
+        borderDash: [],
+        borderDashOffset: 0.0,
+        borderJoinStyle: 'miter',
+        pointBorderColor: 'rgba(54, 162, 235, 0.3)',
+        pointBackgroundColor: 'rgb(255, 255, 255)',
+        pointBorderWidth: 10,
+        pointHoverRadius: 5,
+        pointHoverBackgroundColor: 'rgb(255, 255, 255)',
+        pointHoverBorderColor: 'rgba(0, 0, 0, 1)',
+        pointHoverBorderWidth: 2,
+        pointRadius: 1,
+        pointHitRadius: 10,
+        data: [33, 12, 77, 55, 13, 51]
+      }
+    ]
+  }}
+  options={{
+    responsive: true,
+    plugins: {
+      zoom: {
+        limits: {
+          x: { min: 0.5, max: 2e3, minRange: 100 },
+          y: { min: 0, max: 200, minRange: 10 }
+        },
+        pan: {
+          enabled: true,
+          mode: 'xy',
+          threshold: 5
+        },
+        zoom: {
+          wheel: {
+            enabled: true
+          },
+          pinch: {
+            enabled: true
+          },
+          mode: 'xy'
+        }
+      },
+      legend: {
+        position: 'top'
+      },
+      title: {
+        display: true,
+        text: 'Temperature'
+      }
+    }
+  }}
+/>

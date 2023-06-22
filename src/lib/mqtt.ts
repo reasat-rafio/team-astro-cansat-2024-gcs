@@ -10,9 +10,9 @@ class MqttHandler {
     this.mqttClient = null;
     this.connect();
 
-    // setInterval(() => {
-    //   this.pubTemperature();
-    // }, 5000);
+    setInterval(() => {
+      this.pubTemperature();
+    }, 5000);
   }
 
   connect() {

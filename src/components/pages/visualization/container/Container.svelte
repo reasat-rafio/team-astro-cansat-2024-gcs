@@ -14,6 +14,3 @@
     <Temperature />
   </div>
 </section>
-
-<style>
-</style>
