@@ -14,6 +14,7 @@
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
   import ZoomPlugin from 'chartjs-plugin-zoom';
+  import { temperature } from '@stores/data.store';
 
   ChartJS.register(
     Title,
@@ -26,25 +27,31 @@
     ZoomPlugin
   );
 
-  let labels = ['January', 'February', 'March', 'April', 'May', 'June', 'July'];
-  let data = [65, 59, 80, 81, 56, 55, 40];
-
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
 
-  onMount(() => {
-    if (chart)
-      setInterval(() => {
-        chart?.data.datasets[0].data.push(Math.random() * 100);
-        chart?.data.labels?.push('asd');
-        chart?.update();
-      }, 1000);
-  });
+  // $: {
+  //   console.log('====================================');
+  //   console.log($temperature);
+  //   console.log('====================================');
+  // }
+
+  function updateGraph() {
+    if (chart) {
+      chart.data.datasets[0].data.push(
+        $temperature.temperature[$temperature.temperature.length - 1]
+      );
+      chart.data.labels?.push($temperature.time[$temperature.time.length - 1]);
+      chart.update();
+    }
+  }
+
+  $: $temperature, updateGraph();
 </script>
 
 <Line
   bind:chart
   data={{
-    labels,
+    labels: [],
     datasets: [
       {
         label: 'Temperature',
@@ -64,7 +71,7 @@
         pointHoverBorderWidth: 2,
         pointRadius: 1,
         pointHitRadius: 10,
-        data
+        data: []
       }
     ]
   }}

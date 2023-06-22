@@ -26,12 +26,12 @@
   let chart: ChartJS<'bar', (number | [number, number])[], unknown> | undefined;
 
   onMount(() => {
-    if (chart)
-      setInterval(() => {
-        chart?.data.datasets[0].data.push(Math.random() * 50);
-        chart?.data.labels?.push('asd');
-        chart?.update();
-      }, 1000);
+    // if (chart)
+    //   setInterval(() => {
+    //     chart?.data.datasets[0].data.push(Math.random() * 50);
+    //     chart?.data.labels?.push('asd');
+    //     chart?.update();
+    //   }, 1000);
   });
 </script>
 

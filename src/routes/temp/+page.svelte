@@ -1,6 +1,6 @@
 <script lang="ts">
-  import MqttHandler from "../../lib/mqtt";
-  import { onMount } from "svelte";
+  import MqttHandler from '../../lib/mqtt';
+  import { onMount } from 'svelte';
 
   let publishTem = true;
   let timer: string | number | NodeJS.Timer | undefined;
@@ -15,7 +15,7 @@
   $: if (publishTem) {
     timer = setInterval(() => {
       if (mqttClient.isConnected()) {
-        mqttClient.sendTemperature();
+        mqttClient.pubTemperature();
       }
     }, 5000);
   } else clearInterval(timer);
