@@ -9,6 +9,7 @@ export const temperature = writable<IData>({
   value: [],
   time: []
 });
+
 export const voltage = writable<IData>({
   value: [],
   time: []

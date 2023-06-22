@@ -1,12 +1,13 @@
 <script lang="ts">
-  import { AppBar } from "@skeletonlabs/skeleton";
-  import VisualIcon from "@components/icons/VisualIcon.svelte";
-  import HomeIcon from "@components/icons/HomeIcon.svelte";
-  import { navbarHeight } from "@stores/ui.store.";
+  import { AppBar } from '@skeletonlabs/skeleton';
+  import VisualIcon from '@components/icons/VisualIcon.svelte';
+  import HomeIcon from '@components/icons/HomeIcon.svelte';
+  import { navbarHeight } from '@stores/ui.store.';
+  import { page } from '$app/stores';
 
   const navItems = [
-    { name: "Home", icon: HomeIcon, url: "/" },
-    { name: "Data Visualization", icon: VisualIcon, url: "/visualization" },
+    { name: 'Home', icon: HomeIcon, url: '/' },
+    { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' }
   ];
 </script>
 
@@ -17,7 +18,12 @@
       <ul class="flex space-x-2">
         {#each navItems as { icon, name, url }}
           <li>
-            <a class="btn hover:variant-ghost" href={url}>
+            <a
+              class="btn {$page.url.pathname === url
+                ? 'variant-ghost-primary'
+                : 'hover:variant-ghost'}"
+              href={url}
+            >
               <span>{name}</span>
               <svelte:component this={icon} />
             </a>
