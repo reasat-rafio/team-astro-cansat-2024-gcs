@@ -11,7 +11,7 @@
   let CorruptedPackets = 0;
 </script>
 
-<div class="h-[20%] space-y-3">
+<div class="space-y-3">
   <div class="flex items-center">
     <header class="flex flex-1 items-end space-x-4">
       <H4>CONTAINER</H4>
