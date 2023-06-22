@@ -29,11 +29,15 @@
 
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
 
-  // $: {
-  //   console.log('====================================');
-  //   console.log($temperature);
-  //   console.log('====================================');
-  // }
+  onMount(() => {
+    if (chart) {
+      $temperature.temperature.forEach((d) =>
+        chart?.data.datasets[0].data.push(d)
+      );
+      $temperature.time.forEach((d) => chart?.data.labels!!.push(d));
+      chart.update();
+    }
+  });
 
   function updateGraph() {
     if (chart) {

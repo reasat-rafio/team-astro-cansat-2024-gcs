@@ -1,13 +1,11 @@
 <script lang="ts">
-  import MqttHandler from '$lib/mqtt';
+  import mqttClient from '$lib/mqtt';
   import Camera from '@components/pages/visualization/Camera.svelte';
   import Container from '@components/pages/visualization/container/Container.svelte';
   import Gps from '@components/pages/visualization/GPS.svelte';
   import Payload from '@components/pages/visualization/Payload.svelte';
   import { navbarHeight } from '@stores/ui.store.';
   import { onMount } from 'svelte';
-
-  const mqttClient = new MqttHandler();
 
   onMount(() => {
     mqttClient.subToTemp();

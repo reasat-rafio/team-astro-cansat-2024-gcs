@@ -16,9 +16,7 @@ class MqttHandler {
   }
 
   connect() {
-    this.mqttClient = this.mqttClient
-      ? this.mqttClient
-      : mqtt.connect('ws://localhost:8080');
+    this.mqttClient = mqtt.connect('ws://localhost:8080');
 
     // Mqtt error calback
     this.mqttClient.on('error', (err) => {
@@ -121,4 +119,5 @@ class MqttHandler {
   }
 }
 
-export default MqttHandler;
+const mqttClient = new MqttHandler();
+export default mqttClient;
