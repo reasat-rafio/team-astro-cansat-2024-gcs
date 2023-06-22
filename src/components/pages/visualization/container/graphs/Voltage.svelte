@@ -12,6 +12,7 @@
     LinearScale
   } from 'chart.js';
   import { onMount } from 'svelte';
+  import { voltage } from '@stores/data.store';
 
   ChartJS.register(
     Title,
@@ -26,23 +27,34 @@
   let chart: ChartJS<'bar', (number | [number, number])[], unknown> | undefined;
 
   onMount(() => {
-    // if (chart)
-    //   setInterval(() => {
-    //     chart?.data.datasets[0].data.push(Math.random() * 50);
-    //     chart?.data.labels?.push('asd');
-    //     chart?.update();
-    //   }, 1000);
+    if (chart) {
+      $voltage.value.forEach((d) => chart?.data.datasets[0].data.push(d));
+      $voltage.time.forEach((d) => chart?.data.labels!!.push(d));
+      chart.update();
+    }
   });
+
+  function updateGraph() {
+    if (chart) {
+      chart.data.datasets[0].data.push(
+        $voltage.value[$voltage.value.length - 1]
+      );
+      chart.data.labels?.push($voltage.time[$voltage.time.length - 1]);
+      chart.update();
+    }
+  }
+
+  $: $voltage, updateGraph();
 </script>
 
 <Bar
   bind:chart
   data={{
-    labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+    labels: [],
     datasets: [
       {
         label: '% of Voltage',
-        data: [12, 19, 3, 5, 2, 3],
+        data: [],
         backgroundColor: ['rgba(255, 134,159,0.4)'],
         borderWidth: 2,
         borderColor: ['rgba(255, 134, 159, 1)']

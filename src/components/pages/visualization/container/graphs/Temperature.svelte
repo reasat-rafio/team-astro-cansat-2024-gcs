@@ -31,9 +31,7 @@
 
   onMount(() => {
     if (chart) {
-      $temperature.temperature.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
-      );
+      $temperature.value.forEach((d) => chart?.data.datasets[0].data.push(d));
       $temperature.time.forEach((d) => chart?.data.labels!!.push(d));
       chart.update();
     }
@@ -42,7 +40,7 @@
   function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $temperature.temperature[$temperature.temperature.length - 1]
+        $temperature.value[$temperature.value.length - 1]
       );
       chart.data.labels?.push($temperature.time[$temperature.time.length - 1]);
       chart.update();

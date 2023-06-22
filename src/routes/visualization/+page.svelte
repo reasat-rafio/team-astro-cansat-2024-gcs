@@ -9,6 +9,7 @@
 
   onMount(() => {
     mqttClient.subToTemp();
+    mqttClient.subToVoltage();
   });
 </script>
 

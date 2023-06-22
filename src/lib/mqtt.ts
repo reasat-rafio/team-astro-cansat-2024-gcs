@@ -1,7 +1,7 @@
 import mqtt from 'mqtt';
 import chalk from 'chalk';
 import type { MqttClient } from 'mqtt';
-import { temperature } from '@stores/data.store';
+import { temperature, voltage } from '@stores/data.store';
 
 class MqttHandler {
   private mqttClient: MqttClient | null;
@@ -10,9 +10,9 @@ class MqttHandler {
     this.mqttClient = null;
     this.connect();
 
-    setInterval(() => {
-      this.pubTemperature();
-    }, 5000);
+    // setInterval(() => {
+    //   this.pubTemperature();
+    // }, 5000);
   }
 
   connect() {
@@ -38,30 +38,38 @@ class MqttHandler {
         case 'temperature':
           try {
             decodedMessage = decoder.decode(message);
-            const { data }: { data: { temperature: string; time: string } } =
+            const { value, time }: { value: string; time: string } =
               JSON.parse(decodedMessage);
 
             temperature.update((t) => ({
-              temperature: [...t.temperature, +data.temperature],
-              time: [...t.time, data.time]
+              value: [...t.value, +value],
+              time: [...t.time, time]
+            }));
+
+            // console.log(
+            //   `type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
+            //     topic
+            //   )}, message = ${chalk.bold.bgRed(decodedMessage)}`
+            // );
+          } catch (error) {
+            console.log(error);
+          }
+          break;
+        case 'voltage':
+          try {
+            decodedMessage = decoder.decode(message);
+            const { value }: { value: string } = JSON.parse(decodedMessage);
+            const time = new Date().toLocaleTimeString();
+
+            voltage.update((t) => ({
+              value: [...t.value, +value],
+              time: [...t.time, time]
             }));
 
             console.log(
               `type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
                 topic
-              )}, message = ${chalk.bold.bgRed(decodedMessage)}`
-            );
-          } catch (error) {
-            console.log(error);
-          }
-          break;
-        case 'orbit':
-          try {
-            decodedMessage = decoder.decode(message);
-            console.log(
-              `type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
-                topic
-              )}, message = ${chalk.bold.bgRed(decodedMessage)}`
+              )}, message = ${chalk.bold.bgRed(value)}`
             );
           } catch (error) {
             console.log('error');
@@ -83,8 +91,8 @@ class MqttHandler {
     });
   }
 
-  subToOrbit() {
-    this.mqttClient?.subscribe('orbit', (err) => {
+  subToVoltage() {
+    this.mqttClient?.subscribe('voltage', (err) => {
       if (err) console.log(err);
     });
   }
@@ -100,8 +108,8 @@ class MqttHandler {
     this.mqttClient?.publish(
       'temperature',
       JSON.stringify({
-        name: 'temperature',
-        data: { temperature, time }
+        value: temperature,
+        time
       })
     );
   }
