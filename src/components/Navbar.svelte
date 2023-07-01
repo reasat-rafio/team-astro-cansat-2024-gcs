@@ -20,7 +20,7 @@
           <li>
             <a
               class="btn {$page.url.pathname === url
-                ? 'variant-ghost-primary'
+                ? 'variant-ghost'
                 : 'hover:variant-ghost'}"
               href={url}
             >

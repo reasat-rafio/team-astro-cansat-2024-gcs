@@ -16,7 +16,7 @@ class MqttHandler {
   }
 
   connect() {
-    this.mqttClient = mqtt.connect('ws://localhost:8080');
+    this.mqttClient = mqtt.connect('ws://127.0.0.1:8080');
 
     // Mqtt error calback
     this.mqttClient.on('error', (err) => {
