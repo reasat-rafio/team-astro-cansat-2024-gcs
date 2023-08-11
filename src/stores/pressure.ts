@@ -13,7 +13,7 @@ function createPressureStore() {
 
   return {
     subscribe,
-    add: ({ time, value }: { time: string; value: number }) =>
+    update: ({ time, value }: { time: string; value: number }) =>
       update(($data) => {
         $data.value = [...$data.value, value];
         $data.time = [...$data.time, time];
@@ -23,4 +23,5 @@ function createPressureStore() {
   };
 }
 
-export const temperatureStore = createPressureStore();
+const pressureStore = createPressureStore();
+export default pressureStore;

@@ -13,7 +13,7 @@ function createTemperatureStore() {
 
   return {
     subscribe,
-    add: ({ time, value }: { time: string; value: number }) =>
+    update: ({ time, value }: { time: string; value: number }) =>
       update(($data) => {
         $data.value = [...$data.value, value];
         $data.time = [...$data.time, time];
@@ -23,4 +23,5 @@ function createTemperatureStore() {
   };
 }
 
-export const temperatureStore = createTemperatureStore();
+const temperatureStore = createTemperatureStore();
+export default temperatureStore;
