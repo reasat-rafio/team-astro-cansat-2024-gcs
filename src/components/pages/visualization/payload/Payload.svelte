@@ -9,7 +9,7 @@
 </script>
 
 <section
-  class="{$$props.class} flex h-full w-full flex-col space-y-6 overflow-x-scroll"
+  class="{$$props.class} flex h-full w-full flex-col space-y-6 overflow-x-scroll pt-5"
 >
   <SectionHeader title="Payload" color="secondary" />
 

@@ -29,7 +29,7 @@
 </script>
 
 <section class="w-full [&>*]:border-surface-600 [&>*]:p-5">
-  <div class="space-y-10">
+  <div class="divide-y divide-surface-500">
     <Container />
     <Payload />
   </div>
