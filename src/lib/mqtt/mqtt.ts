@@ -1,7 +1,8 @@
 import mqtt from 'mqtt';
 import chalk from 'chalk';
 import temperatureStore from '@stores/temperature';
-import pressureStore from '@stores/pressure';
+import type { Topics } from './types';
+import { onTempMessage } from './actions/container';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -16,12 +17,15 @@ const createMqttHandler = () => {
     console.log(`mqtt client connected`);
   });
 
-  mqttClient.on('message', async (topic, message) => {
+  mqttClient.on('message', async (topic: Topics, message: BufferSource) => {
     const decoder = new TextDecoder('utf8');
     const decodedMessage = decoder.decode(message);
 
     switch (topic) {
-      case 'temperature':
+      case 'container/temperature':
+        onTempMessage({ message: decodedMessage });
+        break;
+      case 'payload/temperature':
         try {
           const { value, time } = JSON.parse(decodedMessage);
           temperatureStore.update({ value, time });
@@ -29,20 +33,20 @@ const createMqttHandler = () => {
           console.log(error);
         }
         break;
-      case 'pressure':
-        try {
-          const { value } = JSON.parse(decodedMessage);
-          const time = new Date().toLocaleTimeString();
-          pressureStore.update({ value, time });
-          console.log(
-            `type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
-              topic
-            )}, message = ${chalk.bold.bgRed(value)}`
-          );
-        } catch (error) {
-          console.log('error');
-        }
-        break;
+      // case 'pressure':
+      //   try {
+      //     const { value } = JSON.parse(decodedMessage);
+      //     const time = new Date().toLocaleTimeString();
+      //     pressureStore.update({ value, time });
+      //     console.log(
+      //       `type = ${chalk.bold.bgBlue('sub')}, topic = ${chalk.bold.bgGreen(
+      //         topic
+      //       )}, message = ${chalk.bold.bgRed(value)}`
+      //     );
+      //   } catch (error) {
+      //     console.log('error');
+      //   }
+      //   break;
       default:
         break;
     }
