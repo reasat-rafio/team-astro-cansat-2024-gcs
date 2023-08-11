@@ -12,8 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import temperatureStore from '@stores/temperature';
-  import { navbarHeight } from '@stores/ui.store.';
+  import temperatureStore from '@stores/container/temperature';
   import { delay } from '$lib/helper';
 
   ChartJS.register(

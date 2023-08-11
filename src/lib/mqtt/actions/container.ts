@@ -1,12 +1,14 @@
-import temperatureStore from '@stores/temperature';
+import temperatureStore from '@stores/container/temperature';
 import type { MqttClient } from 'mqtt';
+import type { Topics } from '../types';
 
 interface ITempMessage {
   message: string;
+  topic: Topics;
 }
 
 // container/temperature
-export const onTempMessage = ({ message }: ITempMessage) => {
+const onTempMessage = ({ message }: ITempMessage) => {
   try {
     const { value, time } = JSON.parse(message);
     temperatureStore.update({ value, time });
@@ -15,15 +17,30 @@ export const onTempMessage = ({ message }: ITempMessage) => {
   }
 };
 
-export const pubTemp = (mqttClient: MqttClient) => {
+const subTemp = (mqttClient: MqttClient) => {
+  mqttClient.subscribe('container/temperature', (err) => {
+    if (err) console.log(err);
+  });
+};
+
+const pubTemp = (mqttClient: MqttClient) => {
   const temperatureValue = (50 + Math.random() * 20).toFixed(2);
   const secs = new Date().getSeconds();
   const mins = new Date().getMinutes();
-  mqttClient.publish(
-    'temperature',
-    JSON.stringify({
-      value: temperatureValue,
-      time: `${mins}:${secs}`
-    })
-  );
+
+  try {
+    mqttClient.publish(
+      'container/temperature',
+      JSON.stringify({
+        value: temperatureValue,
+        time: `${mins}:${secs}`
+      })
+    );
+  } catch (error) {
+    console.log(error);
+  }
 };
+
+const Container = { onTempMessage, pubTemp, subTemp };
+
+export default Container;
