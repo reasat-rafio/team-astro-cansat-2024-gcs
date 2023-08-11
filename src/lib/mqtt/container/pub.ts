@@ -61,7 +61,7 @@ const altitude = (mqttClient: MqttClient) => {
 
   try {
     mqttClient.publish(
-      'container/pressure',
+      'container/altitude',
       JSON.stringify({
         value: pressureValue,
         time: `${mins}:${secs}`

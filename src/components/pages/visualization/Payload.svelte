@@ -1,5 +1,10 @@
 <script lang="ts">
-  import Temperature from './container/graphs/Temperature.svelte';
+  import Acceleration from './container/graphs/Acceleration.svelte';
+  import Altitude from './container/graphs/Altitude.svelte';
+  import Gyroscope from './container/graphs/Gyroscope.svelte';
+  import Humidity from './container/graphs/Humidity.svelte';
+  import Pressure from './container/graphs/Pressure.svelte';
+  import Temperature from './payload/graphs/Temperature.svelte';
   import SectionHeader from './SectionHeader.svelte';
 </script>
 
@@ -10,9 +15,10 @@
 
   <div class="grid h-full grid-cols-3 gap-[50px] overflow-x-scroll">
     <Temperature />
-    <!-- <Temperature />
-    <Temperature />
-    <Temperature />
-    <Temperature /> -->
+    <Humidity />
+    <Pressure />
+    <Altitude />
+    <Acceleration />
+    <Gyroscope />
   </div>
 </section>

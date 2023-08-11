@@ -15,7 +15,14 @@
       mqttClient.container.publish.gyroscope();
       mqttClient.container.publish.humidity();
       mqttClient.container.publish.pressure();
-    }, 2000);
+
+      mqttClient.payload.publish.temperature();
+      mqttClient.payload.publish.acceleration();
+      mqttClient.payload.publish.altitude();
+      mqttClient.payload.publish.gyroscope();
+      mqttClient.payload.publish.humidity();
+      mqttClient.payload.publish.pressure();
+    }, 5000);
 
     return () => clearInterval(interval);
   });

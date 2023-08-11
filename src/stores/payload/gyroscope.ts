@@ -1,7 +1,13 @@
 import { writable } from 'svelte/store';
 
+interface AccelerationValue {
+  x: number;
+  y: number;
+  z: number;
+}
+
 export interface IGyroscope {
-  value: number[];
+  value: AccelerationValue[];
   time: string[];
 }
 
@@ -13,7 +19,7 @@ function createGyroscopeStore() {
 
   return {
     subscribe,
-    update: ({ time, value }: { time: string; value: number }) =>
+    update: ({ time, value }: { time: string; value: AccelerationValue }) =>
       update(($data) => {
         $data.value = [...$data.value, value];
         $data.time = [...$data.time, time];

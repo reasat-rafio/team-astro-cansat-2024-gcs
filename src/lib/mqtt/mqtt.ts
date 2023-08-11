@@ -26,8 +26,53 @@ const createMqttHandler = () => {
       case 'container/temperature':
         Container.message.temperature({ message: decodedMessage, topic });
         break;
+
+      case 'container/altitude':
+        Container.message.altitude({ message: decodedMessage, topic });
+        break;
+
+      case 'container/gyroscope':
+        Container.message.gyroscope({ message: decodedMessage, topic });
+        break;
+
+      case 'container/acceleration':
+        Container.message.acceleration({ message: decodedMessage, topic });
+        break;
+
+      case 'container/humidity':
+        Container.message.humidity({ message: decodedMessage, topic });
+        break;
+
+      case 'container/pressure':
+        Container.message.pressure({ message: decodedMessage, topic });
+        break;
+
+      // case 'container/separatorLine':
+      //   Container.message.separatorLine({ message: decodedMessage, topic });
+      //   break;
+
       case 'payload/temperature':
         Payload.message.temperature({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/altitude':
+        Payload.message.altitude({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/gyroscope':
+        Payload.message.gyroscope({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/acceleration':
+        Payload.message.acceleration({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/humidity':
+        Payload.message.humidity({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/pressure':
+        Payload.message.pressure({ message: decodedMessage, topic });
         break;
       default:
         break;
