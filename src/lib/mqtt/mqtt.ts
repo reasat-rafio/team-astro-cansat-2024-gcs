@@ -1,11 +1,13 @@
 import mqtt from 'mqtt';
 import type { Topics } from './types';
 import container from './container';
+import payload from './payload';
 
 // MQTT handler
 const createMqttHandler = () => {
   const mqttClient = mqtt.connect('ws://127.0.0.1:8080');
   const Container = container(mqttClient);
+  const Payload = payload(mqttClient);
 
   mqttClient.on('error', (err) => {
     console.log(`ERROR: ${err}`);
@@ -39,7 +41,8 @@ const createMqttHandler = () => {
   return {
     mqttClient,
     isConnected: () => mqttClient.connected,
-    container: Container
+    container: Container,
+    payload: Payload
   };
 };
 
