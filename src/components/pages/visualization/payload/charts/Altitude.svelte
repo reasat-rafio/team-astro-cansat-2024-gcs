@@ -12,7 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import pressureStore from '@stores/payload/pressure';
+  import altitudeStore from '@stores/payload/altitude';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -31,8 +31,8 @@
 
   onMount(() => {
     if (chart) {
-      $pressureStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
-      $pressureStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $altitudeStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
+      $altitudeStore.time.forEach((d) => chart?.data.labels!!.push(d));
       chart.update();
     }
   });
@@ -40,10 +40,10 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $pressureStore.value[$pressureStore.value.length - 1]
+        $altitudeStore.value[$altitudeStore.value.length - 1]
       );
       chart.data.labels?.push(
-        $pressureStore.time[$pressureStore.time.length - 1]
+        $altitudeStore.time[$altitudeStore.time.length - 1]
       );
 
       await delay(10);
@@ -58,12 +58,12 @@
     }
   }
 
-  $: $pressureStore, updateGraph();
+  $: $altitudeStore, updateGraph();
 </script>
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Pressure</h4>
+    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Altitude</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
@@ -76,7 +76,7 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $pressureStore.value.length * 50}px; "
+      style="width: {500 + $altitudeStore.value.length * 50}px; "
     >
       <Line
         bind:chart
@@ -84,10 +84,10 @@
           labels: [],
           datasets: [
             {
-              label: 'Temperature',
+              label: 'Altitude',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
-              borderColor: 'rgb(75, 192, 192)',
+              borderColor: 'rgb(75, 75, 192)',
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,

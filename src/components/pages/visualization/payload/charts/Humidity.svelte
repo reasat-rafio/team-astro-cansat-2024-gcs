@@ -12,7 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import temperatureStore from '@stores/payload/temperature';
+  import humidityStore from '@stores/container/humidity';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -31,10 +31,8 @@
 
   onMount(() => {
     if (chart) {
-      $temperatureStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
-      );
-      $temperatureStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $humidityStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
+      $humidityStore.time.forEach((d) => chart?.data.labels!!.push(d));
       chart.update();
     }
   });
@@ -42,10 +40,10 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $temperatureStore.value[$temperatureStore.value.length - 1]
+        $humidityStore.value[$humidityStore.value.length - 1]
       );
       chart.data.labels?.push(
-        $temperatureStore.time[$temperatureStore.time.length - 1]
+        $humidityStore.time[$humidityStore.time.length - 1]
       );
 
       await delay(10);
@@ -60,12 +58,12 @@
     }
   }
 
-  $: $temperatureStore, updateGraph();
+  $: $humidityStore, updateGraph();
 </script>
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Temperature</h4>
+    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Humidity</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
@@ -78,7 +76,7 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $temperatureStore.value.length * 50}px; "
+      style="width: {500 + $humidityStore.value.length * 50}px; "
     >
       <Line
         bind:chart
@@ -86,10 +84,10 @@
           labels: [],
           datasets: [
             {
-              label: 'Temperature',
+              label: 'Humidity',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
-              borderColor: 'rgb(92, 75, 192)',
+              borderColor: 'rgb(75, 75, 192)',
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,

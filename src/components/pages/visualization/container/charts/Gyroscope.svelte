@@ -137,7 +137,7 @@
               label: 'Z',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
-              borderColor: 'rgb(75, 75, 192)',
+              borderColor: 'rgb(255, 163, 102)',
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,

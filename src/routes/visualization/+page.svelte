@@ -1,7 +1,7 @@
 <script lang="ts">
   import mqttClient from '$lib/mqtt/mqtt';
   import Container from '@components/pages/visualization/container/Container.svelte';
-  import Payload from '@components/pages/visualization/Payload.svelte';
+  import Payload from '@components/pages/visualization/payload/Payload.svelte';
   import { onMount } from 'svelte';
 
   onMount(() => {

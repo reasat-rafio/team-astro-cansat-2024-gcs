@@ -12,7 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import humidityStore from '@stores/container/humidity';
+  import accelerationStore from '@stores/container/acceleration';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -31,8 +31,12 @@
 
   onMount(() => {
     if (chart) {
-      $humidityStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
-      $humidityStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $accelerationStore.value.forEach(({ x, y, z }) => {
+        chart?.data.datasets[0].data.push(x);
+        chart?.data.datasets[1].data.push(y);
+        chart?.data.datasets[2].data.push(z);
+      });
+      $accelerationStore.time.forEach((d) => chart?.data.labels!!.push(d));
       chart.update();
     }
   });
@@ -40,10 +44,16 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $humidityStore.value[$humidityStore.value.length - 1]
+        $accelerationStore.value[$accelerationStore.value.length - 1].x
+      );
+      chart.data.datasets[1].data.push(
+        $accelerationStore.value[$accelerationStore.value.length - 1].y
+      );
+      chart.data.datasets[2].data.push(
+        $accelerationStore.value[$accelerationStore.value.length - 1].z
       );
       chart.data.labels?.push(
-        $humidityStore.time[$humidityStore.time.length - 1]
+        $accelerationStore.time[$accelerationStore.time.length - 1]
       );
 
       await delay(10);
@@ -58,12 +68,12 @@
     }
   }
 
-  $: $humidityStore, updateGraph();
+  $: $accelerationStore, updateGraph();
 </script>
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Humidity</h4>
+    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Acceleration</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
@@ -76,7 +86,7 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $humidityStore.value.length * 50}px; "
+      style="width: {500 + $accelerationStore.value.length * 50}px; "
     >
       <Line
         bind:chart
@@ -84,10 +94,50 @@
           labels: [],
           datasets: [
             {
-              label: 'Temperature',
+              label: 'X',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
               borderColor: 'rgb(75, 192, 192)',
+              borderCapStyle: 'butt',
+              borderDash: [],
+              borderDashOffset: 0.0,
+              borderJoinStyle: 'miter',
+              pointBorderColor: 'rgba(54, 162, 235, 0.3)',
+              pointBackgroundColor: 'rgb(255, 255, 255)',
+              pointBorderWidth: 10,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: 'rgb(255, 255, 255)',
+              pointHoverBorderColor: 'rgba(0, 0, 0, 1)',
+              pointHoverBorderWidth: 2,
+              pointRadius: 1,
+              pointHitRadius: 10,
+              data: []
+            },
+            {
+              label: 'Y',
+              fill: true,
+              backgroundColor: 'rgba(54, 162, 235, 0.3)',
+              borderColor: 'rgb(192, 75, 75)',
+              borderCapStyle: 'butt',
+              borderDash: [],
+              borderDashOffset: 0.0,
+              borderJoinStyle: 'miter',
+              pointBorderColor: 'rgba(54, 162, 235, 0.3)',
+              pointBackgroundColor: 'rgb(255, 255, 255)',
+              pointBorderWidth: 10,
+              pointHoverRadius: 5,
+              pointHoverBackgroundColor: 'rgb(255, 255, 255)',
+              pointHoverBorderColor: 'rgba(0, 0, 0, 1)',
+              pointHoverBorderWidth: 2,
+              pointRadius: 1,
+              pointHitRadius: 10,
+              data: []
+            },
+            {
+              label: 'Z',
+              fill: true,
+              backgroundColor: 'rgba(54, 162, 235, 0.3)',
+              borderColor: 'rgb(255, 163, 102)',
               borderCapStyle: 'butt',
               borderDash: [],
               borderDashOffset: 0.0,
@@ -110,7 +160,8 @@
           scales: { x: { beginAtZero: true } },
           plugins: {
             legend: {
-              display: false
+              display: true,
+              position: 'right'
             },
             title: {
               display: false

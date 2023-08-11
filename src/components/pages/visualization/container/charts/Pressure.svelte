@@ -84,7 +84,7 @@
           labels: [],
           datasets: [
             {
-              label: 'Temperature',
+              label: 'Humidity',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
               borderColor: 'rgb(75, 192, 192)',
