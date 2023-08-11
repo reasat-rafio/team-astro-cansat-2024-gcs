@@ -1,14 +1,16 @@
 <script lang="ts">
-  import Header from './payload/Header.svelte';
-  import Temperature from './payload/graphs/Temperature.svelte';
-  import Voltage from './payload/graphs/Voltage.svelte';
+  import Temperature from './container/graphs/Temperature.svelte';
+  import SectionHeader from './SectionHeader.svelte';
 </script>
 
 <section class="{$$props.class} flex h-full w-full flex-col">
-  <Header />
+  <SectionHeader title="Payload" />
 
-  <div class="flex flex-1 overflow-x-auto [&>*]:!w-[50%]">
-    <Voltage />
+  <div class="grid h-full grid-cols-3 gap-[50px] overflow-x-scroll">
+    <Temperature />
+    <Temperature />
+    <Temperature />
+    <Temperature />
     <Temperature />
   </div>
 </section>

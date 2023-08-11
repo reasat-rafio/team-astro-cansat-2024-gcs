@@ -29,7 +29,7 @@ const createMqttHandler = () => {
           console.log(error);
         }
         break;
-      case 'voltage':
+      case 'pressure':
         try {
           const { value } = JSON.parse(decodedMessage);
           const time = new Date().toLocaleTimeString();
@@ -67,12 +67,13 @@ const createMqttHandler = () => {
     },
     pubTemperature: () => {
       const temperatureValue = (50 + Math.random() * 20).toFixed(2);
-      const time = new Date().toLocaleTimeString();
+      const secs = new Date().getSeconds();
+      const mins = new Date().getMinutes();
       mqttClient.publish(
         'temperature',
         JSON.stringify({
           value: temperatureValue,
-          time
+          time: `${mins}:${secs}`
         })
       );
     },
