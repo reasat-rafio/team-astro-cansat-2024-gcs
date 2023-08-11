@@ -6,9 +6,15 @@
 
   onMount(() => {
     mqttClient.container.subscribe.all();
+    mqttClient.payload.subscribe.all();
 
     const interval = setInterval(() => {
       mqttClient.container.publish.temperature();
+      mqttClient.container.publish.acceleration();
+      mqttClient.container.publish.altitude();
+      mqttClient.container.publish.gyroscope();
+      mqttClient.container.publish.humidity();
+      mqttClient.container.publish.pressure();
     }, 2000);
 
     return () => clearInterval(interval);

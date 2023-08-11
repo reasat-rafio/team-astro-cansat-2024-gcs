@@ -27,7 +27,7 @@ const createMqttHandler = () => {
         Container.message.temperature({ message: decodedMessage, topic });
         break;
       case 'payload/temperature':
-        // Payload.onTempMessage({ message: decodedMessage, topic });
+        Payload.message.temperature({ message: decodedMessage, topic });
         break;
       default:
         break;

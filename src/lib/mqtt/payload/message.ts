@@ -1,5 +1,5 @@
 import type { Topics } from '../types';
-import temperatureStore from '@stores/container/temperature';
+import temperatureStore from '@stores/payload/temperature';
 
 interface ITempMessage {
   message: string;
