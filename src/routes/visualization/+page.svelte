@@ -5,10 +5,10 @@
   import { onMount } from 'svelte';
 
   onMount(() => {
-    mqttClient.subToContainerTemp();
+    mqttClient.container.subscribe.all();
 
     const interval = setInterval(() => {
-      mqttClient.pubContainerTemperature();
+      mqttClient.container.publish.temperature();
     }, 2000);
 
     return () => clearInterval(interval);

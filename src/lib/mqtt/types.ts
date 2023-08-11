@@ -1,4 +1,19 @@
-export type Topics = ContainerTopcis | PayloadTopcis;
+export type Topics = ContainerTopics | PayloadTopics;
 
-export type ContainerTopcis = 'container/temperature';
-export type PayloadTopcis = 'payload/temperature';
+export type ContainerTopics =
+  | 'container/temperature'
+  | 'container/humidity'
+  | 'container/altitude'
+  | 'container/acceleration'
+  | 'container/gyroscope'
+  | 'container/pressure'
+  | 'container/separatorLine';
+
+export type PayloadTopics =
+  | 'payload/temperature'
+  | 'payload/humidity'
+  | 'payload/altitude'
+  | 'payload/acceleration'
+  | 'payload/gyroscope'
+  | 'payload/separatorLine'
+  | 'payload/pressure';

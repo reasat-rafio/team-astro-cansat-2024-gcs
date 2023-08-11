@@ -1,11 +1,11 @@
 import mqtt from 'mqtt';
-import chalk from 'chalk';
-import Container from './actions/container';
-import Payload from './actions/payload';
+import type { Topics } from './types';
+import container from './container';
 
 // MQTT handler
 const createMqttHandler = () => {
   const mqttClient = mqtt.connect('ws://127.0.0.1:8080');
+  const Container = container(mqttClient);
 
   mqttClient.on('error', (err) => {
     console.log(`ERROR: ${err}`);
@@ -16,16 +16,16 @@ const createMqttHandler = () => {
     console.log(`mqtt client connected`);
   });
 
-  mqttClient.on('message', async (topic, message) => {
+  mqttClient.on('message', async (topic: Topics, message: BufferSource) => {
     const decoder = new TextDecoder('utf8');
     const decodedMessage = decoder.decode(message);
 
     switch (topic) {
       case 'container/temperature':
-        Container.onTempMessage({ message: decodedMessage, topic });
+        Container.message.temperature({ message: decodedMessage, topic });
         break;
       case 'payload/temperature':
-        Payload.onTempMessage({ message: decodedMessage, topic });
+        // Payload.onTempMessage({ message: decodedMessage, topic });
         break;
       default:
         break;
@@ -39,8 +39,7 @@ const createMqttHandler = () => {
   return {
     mqttClient,
     isConnected: () => mqttClient.connected,
-    subToContainerTemp: () => Container.subTemp(mqttClient),
-    pubContainerTemperature: () => Container.pubTemp(mqttClient)
+    container: Container
   };
 };
 
