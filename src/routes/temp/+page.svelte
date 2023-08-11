@@ -1,5 +1,5 @@
 <script lang="ts">
-  import MqttHandler from '../../lib/mqtt';
+  import MqttHandler from '../../lib/mqtt/mqtt';
   import { onMount } from 'svelte';
 
   let publishTem = true;

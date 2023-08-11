@@ -60,8 +60,8 @@ const createMqttHandler = () => {
         if (err) console.log(err);
       });
     },
-    subToVoltage: () => {
-      mqttClient.subscribe('voltage', (err) => {
+    subToPressure: () => {
+      mqttClient.subscribe('pressure', (err) => {
         if (err) console.log(err);
       });
     },

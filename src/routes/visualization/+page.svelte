@@ -1,5 +1,5 @@
 <script lang="ts">
-  import mqttClient from '$lib/mqtt';
+  import mqttClient from '$lib/mqtt/mqtt';
   import Camera from '@components/pages/visualization/Camera.svelte';
   import Container from '@components/pages/visualization/container/Container.svelte';
   import Gps from '@components/pages/visualization/GPS.svelte';
@@ -9,7 +9,7 @@
 
   onMount(() => {
     mqttClient.subToTemp();
-    mqttClient.subToVoltage();
+    mqttClient.subToPressure();
   });
 </script>
 
