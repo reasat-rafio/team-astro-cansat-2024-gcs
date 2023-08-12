@@ -9,10 +9,19 @@ interface ITempMessage {
   message: string;
   topic: Topics;
 }
+
+const getCurrentTime = () => {
+  const secs = new Date().getSeconds();
+  const mins = new Date().getMinutes();
+  const time = `${mins}:${secs}`;
+  return time;
+};
+
 const temperature = ({ message }: ITempMessage) => {
   try {
-    const { value, time } = JSON.parse(message);
-    temperatureStore.update({ value, time });
+    const { value } = JSON.parse(message);
+
+    temperatureStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }
@@ -20,8 +29,9 @@ const temperature = ({ message }: ITempMessage) => {
 
 const humidity = ({ message }: ITempMessage) => {
   try {
-    const { value, time } = JSON.parse(message);
-    humidityStore.update({ value, time });
+    const { value } = JSON.parse(message);
+
+    humidityStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }
@@ -29,16 +39,16 @@ const humidity = ({ message }: ITempMessage) => {
 
 const pressure = ({ message }: ITempMessage) => {
   try {
-    const { value, time } = JSON.parse(message);
-    pressureStore.update({ value, time });
+    const { value } = JSON.parse(message);
+    pressureStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }
 };
 const altitude = ({ message }: ITempMessage) => {
   try {
-    const { value, time } = JSON.parse(message);
-    altitudeStore.update({ value, time });
+    const { value } = JSON.parse(message);
+    altitudeStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }
@@ -46,16 +56,16 @@ const altitude = ({ message }: ITempMessage) => {
 
 const acceleration = ({ message }: ITempMessage) => {
   try {
-    const { value, time } = JSON.parse(message);
-    accelerationStore.update({ value, time });
+    const { value } = JSON.parse(message);
+    accelerationStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }
 };
 const gyroscope = ({ message }: ITempMessage) => {
   try {
-    const { value, time } = JSON.parse(message);
-    gyroscopeStore.update({ value, time });
+    const { value } = JSON.parse(message);
+    gyroscopeStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }
