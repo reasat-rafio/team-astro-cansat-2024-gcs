@@ -12,7 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import humidityStore from '@stores/container/humidity';
+  import humidityStore from '@stores/payload/humidity';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
