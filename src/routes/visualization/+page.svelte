@@ -1,14 +1,14 @@
 <script lang="ts">
   import mqttClient from '$lib/mqtt/mqtt';
-  import Container from '@components/pages/visualization/container/Container.svelte';
   import Payload from '@components/pages/visualization/payload/Payload.svelte';
   import { onMount } from 'svelte';
 
+  let interval: number;
   onMount(() => {
     // mqttClient.container.subscribe.all();
     mqttClient.payload.subscribe.all();
 
-    const interval = setInterval(() => {
+    interval = setInterval(() => {
       // mqttClient.container.publish.temperature();
       // mqttClient.container.publish.acceleration();
       // mqttClient.container.publish.altitude();
@@ -16,11 +16,11 @@
       // mqttClient.container.publish.humidity();
       // mqttClient.container.publish.pressure();
       mqttClient.payload.publish.temperature();
-      mqttClient.payload.publish.acceleration();
-      mqttClient.payload.publish.altitude();
-      mqttClient.payload.publish.gyroscope();
-      mqttClient.payload.publish.humidity();
-      mqttClient.payload.publish.pressure();
+      // mqttClient.payload.publish.acceleration();
+      // mqttClient.payload.publish.altitude();
+      // mqttClient.payload.publish.gyroscope();
+      // mqttClient.payload.publish.humidity();
+      // mqttClient.payload.publish.pressure();
     }, 5000);
 
     return () => clearInterval(interval);
@@ -29,7 +29,6 @@
 
 <section class="w-full [&>*]:border-surface-600 [&>*]:p-5">
   <div class="divide-y divide-surface-500">
-    <!-- <Container /> -->
     <Payload />
   </div>
 </section>
