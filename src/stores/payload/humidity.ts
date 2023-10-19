@@ -5,7 +5,7 @@ export interface IHumidity {
   time: string[];
 }
 
-function createHumidityStore() {
+function createAirPressureStore() {
   const { subscribe, set, update } = writable<IHumidity>({
     value: [],
     time: []
@@ -23,5 +23,5 @@ function createHumidityStore() {
   };
 }
 
-const humidityStore = createHumidityStore();
-export default humidityStore;
+const airPressureStore = createAirPressureStore();
+export default airPressureStore;

@@ -61,8 +61,6 @@
   }
 
   $: $temperatureStore, updateGraph();
-
-  $: console.log($temperatureStore);
 </script>
 
 <section>

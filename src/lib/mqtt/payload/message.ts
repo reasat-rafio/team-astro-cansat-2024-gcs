@@ -1,5 +1,5 @@
 import type { Topics } from '../types';
-import humidityStore from '@stores/payload/humidity';
+import airPressureStore from '@stores/payload/humidity';
 import temperatureStore from '@stores/payload/temperature';
 import pressureStore from '@stores/payload/pressure';
 import altitudeStore from '@stores/payload/altitude';
@@ -31,7 +31,7 @@ const humidity = ({ message }: ITempMessage) => {
   try {
     const { value } = JSON.parse(message);
 
-    humidityStore.update({ value, time: getCurrentTime() });
+    airPressureStore.update({ value, time: getCurrentTime() });
   } catch (error) {
     console.log(error);
   }

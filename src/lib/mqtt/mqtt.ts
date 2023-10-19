@@ -21,29 +21,30 @@ const createMqttHandler = () => {
     const decodedMessage = decoder.decode(message);
 
     switch (topic) {
-      case 'payload/temperature':
-        Payload.message.temperature({ message: decodedMessage, topic });
-        break;
-
       case 'payload/altitude':
         Payload.message.altitude({ message: decodedMessage, topic });
         break;
 
-      case 'payload/gyroscope':
-        Payload.message.gyroscope({ message: decodedMessage, topic });
+      case 'payload/temperature':
+        Payload.message.temperature({ message: decodedMessage, topic });
         break;
 
       case 'payload/acceleration':
         Payload.message.acceleration({ message: decodedMessage, topic });
         break;
 
-      case 'payload/humidity':
-        Payload.message.humidity({ message: decodedMessage, topic });
-        break;
+      // case 'payload/humidity':
+      //   Payload.message.humidity({ message: decodedMessage, topic });
+      //   break;
 
       case 'payload/pressure':
         Payload.message.pressure({ message: decodedMessage, topic });
         break;
+
+      case 'payload/gyroscope':
+        Payload.message.gyroscope({ message: decodedMessage, topic });
+        break;
+
       default:
         break;
     }

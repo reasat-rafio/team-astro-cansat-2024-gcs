@@ -2,7 +2,7 @@
   import Gyroscope from './charts/Gyroscope.svelte';
   import Acceleration from './charts/Acceleration.svelte';
   import Altitude from './charts/Altitude.svelte';
-  import Humidity from './charts/Humidity.svelte';
+  import Airpressure from './charts/Airpressure.svelte';
   import Pressure from './charts/Pressure.svelte';
   import Temperature from './charts/Temperature.svelte';
   import SectionHeader from '../SectionHeader.svelte';
@@ -14,10 +14,10 @@
   <SectionHeader title="Payload" color="secondary" />
 
   <div class="grid h-full grid-cols-3 gap-[50px] overflow-x-scroll">
-    <Temperature />
-    <Humidity />
-    <Pressure />
     <Altitude />
+    <Airpressure />
+    <Temperature />
+    <Pressure />
     <Acceleration />
     <Gyroscope />
   </div>
