@@ -5,7 +5,7 @@ export interface IAltitude {
   time: string[];
 }
 
-function createAltitudeStore() {
+function createLongitudeStore() {
   const { subscribe, set, update } = writable<IAltitude>({
     value: [],
     time: []
@@ -23,5 +23,5 @@ function createAltitudeStore() {
   };
 }
 
-const altitudeStore = createAltitudeStore();
-export default altitudeStore;
+const longitudeStore = createLongitudeStore();
+export default longitudeStore;

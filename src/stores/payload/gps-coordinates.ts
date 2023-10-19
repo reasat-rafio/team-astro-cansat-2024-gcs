@@ -1,12 +1,12 @@
 import { writable } from 'svelte/store';
 
-export interface ITemperature {
+export interface IAltitude {
   value: number[];
   time: string[];
 }
 
-function createTemperatureStore() {
-  const { subscribe, set, update } = writable<ITemperature>({
+function createGpsCoordinatesStore() {
+  const { subscribe, set, update } = writable<IAltitude>({
     value: [],
     time: []
   });
@@ -23,5 +23,5 @@ function createTemperatureStore() {
   };
 }
 
-const temperatureStore = createTemperatureStore();
-export default temperatureStore;
+const gpsCoordinatesStore = createGpsCoordinatesStore();
+export default gpsCoordinatesStore;

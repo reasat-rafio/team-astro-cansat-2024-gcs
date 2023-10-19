@@ -1,16 +1,15 @@
 import { writable } from 'svelte/store';
 
-interface AccelerationValue {
-  x: number;
-  y: number;
-  z: number;
+interface AirPressureValue {
+  value: number[];
+  time: string[];
 }
 export interface IAcceleration {
-  value: AccelerationValue[];
+  value: AirPressureValue[];
   time: string[];
 }
 
-function createAccelerationStore() {
+function createAirPressureStore() {
   const { subscribe, set, update } = writable<IAcceleration>({
     value: [],
     time: []
@@ -18,7 +17,7 @@ function createAccelerationStore() {
 
   return {
     subscribe,
-    update: ({ time, value }: { time: string; value: AccelerationValue }) =>
+    update: ({ time, value }: { time: string; value: AirPressureValue }) =>
       update(($data) => {
         $data.value = [...$data.value, value];
         $data.time = [...$data.time, time];
@@ -28,5 +27,5 @@ function createAccelerationStore() {
   };
 }
 
-const accelerationStore = createAccelerationStore();
-export default accelerationStore;
+const airPressureStore = createAirPressureStore();
+export default airPressureStore;

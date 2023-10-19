@@ -1,12 +1,12 @@
 import { writable } from 'svelte/store';
 
-export interface IHumidity {
+export interface IAltitude {
   value: number[];
   time: string[];
 }
 
-function createAirPressureStore() {
-  const { subscribe, set, update } = writable<IHumidity>({
+function createCommandEchoStore() {
+  const { subscribe, set, update } = writable<IAltitude>({
     value: [],
     time: []
   });
@@ -23,5 +23,5 @@ function createAirPressureStore() {
   };
 }
 
-const airPressureStore = createAirPressureStore();
-export default airPressureStore;
+const commandEchoStore = createCommandEchoStore();
+export default commandEchoStore;
