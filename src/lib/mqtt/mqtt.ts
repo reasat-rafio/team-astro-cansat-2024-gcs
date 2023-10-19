@@ -25,20 +25,40 @@ const createMqttHandler = () => {
         Payload.message.altitude({ message: decodedMessage, topic });
         break;
 
+      case 'payload/air_pressure':
+        Payload.message.airPressure({ message: decodedMessage, topic });
+        break;
+
       case 'payload/temperature':
         Payload.message.temperature({ message: decodedMessage, topic });
         break;
 
-      case 'payload/acceleration':
-        Payload.message.acceleration({ message: decodedMessage, topic });
+      case 'payload/battery_voltage':
+        Payload.message.batteryVoltage({ message: decodedMessage, topic });
         break;
 
-      // case 'payload/humidity':
-      //   Payload.message.humidity({ message: decodedMessage, topic });
-      //   break;
+      case 'payload/tilt_angle':
+        Payload.message.tiltAngle({ message: decodedMessage, topic });
+        break;
 
-      case 'payload/pressure':
-        Payload.message.pressure({ message: decodedMessage, topic });
+      case 'payload/air_speed':
+        Payload.message.airSpeed({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/command_echo':
+        Payload.message.commandEcho({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/gps_coordinates':
+        Payload.message.gpsCoordinates({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/longitude':
+        Payload.message.longitude({ message: decodedMessage, topic });
+        break;
+
+      case 'payload/satellites_tracked':
+        Payload.message.satellitesTracked({ message: decodedMessage, topic });
         break;
 
       case 'payload/gyroscope':

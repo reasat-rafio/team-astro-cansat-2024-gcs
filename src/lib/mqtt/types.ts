@@ -14,5 +14,4 @@ export type PayloadTopics =
   //
   | 'payload/acceleration'
   | 'payload/gyroscope'
-  | 'payload/separator'
   | 'payload/pressure';

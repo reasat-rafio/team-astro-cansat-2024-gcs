@@ -4,20 +4,16 @@ interface AirPressureValue {
   value: number[];
   time: string[];
 }
-export interface IAcceleration {
-  value: AirPressureValue[];
-  time: string[];
-}
 
 function createAirPressureStore() {
-  const { subscribe, set, update } = writable<IAcceleration>({
+  const { subscribe, set, update } = writable<AirPressureValue>({
     value: [],
     time: []
   });
 
   return {
     subscribe,
-    update: ({ time, value }: { time: string; value: AirPressureValue }) =>
+    update: ({ time, value }: { time: string; value: number }) =>
       update(($data) => {
         $data.value = [...$data.value, value];
         $data.time = [...$data.time, time];

@@ -1,23 +1,19 @@
 import { writable } from 'svelte/store';
 
-interface airSpeedValue {
+interface AirSpeedValue {
   value: number[];
-  time: string[];
-}
-export interface IAcceleration {
-  value: airSpeedValue[];
   time: string[];
 }
 
 function createAirSpeedStore() {
-  const { subscribe, set, update } = writable<IAcceleration>({
+  const { subscribe, set, update } = writable<AirSpeedValue>({
     value: [],
     time: []
   });
 
   return {
     subscribe,
-    update: ({ time, value }: { time: string; value: airSpeedValue }) =>
+    update: ({ time, value }: { time: string; value: number }) =>
       update(($data) => {
         $data.value = [...$data.value, value];
         $data.time = [...$data.time, time];

@@ -12,7 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import pressureStore from '@stores/payload/pressure';
+  import airSpeedStore from '@stores/payload/air-speed';
+
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -31,8 +32,8 @@
 
   onMount(() => {
     if (chart) {
-      $pressureStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
-      $pressureStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $airSpeedStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
+      $airSpeedStore.time.forEach((d) => chart?.data.labels!!.push(d));
       chart.update();
     }
   });
@@ -40,10 +41,10 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $pressureStore.value[$pressureStore.value.length - 1]
+        $airSpeedStore.value[$airSpeedStore.value.length - 1]
       );
       chart.data.labels?.push(
-        $pressureStore.time[$pressureStore.time.length - 1]
+        $airSpeedStore.time[$airSpeedStore.time.length - 1]
       );
 
       await delay(10);
@@ -58,12 +59,12 @@
     }
   }
 
-  $: $pressureStore, updateGraph();
+  $: $airSpeedStore, updateGraph();
 </script>
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Pressure</h4>
+    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Air Speed</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
@@ -76,7 +77,7 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $pressureStore.value.length * 50}px; "
+      style="width: {500 + $airSpeedStore.value.length * 50}px; "
     >
       <Line
         bind:chart
@@ -84,7 +85,7 @@
           labels: [],
           datasets: [
             {
-              label: 'Pressure',
+              label: 'Air Speed',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
               borderColor: 'rgb(75, 75, 192)',

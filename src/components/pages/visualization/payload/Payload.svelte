@@ -3,9 +3,15 @@
   import Acceleration from './charts/Acceleration.svelte';
   import Altitude from './charts/Altitude.svelte';
   import Airpressure from './charts/Airpressure.svelte';
-  import Pressure from './charts/Pressure.svelte';
+  import BatteryVoltage from './charts/BatteryVoltage.svelte';
   import Temperature from './charts/Temperature.svelte';
   import SectionHeader from '../SectionHeader.svelte';
+  import TiltAngle from './charts/TiltAngle.svelte';
+  import AirSpeed from './charts/AirSpeed.svelte';
+  import CommandEcho from './charts/CommandEcho.svelte';
+  import GpsCoordinates from './charts/GpsCoordinates.svelte';
+  import Longitude from './charts/Longitude.svelte';
+  import SatellitesTracked from './charts/SatellitesTracked.svelte';
 </script>
 
 <section
@@ -17,7 +23,14 @@
     <Altitude />
     <Airpressure />
     <Temperature />
-    <Pressure />
+    <BatteryVoltage />
+    <TiltAngle />
+    <AirSpeed />
+    <CommandEcho />
+    <GpsCoordinates />
+    <Longitude />
+    <SatellitesTracked />
+
     <Acceleration />
     <Gyroscope />
   </div>
