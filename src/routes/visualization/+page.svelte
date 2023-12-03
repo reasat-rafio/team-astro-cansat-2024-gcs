@@ -2,19 +2,22 @@
   import mqttClient from '$lib/mqtt/mqtt';
   import Payload from '@components/pages/visualization/payload/Payload.svelte';
   import { onMount } from 'svelte';
+  import { gcsService } from '../../machines/gcs-machine';
 
   let interval: number;
+
+  // $: console.log($gcsService.context);
+  $: console.log({ v: $gcsService.value, c: $gcsService.context });
+  gcsService.send({ type: 'ACTIVATE' });
+  $: console.log({ v: $gcsService.value, c: $gcsService.context });
+  gcsService.send({ type: 'UPDATE_DATA', value: '10' });
+  $: console.log({ v: $gcsService.value, c: $gcsService.context });
+
   onMount(() => {
     // mqttClient.container.subscribe.all();
     mqttClient.payload.subscribe.all();
 
     interval = setInterval(() => {
-      // mqttClient.container.publish.temperature();
-      // mqttClient.container.publish.acceleration();
-      // mqttClient.container.publish.altitude();
-      // mqttClient.container.publish.gyroscope();
-      // mqttClient.container.publish.humidity();
-      // mqttClient.container.publish.pressure();
       // mqttClient.payload.publish.temperature();
       // mqttClient.payload.publish.acceleration();
       // mqttClient.payload.publish.altitude();

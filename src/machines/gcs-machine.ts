@@ -1,126 +1,118 @@
-import { createMachine } from 'xstate';
+import type { MachineContext, MachineEvent } from '$lib/@types/app.types';
+import { assign, createActor, createMachine } from 'xstate';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwDoBLCcsAYnoENUSAbQAMAXUSgADulisSrYhJAAPRAEYAbABZmwvcLXCAnMIBMADnNqjWgDQgaiK8y1G3J4QHYArOdMbtAF9A+zQsXEJiMnRKWnomZklUMDxyXhwAYwALZj4IgCMaLghiMDZsADd0AGsysJx8IlIKajoGFiSUtMycvPxChFZK9AzeeWIRUUmlaVlx7CVVBC01T2Y1cx8Lbw3TawD7RwRvT1NmI28AZjVrvxsNz2DQjAbI5pjW+I7k1PTsbNyJF4BSKJWwZSGVVqzHqESa0VibQSnV+PUBwP6NEGw1G80mgjU4iQIFmcgUC2JS02h0QWm8RnO7iM5g0ZmE9MuTxAsMaURacXaiR+3X+vSBIK4YFQGFQiTSJAAZuhUCweW8EZ9BSiRQC+ngBpCRmNyfixDMZGTFJT1D5zqyLpdXOY3GpvBoacs1GdvPpdqZTJ5Lp4tFy1fD+Ujvl0-gDeBl5BVuGCIcNoWG+R8BcjhTGcnGE2BsVVcSaxNNiaT5ot1MIVudhBpTBzfD7THYHIhvFpzMxLm7zGZg3SjD5Qy84RnEV8hdG0fnWIniqVylC6uPee8p1qc3P4wvC4aSxMy4TzXNydWEBojBpdFoNM6vKtg+YPVpbcJzJc+-TA5djK6Y7hBuGpZlGqKisw86LlKMpymMSoqjC67qhG07armUF7omRZGniZZmhWFpVtaCCeIG9aNk22jdm2phvgGzC+N+lyWK4N50t4QGvOGmaRjOEEAskvAQKCy6GmmKG8Vu2azpBwmibhR7YKaRJSMRF6kX6vZaEGpgmJ4RiXAGHoaJcDJePprKXGZzqsdxE6bpqsmCTkClieCK41GuwGoXx6E7vJYAiVih7GseUynkR55WqASw3N+LhXGoXqunswZviY6wBJ41j3uYboWBoDkgWh25yUJwWiZK0rKvBirKqqUmTs54E6m5VWhTi4UqQRakkhpsUqOo3Y9j6egBp4fj+FNb5aGcAQaJ4ZiOt4ex+FxITcs1TlgYkMgkK5XAAKKJqQeBqOW6kxRScWIKY5m6L6xhmJY1ieB6hises-orN4bp6AV5jBFt2DoBAcBKOmu2Rmelq3cNCAALRGB6SPFVt0Ogfx7CcHDJF3cs9EdggzhMrly2sWlwOYzt2MBRVWT45phPmR6xk6OT+l6Y6GPPL50mtQJ7XoiCzNDfFGhqMwU1ejs5kBPpH0k74OhaA2M0Dlc1589tAstXtGG7gW4sI0sPgMqcGgA0V3Y7B69IMt2FxscZ9JLSVfkyW1mHuabl5qO+OjGa9dm+F+aimYHTGnBc1gBgV7Ke4LhsHa5-ukWzJMjsIzCbA9lgBo2wjXMnBv8bMh0i7wsAZGApAZ4T1Ik4Yvi9qcfYjpoN7-WXMPThDtf1yQjeI9+0t0o2jaGV994eiOt5mG2Nz+v9-imH39OCoPdekMwAASwWHbAWSsGA5D4BDkjkOgNCMMPo9LEGTuFdPRiz+6LcNt4ui-YHWjdilr4EGgQgA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiABwBGAGwAaEDUQq+ATgB0Adj4BmFQCYArAF9bWtFlyFiZdJVr0mh2OTBgIswAggQAKuwAasFhAKL8QkggYpLSskmKCPoALGZaOgjqRqYWNvaOGDj4RKQU1HQMjIaoONgS2FDMAKoACgAiMbEA+gNhwQlyKVIy2HKZNnz5iNn2DiDY6BBwck5VrrUe9d6Mk+LT6aDzfJZLCAC0SmaGdmu7LjXung0+fgEip6kZnNlOpbipTIZLOYrC8Ks5qm46l5Gs1Wu0oADzrMMroVGZrM9SrkzOYzNklDdtLpjMZDNlrKVYSA3giDl9joYGKhGO0AIYMCCYtLYy6IHJ5KmFPSQ6GWNTGElqEnZfSrWxAA */
     id: 'Ground Control System',
-    initial: 'idle',
-    tsTypes: {} as import('./gcs-machine.typegen').Typegen0,
+
+    initial: 'sleep',
+    types: {
+      context: {} as MachineContext,
+      events: {} as MachineEvent
+    },
     context: {
-      errorMessage: null
+      acceleration: {
+        values: [],
+        timestamps: []
+      },
+      airPressure: {
+        values: [],
+        timestamps: []
+      },
+      airSpeed: {
+        values: [],
+        timestamps: []
+      },
+      altitude: {
+        values: [],
+        timestamps: []
+      },
+      temperature: {
+        values: [],
+        timestamps: []
+      },
+      batteryVoltage: {
+        values: [],
+        timestamps: []
+      },
+      gpsCoordinates: {
+        values: [],
+        timestamps: []
+      },
+      gyroscope: {
+        values: [],
+        timestamps: []
+      },
+      longitude: {
+        values: [],
+        timestamps: []
+      },
+      satellitesTracked: {
+        values: [],
+        timestamps: []
+      },
+      tiltAngle: {
+        values: [],
+        timestamps: []
+      }
     },
 
     states: {
-      idle: {
+      sleep: {
         on: {
-          start: 'pre launch'
-        }
-      },
-
-      'pre launch': {
-        states: {
-          'stand by': {
-            invoke: {
-              src: 'activate',
-
-              onError: {
-                target: 'stand by',
-                internal: true
-              },
-              onDone: [
-                {
-                  target: 'active',
-                  cond: 'can activate',
-                  actions: ['Set module to active', 'Set system to active']
-                },
-                {
-                  cond: 'cannot activate',
-                  actions: ['Print the error message', 'Try again']
-                }
-              ]
-            }
-          },
-
-          active: {
-            invoke: {
-              src: 'test readiness',
-              onDone: [
-                {
-                  target: 'ready',
-
-                  actions: [
-                    'set altitude to 0',
-                    'set temperature to 0',
-                    'set pressure to 0',
-                    'set time to 0',
-                    'set clock to 0'
-                  ],
-
-                  cond: 'is ready'
-                },
-                {
-                  cond: 'is not ready',
-                  actions: ['Print the error message', 'Try again']
-                }
-              ],
-
-              onError: {
-                target: 'active',
-                internal: true
-              }
-            }
-          },
-
-          ready: {
-            invoke: {
-              src: 'launch',
-
-              onDone: [
-                {
-                  target: '#Ground Control System.post launch',
-                  cond: 'velocity > 0 && altitude > 0 && height > 0'
-                },
-                {
-                  cond: 'velocity < 0 || altitude < 0 || height < 0',
-                  actions: ['Print the error message', 'Try again']
-                }
-              ],
-
-              onError: {
-                target: 'ready',
-                internal: true
-              }
-            }
+          ACTIVATE: {
+            target: 'running',
+            actions: 'activate'
           }
-        },
-
-        initial: 'stand by'
-      },
-
-      'post launch': {
-        states: {
-          ascent: {}
-        },
-
-        initial: 'ascent',
-
-        on: {
-          'Event 1': 'descent'
         }
       },
 
-      descent: {
-        states: {
-          'Heat shield deployment': {}
-        },
+      running: {
+        entry: 'notifyActive',
+        exit: 'notifyInactive',
+        on: {
+          UPDATE_DATA: {
+            actions: 'updateAcceleration'
+          }
+        }
+      },
 
-        type: 'final'
-      }
+      terminated: {}
+    },
+
+    on: {
+      KILL: '.terminated'
     }
   },
   {
-    guards: {
-      'velocity > 0 && altitude > 0 && height > 0': () => true
+    actions: {
+      activate: () => {
+        console.log('activating...');
+      },
+      notifyActive: () => {
+        console.log('active!');
+      },
+      notifyInactive: () => {
+        console.log('inactive!');
+      },
+      updateAcceleration: assign(({ event }) => {
+        return {
+          airSpeed: {
+            values: [
+              (
+                event as {
+                  type: 'UPDATE_DATA';
+                  value: string;
+                }
+              ).value
+            ],
+            timestamps: ['2']
+          }
+        };
+      })
     }
   }
 );
+
+export const gcsService = createActor(gcsMachine).start();
