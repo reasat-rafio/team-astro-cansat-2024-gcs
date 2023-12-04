@@ -12,8 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import altitudeStore from '@stores/payload/altitude';
   import { delay } from '$lib/helper';
+  import { gcsService } from '@/machines/gcs-machine';
 
   ChartJS.register(
     Title,
@@ -31,8 +31,13 @@
 
   onMount(() => {
     if (chart) {
-      $altitudeStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
-      $altitudeStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.altitude?.values.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
+      $gcsService?.context?.altitude?.time.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
+
       chart.update();
     }
   });
@@ -40,10 +45,14 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $altitudeStore.value[$altitudeStore.value.length - 1]
+        +$gcsService?.context?.altitude?.values[
+          +$gcsService?.context?.altitude?.values.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $altitudeStore.time[$altitudeStore.time.length - 1]
+        $gcsService?.context?.altitude?.time[
+          +$gcsService?.context?.altitude?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -58,7 +67,7 @@
     }
   }
 
-  $: $altitudeStore, updateGraph();
+  $: $gcsService?.context?.altitude, updateGraph();
 </script>
 
 <section>
@@ -76,7 +85,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $altitudeStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.altitude?.values.length * 50}px; "
     >
       <Line
         bind:chart

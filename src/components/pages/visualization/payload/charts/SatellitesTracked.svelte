@@ -12,8 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import satellitesTrackedStore from '@stores/payload/satellites-tracked';
-
+  import { gcsService } from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -32,21 +31,26 @@
 
   onMount(() => {
     if (chart) {
-      $satellitesTrackedStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
+      $gcsService?.context?.satellitesTracked?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
       );
-      $satellitesTrackedStore.time.forEach((d) => chart?.data.labels!!.push(d));
-      chart.update();
+      $gcsService?.context?.satellitesTracked?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
     }
   });
 
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $satellitesTrackedStore.value[$satellitesTrackedStore.value.length - 1]
+        +$gcsService?.context?.satellitesTracked?.values[
+          $gcsService?.context?.satellitesTracked?.values.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $satellitesTrackedStore.time[$satellitesTrackedStore.time.length - 1]
+        +$gcsService?.context?.satellitesTracked?.time[
+          $gcsService?.context?.satellitesTracked?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -60,8 +64,7 @@
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-
-  $: $satellitesTrackedStore, updateGraph();
+  $: $gcsService?.context?.satellitesTracked, updateGraph();
 </script>
 
 <section>
@@ -79,7 +82,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $satellitesTrackedStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.satellitesTracked?.values?.length * 50}px; "
     >
       <Line
         bind:chart

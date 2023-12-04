@@ -12,8 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import tiltAngleStore from '@stores/payload/tilt-angle';
-
+  import { gcsService } from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -32,10 +31,12 @@
 
   onMount(() => {
     if (chart) {
-      $tiltAngleStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
+      $gcsService?.context?.tiltAngle?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
       );
-      $tiltAngleStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.tiltAngle?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
       chart.update();
     }
   });
@@ -43,10 +44,14 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $tiltAngleStore.value[$tiltAngleStore.value.length - 1]
+        +$gcsService?.context?.tiltAngle?.values[
+          $gcsService?.context?.tiltAngle?.values.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $tiltAngleStore.time[$tiltAngleStore.time.length - 1]
+        +$gcsService?.context?.tiltAngle?.time[
+          $gcsService?.context?.tiltAngle?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -61,7 +66,7 @@
     }
   }
 
-  $: $tiltAngleStore, updateGraph();
+  $: $gcsService?.context?.tiltAngle, updateGraph();
 </script>
 
 <section>
@@ -79,7 +84,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $tiltAngleStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.tiltAngle?.values?.length * 50}px; "
     >
       <Line
         bind:chart

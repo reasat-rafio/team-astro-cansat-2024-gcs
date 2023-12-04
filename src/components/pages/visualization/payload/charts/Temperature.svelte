@@ -12,8 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import temperatureStore from '@stores/payload/temperature';
   import { delay } from '$lib/helper';
+  import { gcsService } from '@/machines/gcs-machine';
 
   ChartJS.register(
     Title,
@@ -31,10 +31,12 @@
 
   onMount(() => {
     if (chart) {
-      $temperatureStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
+      $gcsService?.context?.temperature?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
       );
-      $temperatureStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.temperature?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
       chart.update();
     }
   });
@@ -42,10 +44,14 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $temperatureStore.value[$temperatureStore.value.length - 1]
+        +$gcsService?.context?.temperature?.values[
+          $gcsService?.context?.temperature?.values?.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $temperatureStore.time[$temperatureStore.time.length - 1]
+        +$gcsService?.context?.temperature?.time[
+          $gcsService?.context?.temperature?.time?.length - 1
+        ]
       );
 
       await delay(10);
@@ -60,7 +66,7 @@
     }
   }
 
-  $: $temperatureStore, updateGraph();
+  $: $gcsService?.context?.temperature, updateGraph();
 </script>
 
 <section>
@@ -78,7 +84,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $temperatureStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.temperature?.values?.length * 50}px; "
     >
       <Line
         bind:chart

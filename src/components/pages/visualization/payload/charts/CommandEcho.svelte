@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { Line } from 'svelte-chartjs';
   import {
     Chart as ChartJS,
@@ -12,8 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import commandEchoStore from '@stores/payload/command-echo';
-
+  import { gcsService } from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -32,11 +31,12 @@
 
   onMount(() => {
     if (chart) {
-      $commandEchoStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
+      $gcsService?.context?.airPressure?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
       );
-      $commandEchoStore.time.forEach((d) => chart?.data.labels!!.push(d));
-      chart.update();
+      $gcsService?.context?.airPressure?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
     }
   });
 
@@ -123,4 +123,4 @@
       />
     </div>
   </div>
-</section>
+</section> -->

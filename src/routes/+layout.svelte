@@ -2,7 +2,7 @@
   import '../app.css';
 
   import { AppShell } from '@skeletonlabs/skeleton';
-  import Navbar from '@components/Navbar.svelte';
+  import Navbar from '@/components/Navbar.svelte';
 </script>
 
 <AppShell>

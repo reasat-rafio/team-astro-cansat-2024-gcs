@@ -12,8 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import gyroscopeStore from '@stores/payload/gyroscope';
   import { delay } from '$lib/helper';
+  import { gcsService } from '@/machines/gcs-machine';
 
   ChartJS.register(
     Title,
@@ -31,29 +31,32 @@
 
   onMount(() => {
     if (chart) {
-      $gyroscopeStore.value.forEach(({ x, y, z }) => {
+      $gcsService?.context?.gyroscope?.values?.forEach(({ x, y, z }) => {
         chart?.data.datasets[0].data.push(x);
         chart?.data.datasets[1].data.push(y);
         chart?.data.datasets[2].data.push(z);
       });
-      $gyroscopeStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.gyroscope?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
+
       chart.update();
     }
   });
 
   async function updateGraph() {
     if (chart) {
-      chart.data.datasets[0].data.push(
-        $gyroscopeStore.value[$gyroscopeStore.value.length - 1].x
-      );
-      chart.data.datasets[1].data.push(
-        $gyroscopeStore.value[$gyroscopeStore.value.length - 1].y
-      );
-      chart.data.datasets[2].data.push(
-        $gyroscopeStore.value[$gyroscopeStore.value.length - 1].z
-      );
+      const index = $gcsService?.context?.gyroscope?.values.length - 1;
+      const data = $gcsService?.context?.gyroscope?.values[index];
+
+      chart.data.datasets[0].data.push(data.x);
+      chart.data.datasets[0].data.push(data.y);
+      chart.data.datasets[0].data.push(data.z);
+
       chart.data.labels?.push(
-        $gyroscopeStore.time[$gyroscopeStore.time.length - 1]
+        +$gcsService?.context?.gyroscope?.time[
+          $gcsService?.context?.gyroscope?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -68,7 +71,7 @@
     }
   }
 
-  $: $gyroscopeStore, updateGraph();
+  $: $gcsService?.context?.gyroscope, updateGraph();
 </script>
 
 <section>
@@ -86,7 +89,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $gyroscopeStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.gyroscope?.values?.length * 50}px; "
     >
       <Line
         bind:chart

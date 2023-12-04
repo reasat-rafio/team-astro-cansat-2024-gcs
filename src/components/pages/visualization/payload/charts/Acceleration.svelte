@@ -12,8 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import accelerationStore from '@stores/payload/acceleration';
   import { delay } from '$lib/helper';
+  import { gcsService } from '@/machines/gcs-machine';
 
   ChartJS.register(
     Title,
@@ -31,29 +31,32 @@
 
   onMount(() => {
     if (chart) {
-      $accelerationStore.value.forEach(({ x, y, z }) => {
+      $gcsService?.context?.acceleration?.values?.forEach(({ x, y, z }) => {
         chart?.data.datasets[0].data.push(x);
         chart?.data.datasets[1].data.push(y);
         chart?.data.datasets[2].data.push(z);
       });
-      $accelerationStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.acceleration?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
+
       chart.update();
     }
   });
 
   async function updateGraph() {
     if (chart) {
-      chart.data.datasets[0].data.push(
-        $accelerationStore.value[$accelerationStore.value.length - 1].x
-      );
-      chart.data.datasets[1].data.push(
-        $accelerationStore.value[$accelerationStore.value.length - 1].y
-      );
-      chart.data.datasets[2].data.push(
-        $accelerationStore.value[$accelerationStore.value.length - 1].z
-      );
+      const index = $gcsService?.context?.acceleration?.values.length - 1;
+      const data = $gcsService?.context?.acceleration?.values[index];
+
+      chart.data.datasets[0].data.push(data.x);
+      chart.data.datasets[0].data.push(data.y);
+      chart.data.datasets[0].data.push(data.z);
+
       chart.data.labels?.push(
-        $accelerationStore.time[$accelerationStore.time.length - 1]
+        +$gcsService?.context?.acceleration?.time[
+          $gcsService?.context?.acceleration?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -67,8 +70,7 @@
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-
-  $: $accelerationStore, updateGraph();
+  $: $gcsService?.context?.acceleration, updateGraph();
 </script>
 
 <section>
@@ -86,7 +88,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $accelerationStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.acceleration?.values?.length * 50}px; "
     >
       <Line
         bind:chart

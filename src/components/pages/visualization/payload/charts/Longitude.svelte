@@ -12,8 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import longitudeStore from '@stores/payload/longitude';
-
+  import { gcsService } from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -32,21 +31,26 @@
 
   onMount(() => {
     if (chart) {
-      $longitudeStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
+      $gcsService?.context?.longitude?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
       );
-      $longitudeStore.time.forEach((d) => chart?.data.labels!!.push(d));
-      chart.update();
+      $gcsService?.context?.longitude?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
     }
   });
 
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $longitudeStore.value[$longitudeStore.value.length - 1]
+        +$gcsService?.context?.longitude?.values[
+          $gcsService?.context?.longitude?.values.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $longitudeStore.time[$longitudeStore.time.length - 1]
+        +$gcsService?.context?.longitude?.time[
+          $gcsService?.context?.longitude?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -61,7 +65,7 @@
     }
   }
 
-  $: $longitudeStore, updateGraph();
+  $: $gcsService?.context?.longitude, updateGraph();
 </script>
 
 <section>
@@ -79,7 +83,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $longitudeStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.longitude?.values?.length * 50}px; "
     >
       <Line
         bind:chart

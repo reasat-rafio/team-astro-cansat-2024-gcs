@@ -1,15 +1,16 @@
+import altitudeStore from '@/stores/payload/altitude';
 import type { Topics } from '../types';
-import altitudeStore from '@stores/payload/altitude';
-import airPressureStore from '@stores/payload/air-pressure';
-import temperatureStore from '@stores/payload/temperature';
-import batteryVoltageStore from '@stores/payload/battery-voltage';
-import tiltAngleStore from '@stores/payload/tilt-angle';
-import airSpeedStore from '@stores/payload/air-speed';
-import commandEchoStore from '@stores/payload/command-echo';
-import gpsCoordinatesStore from '@stores/payload/gps-coordinates';
-import longitudeStore from '@stores/payload/longitude';
-import satellitesTrackedStore from '@stores/payload/satellites-tracked';
-import gyroscopeStore from '@stores/payload/gyroscope';
+import airPressureStore from '@/stores/payload/air-pressure';
+import batteryVoltageStore from '@/stores/payload/battery-voltage';
+import tiltAngleStore from '@/stores/payload/tilt-angle';
+import airSpeedStore from '@/stores/payload/air-speed';
+import commandEchoStore from '@/stores/payload/command-echo';
+import gpsCoordinatesStore from '@/stores/payload/gps-coordinates';
+import longitudeStore from '@/stores/payload/longitude';
+import satellitesTrackedStore from '@/stores/payload/satellites-tracked';
+import temperatureStore from '@/stores/payload/temperature';
+import gyroscopeStore from '@/stores/payload/gyroscope';
+
 interface ITempMessage {
   message: string;
   topic: Topics;

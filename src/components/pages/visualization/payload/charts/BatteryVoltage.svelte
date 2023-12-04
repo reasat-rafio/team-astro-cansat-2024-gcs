@@ -12,9 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import batteryVoltageStore from '@stores/payload/battery-voltage';
-
   import { delay } from '$lib/helper';
+  import { gcsService } from '@/machines/gcs-machine';
 
   ChartJS.register(
     Title,
@@ -32,10 +31,12 @@
 
   onMount(() => {
     if (chart) {
-      $batteryVoltageStore.value.forEach((d) =>
-        chart?.data.datasets[0].data.push(d)
+      $gcsService?.context?.batteryVoltage?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
       );
-      $batteryVoltageStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.batteryVoltage?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
       chart.update();
     }
   });
@@ -43,10 +44,14 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $batteryVoltageStore.value[$batteryVoltageStore.value.length - 1]
+        +$gcsService?.context?.batteryVoltage?.values[
+          $gcsService?.context?.batteryVoltage?.values.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $batteryVoltageStore.time[$batteryVoltageStore.time.length - 1]
+        +$gcsService?.context?.batteryVoltage?.time[
+          $gcsService?.context?.batteryVoltage?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -61,7 +66,7 @@
     }
   }
 
-  $: $batteryVoltageStore, updateGraph();
+  $: $gcsService?.context?.batteryVoltage, updateGraph();
 </script>
 
 <section>
@@ -79,7 +84,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $batteryVoltageStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.batteryVoltage?.values?.length * 50}px; "
     >
       <Line
         bind:chart

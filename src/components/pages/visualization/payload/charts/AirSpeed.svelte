@@ -12,8 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import airSpeedStore from '@stores/payload/air-speed';
-
+  import { gcsService } from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
 
   ChartJS.register(
@@ -32,8 +31,12 @@
 
   onMount(() => {
     if (chart) {
-      $airSpeedStore.value.forEach((d) => chart?.data.datasets[0].data.push(d));
-      $airSpeedStore.time.forEach((d) => chart?.data.labels!!.push(d));
+      $gcsService?.context?.airPressure?.values?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
+      $gcsService?.context?.airPressure?.time?.forEach((d) =>
+        chart?.data.datasets[0].data.push(+d)
+      );
       chart.update();
     }
   });
@@ -41,10 +44,14 @@
   async function updateGraph() {
     if (chart) {
       chart.data.datasets[0].data.push(
-        $airSpeedStore.value[$airSpeedStore.value.length - 1]
+        +$gcsService?.context?.airPressure?.values[
+          $gcsService?.context?.airPressure?.values.length - 1
+        ]
       );
       chart.data.labels?.push(
-        $airSpeedStore.time[$airSpeedStore.time.length - 1]
+        +$gcsService?.context?.airPressure?.time[
+          $gcsService?.context?.airPressure?.time.length - 1
+        ]
       );
 
       await delay(10);
@@ -59,7 +66,7 @@
     }
   }
 
-  $: $airSpeedStore, updateGraph();
+  $: $gcsService?.context?.airPressure, updateGraph();
 </script>
 
 <section>
@@ -77,7 +84,8 @@
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
       class="h-[300px]"
-      style="width: {500 + $airSpeedStore.value.length * 50}px; "
+      style="width: {500 +
+        $gcsService?.context?.airSpeed?.values?.length * 50}px; "
     >
       <Line
         bind:chart

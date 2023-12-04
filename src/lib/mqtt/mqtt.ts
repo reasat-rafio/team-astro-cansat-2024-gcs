@@ -1,6 +1,8 @@
 import mqtt from 'mqtt';
 import type { Topics } from './types';
 import payload from './payload';
+import { gcsService } from '../../machines/gcs-machine';
+import type { StringData, XYZNumberData } from '$lib/@types/app.types';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -18,51 +20,84 @@ const createMqttHandler = () => {
 
   mqttClient.on('message', async (topic: Topics, message: BufferSource) => {
     const decoder = new TextDecoder('utf8');
-    const decodedMessage = decoder.decode(message);
+    const decodedMessage = JSON.parse(decoder.decode(message));
 
     switch (topic) {
       case 'payload/altitude':
-        Payload.message.altitude({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_ALTITUDE',
+          altitude: decodedMessage as StringData
+        });
         break;
 
       case 'payload/air_pressure':
-        Payload.message.airPressure({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_AIR_PRESSURE',
+          airPressure: decodedMessage as StringData
+        });
         break;
 
       case 'payload/temperature':
-        Payload.message.temperature({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_TEMPERATURE',
+          temperature: decodedMessage as StringData
+        });
         break;
 
       case 'payload/battery_voltage':
-        Payload.message.batteryVoltage({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_BATTERY_VOLTAGE',
+          batteryVoltage: decodedMessage as StringData
+        });
         break;
 
       case 'payload/tilt_angle':
-        Payload.message.tiltAngle({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_TILT_ANGLE',
+          tiltAngle: decodedMessage as StringData
+        });
         break;
 
       case 'payload/air_speed':
-        Payload.message.airSpeed({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_AIR_SPEED',
+          airSpeed: decodedMessage as StringData
+        });
         break;
 
       case 'payload/command_echo':
-        Payload.message.commandEcho({ message: decodedMessage, topic });
+        // gcsService.send({
+        //   type: 'U',
+        //   airSpeed: decodedMessage as StringData
+        // });
         break;
 
       case 'payload/gps_coordinates':
-        Payload.message.gpsCoordinates({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_GPS_COORDINATES',
+          gpsCoordinates: decodedMessage as StringData
+        });
         break;
 
       case 'payload/longitude':
-        Payload.message.longitude({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_LONGITUDE',
+          longitude: decodedMessage as StringData
+        });
         break;
 
       case 'payload/satellites_tracked':
-        Payload.message.satellitesTracked({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_SATELLITES_TRACKED',
+          satellitesTracked: decodedMessage as StringData
+        });
         break;
 
       case 'payload/gyroscope':
-        Payload.message.gyroscope({ message: decodedMessage, topic });
+        gcsService.send({
+          type: 'UPDATE_GYROSCOPE',
+          gyroscope: decodedMessage as XYZNumberData
+        });
         break;
 
       default:

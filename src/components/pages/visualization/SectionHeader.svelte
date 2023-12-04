@@ -1,8 +1,8 @@
 <script lang="ts">
-  import BatteryIcon from '@components/icons/BatteryIcon.svelte';
-  import H3 from '@components/ui/H3.svelte';
-  import H5 from '@components/ui/H5.svelte';
-  import H6 from '@components/ui/H6.svelte';
+  import BatteryIcon from '@/components/icons/BatteryIcon.svelte';
+  import H3 from '@/components/ui/H3.svelte';
+  import H5 from '@/components/ui/H5.svelte';
+  import H6 from '@/components/ui/H6.svelte';
 
   export let title: string;
   export let batteryLevle = 20;
