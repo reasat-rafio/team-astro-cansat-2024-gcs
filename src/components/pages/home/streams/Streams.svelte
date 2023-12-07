@@ -10,6 +10,16 @@
     '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
     '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
     '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
+    '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.',
     '123456, 10:00:00, 50, Launch, Inflight, 500000, True, False, True, 20°C, 12V, 9:59:59, 498000, 37.7749°N, 122.4194°W, 8, 0.5, -0.5, Success.'
   ];
 </script>
@@ -19,7 +29,7 @@
 
   <div class="flex flex-col gap-y-4">
     {#each data as d, index}
-      <p>{index + 1}. {d}</p>
+      <p><span class="text-secondary-500">{index + 1}.</span> {d}</p>
     {/each}
   </div>
 </section>
