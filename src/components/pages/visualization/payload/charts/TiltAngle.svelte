@@ -29,16 +29,28 @@
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
 
+  let labels = [];
+  let data = [];
+
+  function getRandomValue() {
+    return Math.floor(Math.random() * 100);
+  }
+
+  for (let i = 0; i < 5; i++) {
+    data.push(getRandomValue());
+    labels.push(getRandomValue());
+  }
+
   onMount(() => {
-    if (chart) {
-      $gcsService?.context?.tiltAngle?.values?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d)
-      );
-      $gcsService?.context?.tiltAngle?.time?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d)
-      );
-      chart.update();
-    }
+    // if (chart) {
+    //   $gcsService?.context?.tiltAngle?.values?.forEach((d) =>
+    //     chart?.data.datasets[0].data.push(+d)
+    //   );
+    //   $gcsService?.context?.tiltAngle?.time?.forEach((d) =>
+    //     chart?.data.datasets[0].data.push(+d)
+    //   );
+    //   chart.update();
+    // }
   });
 
   async function updateGraph() {
@@ -66,7 +78,7 @@
     }
   }
 
-  $: $gcsService?.context?.tiltAngle, updateGraph();
+  // $: $gcsService?.context?.tiltAngle, updateGraph();
 </script>
 
 <section>
@@ -90,7 +102,7 @@
       <Line
         bind:chart
         data={{
-          labels: [],
+          labels,
           datasets: [
             {
               label: 'Tilt Angle',
@@ -110,7 +122,7 @@
               pointHoverBorderWidth: 2,
               pointRadius: 1,
               pointHitRadius: 10,
-              data: []
+              data
             }
           ]
         }}

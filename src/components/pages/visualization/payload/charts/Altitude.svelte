@@ -29,17 +29,28 @@
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
 
-  onMount(() => {
-    if (chart) {
-      $gcsService?.context?.altitude?.values.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d)
-      );
-      $gcsService?.context?.altitude?.time.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d)
-      );
+  let labels = [];
+  let data = [];
 
-      chart.update();
-    }
+  function getRandomValue() {
+    return Math.floor(Math.random() * 100);
+  }
+
+  for (let i = 0; i < 5; i++) {
+    data.push(getRandomValue());
+    labels.push(getRandomValue());
+  }
+
+  onMount(() => {
+    // if (chart) {
+    // $gcsService?.context?.altitude?.values.forEach((d) =>
+    //   chart?.data.datasets[0].data.push(+d)
+    // );
+    // $gcsService?.context?.altitude?.time.forEach((d) =>
+    //   chart?.data.datasets[0].data.push(+d)
+    // );
+    // chart.update();
+    // }
   });
 
   async function updateGraph() {
@@ -67,10 +78,10 @@
     }
   }
 
-  $: $gcsService?.context?.altitude, updateGraph();
+  // $: $gcsService?.context?.altitude, updateGraph();
 </script>
 
-<section>
+<section class={$$props.class}>
   <div class="flex">
     <h4 class="h6 ml-5 flex-1 text-tertiary-500">Altitude</h4>
     <label class="flex items-center space-x-2">
@@ -84,14 +95,14 @@
   </div>
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
     <div
-      class="h-[300px]"
+      class="min-h-[300px]"
       style="width: {500 +
         $gcsService?.context?.altitude?.values.length * 50}px; "
     >
       <Line
         bind:chart
         data={{
-          labels: [],
+          labels,
           datasets: [
             {
               label: 'Altitude',
@@ -111,7 +122,7 @@
               pointHoverBorderWidth: 2,
               pointRadius: 1,
               pointHitRadius: 10,
-              data: []
+              data
             }
           ]
         }}

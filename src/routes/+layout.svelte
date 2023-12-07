@@ -3,6 +3,7 @@
 
   import { AppShell } from '@skeletonlabs/skeleton';
   import Navbar from '@/components/Navbar.svelte';
+  import Terminal from '@/components/Terminal.svelte';
 </script>
 
 <AppShell>
@@ -10,4 +11,5 @@
     <Navbar />
   </svelte:fragment>
   <slot />
+  <Terminal />
 </AppShell>

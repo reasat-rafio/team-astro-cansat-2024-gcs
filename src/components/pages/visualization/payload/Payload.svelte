@@ -21,17 +21,17 @@
 
   <div class="grid h-full grid-cols-3 gap-[50px] overflow-x-scroll">
     <Altitude />
-    <!-- <AirPressure />
+    <AirPressure />
     <Temperature />
     <BatteryVoltage />
     <TiltAngle />
-    <AirSpeed /> -->
+    <AirSpeed />
     <!-- <CommandEcho /> -->
-    <!-- <GpsCoordinates />
+    <GpsCoordinates />
     <Longitude />
     <SatellitesTracked />
 
     <Acceleration />
-    <Gyroscope /> -->
+    <Gyroscope />
   </div>
 </section>

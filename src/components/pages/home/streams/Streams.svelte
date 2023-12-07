@@ -29,7 +29,10 @@
 
   <div class="flex flex-col gap-y-4">
     {#each data as d, index}
-      <p><span class="text-secondary-500">{index + 1}.</span> {d}</p>
+      <p>
+        <span class="text-secondary-500">{index + 1}.</span>
+        <span>{d} </span>
+      </p>
     {/each}
   </div>
 </section>
