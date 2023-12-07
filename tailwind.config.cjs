@@ -18,7 +18,7 @@ export default {
   },
   plugins: [
     skeleton({
-      themes: { custom: [myCustomTheme] }
+      themes: { preset: ['crimson'] }
     })
   ]
 };

@@ -8,14 +8,10 @@
 
 <section
   style="height: calc(100vh - {$navbarHeight}px);"
-  class="flex h-full flex-col"
+  class="px-5 grid grid-cols-12 grid-rows-2 py-5 gap-10"
 >
-  <section
-    class="grid grid-cols-2 grid-rows-2 pt-5 [&>*:nth-child(even)]:border-s"
-  >
-    <DataGroups />
-    <!-- <SystemSteps />
-    <Outputs />
-    <Streams /> -->
-  </section>
+  <DataGroups />
+  <Outputs />
+  <SystemSteps />
+  <!-- <Streams /> -->
 </section>
