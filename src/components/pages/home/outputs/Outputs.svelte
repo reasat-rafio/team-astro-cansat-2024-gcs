@@ -4,7 +4,7 @@
   import Item from './Item.svelte';
 </script>
 
-<section class="overflow-auto col-span-2 row-start-2">
+<section class="overflow-auto col-span-3 row-start-2 col-start-1">
   <Header icon={ZapIcon} title="Outputs" />
 
   <div class="flex flex-col gap-y-4">

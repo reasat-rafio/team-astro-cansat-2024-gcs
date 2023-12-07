@@ -24,7 +24,7 @@
   ];
 </script>
 
-<section class="overflow-auto col-span-3 row-span-2">
+<section class="overflow-auto col-span-6 row-start-2 col-start-7">
   <Header icon={RocketIcon} title="Streams" />
 
   <div class="flex flex-col gap-y-4">

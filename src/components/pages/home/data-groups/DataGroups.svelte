@@ -15,7 +15,7 @@
   let y = true;
 </script>
 
-<section class="overflow-auto col-span-2 row-start-1">
+<section class="overflow-auto col-span-3 row-start-1 col-start-1">
   <Header icon={DocumentChartBarIcon} title="Data Groups" />
 
   <div class="flex flex-col gap-y-4">
