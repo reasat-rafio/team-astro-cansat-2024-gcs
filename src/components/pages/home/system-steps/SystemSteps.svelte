@@ -61,10 +61,10 @@
   ];
 </script>
 
-<section class="overflow-auto col-span-4 row-span-2">
+<section class="overflow-auto col-span-3 row-span-2">
   <Header icon={LabIcon} title="System Steps" />
 
-  <ul class="m-0 select-none">
+  <ul class="m-0 select-none mx-2">
     {#each tree as t}
       <TreeView tree={t} />
     {/each}

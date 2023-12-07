@@ -40,7 +40,7 @@
 <li class="pl-[1em]">
   {#if children}
     <button
-      class="hover:bg-surface-500 rounded-lg transition-colors duration-300 flex gap-x-2 py-2 px-5"
+      class="hover:bg-surface-500 rounded-lg transition-colors duration-300 flex gap-x-2 py-2 px-5 text-left"
       on:click={toggleExpansion}
     >
       <span class="cursor-pointer flex items-center gap-x-1">
@@ -73,7 +73,7 @@
     {/if}
   {:else}
     <button
-      class="flex gap-x-2 py-2 px-5 hover:bg-surface-500 rounded-lg transition-colors duration-300"
+      class="flex gap-x-2 py-2 px-5 hover:bg-surface-500 rounded-lg transition-colors duration-300 text-left"
     >
       <FireIcon />
       {label}

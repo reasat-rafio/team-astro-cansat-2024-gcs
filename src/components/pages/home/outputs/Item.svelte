@@ -18,7 +18,7 @@
   </svg>
   <span>
     {formatKey}:{' '}
-    <span class="font-semibold text-gray-900 dark:text-white">
+    <span class="font-semibold text-white">
       {value}
     </span>
   </span>
