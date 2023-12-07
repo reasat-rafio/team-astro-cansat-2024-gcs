@@ -1,13 +1,21 @@
 <script lang="ts">
-  import Container from '@components/pages/home/container/Container.svelte';
-  import Payload from '@components/pages/home/payload/Payload.svelte';
-  import { navbarHeight } from '@stores/ui.store.';
+  import DataGroups from '@/components/pages/home/data-groups/DataGroups.svelte';
+  import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
+  import Streams from '@/components/pages/home/streams/Streams.svelte';
+  import SystemSteps from '@/components/pages/home/system-steps/SystemSteps.svelte';
+  import { navbarHeight } from '@/stores/ui.store.';
 </script>
 
 <section
   style="height: calc(100vh - {$navbarHeight}px);"
-  class="grid grid-cols-2 space-x-5 px-5 pt-3"
+  class="flex h-full flex-col"
 >
-  <Container />
-  <Payload />
+  <section
+    class="grid grid-cols-2 grid-rows-2 pt-5 [&>*:nth-child(even)]:border-s"
+  >
+    <DataGroups />
+    <!-- <SystemSteps />
+    <Outputs />
+    <Streams /> -->
+  </section>
 </section>

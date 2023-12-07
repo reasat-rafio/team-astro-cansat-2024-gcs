@@ -1,5 +1,6 @@
 <script lang="ts">
-  import H4 from '@components/ui/H4.svelte';
+  import H4 from '@/components/ui/H4.svelte';
+
   export let icon: ConstructorOfATypedSvelteComponent;
   export let title: string;
 </script>

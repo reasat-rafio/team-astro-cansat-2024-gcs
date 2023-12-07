@@ -1,5 +1,5 @@
 <script>
-  import DocumentChartBarIcon from '@components/icons/DocumentChartBarIcon.svelte';
+  import DocumentChartBarIcon from '@/components/icons/DocumentChartBarIcon.svelte';
   import Header from '../Header.svelte';
 </script>
 
