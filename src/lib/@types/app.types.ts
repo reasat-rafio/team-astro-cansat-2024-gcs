@@ -101,3 +101,29 @@ export type UpdateTiltAngle = {
   type: 'UPDATE_TILT_ANGLE';
   tiltAngle: StringData;
 };
+
+export type EnterCommand = {
+  type: 'ENTER_COMMAND';
+  command: string;
+};
+export type SubmitCommand = {
+  type: 'SUBMIT_COMMAND';
+  command: string;
+};
+
+export type TerminalEvent =
+  | EnterCommand
+  | SubmitCommand
+  | { type: 'MINIMIZE' }
+  | { type: 'MAXIMIZE' };
+
+export interface Command {
+  text: string;
+  timestamp: Date;
+}
+
+export interface TerminalContext {
+  commandHistory: Command[];
+  currentCommand: string;
+  output: string;
+}

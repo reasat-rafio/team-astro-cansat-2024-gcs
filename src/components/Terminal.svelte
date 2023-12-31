@@ -33,10 +33,10 @@
   <div class="flex justify-between bg-surface-500 p-2">
     <TerminalIcon />
     <div class="flex gap-4">
-      <button on:click={() => send({ type: 'minimize' })}>
+      <button on:click={() => send({ type: 'MINIMIZE' })}>
         <MinimizeIcon />
       </button>
-      <button on:click={() => send({ type: 'maximize' })}>
+      <button on:click={() => send({ type: 'MAXIMIZE' })}>
         <ExpendIcon />
       </button>
     </div>
@@ -51,8 +51,18 @@
         <span>qubit:~$ </span>
       </span>
 
+      <!-- svelte-ignore a11y-interactive-supports-focus -->
       <span
         bind:this={inputEl}
+        on:keydown={(e) => {
+          if (e.currentTarget && e.key === 'Enter') {
+            send({
+              type: 'ENTER_COMMAND',
+              command: e.currentTarget.innerText
+            });
+            e.currentTarget.innerText = '';
+          }
+        }}
         class="flex-1 h-fit bg-transparent border-none outline-none overflow-hidden resize-y block"
         role="textbox"
         contenteditable

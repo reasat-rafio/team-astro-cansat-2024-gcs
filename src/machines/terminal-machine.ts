@@ -1,45 +1,77 @@
-import { createMachine } from 'xstate';
+import type {
+  EnterCommand,
+  SubmitCommand,
+  TerminalContext,
+  TerminalEvent
+} from '@/lib/@types/app.types';
+import { assign, createMachine } from 'xstate';
 
-interface MachineEvent {}
+const terminalMachine = createMachine(
+  {
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUwCcC2BLAdgQwBsACAZQE9YAXMDAYgFEA5ZegJQH0BhAeQFleAgowAiAbQAMAXUSgADgHtYWSlnk4ZIAB6IAjABYAzADodAJgCsAGhBldBvUb3iAbBYC+b66ky5CpCtR0JACqAEK8AJLIXHyCIhLSSCAKSipqGtoIOgbmJuIAnAYA7FY2uqYeXujY+MTkVDRGGHiaWNgAXmC0kYwRkQBa9AkaKcqq6kmZOkUO+S4W1rYIObk5hSWVIN41fvWBTbhtWJ3dAgAafRGDw0mjaROgUzNGc66lSwbiDgAc5uvmHk8IBw8ggcA0218dQCNBGijG6UmiAAtDpFohTNMjGtigCgZDav4Ghgmi0jp04alxhlEHoiujljpxC89KYiuJvgYudyDJsCbsYSSauSwJSEQ8tIgDNlHM5viUGdLjHpWezOTyuUVAW4gA */
+    id: 'Terminal System',
 
-interface Command {
-  text: string;
-  timestamp: Date;
-}
+    types: {
+      context: {} as TerminalContext,
+      events: {} as TerminalEvent
+    },
 
-interface TerminalContext {
-  commandHistory: Command[];
-  currentCommand: string;
-  output: string;
-}
-
-const terminalMachine = createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QBUwCcC2BLAdgQwBsACAZQE9YAXMDAOgzwA8tsAvMAYgHscBZXFlnYBtAAwBdRKAAOXWFkpYeUkI0QBaAJwAmWgEZNAVgDMe7YYA0IMogPHa50aOOjDegOyH3ADjMBfPytUTFxCUgpqOmwcQXZuPiZYsDFJJBBZeUVlNLUED01aU3MrGzzNe0dnVw8vX20AwJAcLgg4FWDosPIqGhUMhSUcFVz1PQAWUX0jIstrWz1aJycXN08fM0MAoPRO4m7I+kS2MD65AezQXIA2URLETW9aQyWVmvX6xo7QvYiaegFjqdMoNhogTIUNncENpNFdFi9qmtfA0-EA */
-  id: 'Terminal System',
-  initial: 'maximize',
-
-  types: {
-    context: {} as TerminalContext
-  },
-
-  context: {
-    commandHistory: [],
-    currentCommand: '',
-    output: ''
-  },
-  states: {
-    maximize: {
-      on: {
-        minimize: 'minimize'
+    context: {
+      commandHistory: [],
+      currentCommand: '',
+      output: ''
+    },
+    on: {
+      ENTER_COMMAND: {
+        actions: 'setCurrentCommand'
+      },
+      SUBMIT_COMMAND: {
+        actions: ['addCommandToHistory', 'updateOutput']
       }
     },
 
-    minimize: {
-      on: {
-        maximize: 'maximize'
+    states: {
+      maximize: {
+        on: {
+          MINIMIZE: 'minimize'
+        }
+      },
+
+      minimize: {
+        on: {
+          MAXIMIZE: 'maximize'
+        }
       }
+    },
+
+    initial: 'maximize'
+  },
+  {
+    actions: {
+      setCurrentCommand: assign(({ event }) => {
+        const { command } = event as EnterCommand;
+        return {
+          currentCommand: command
+        };
+      }),
+      addCommandToHistory: assign(({ event, context }) => {
+        const { command } = event as SubmitCommand;
+        return {
+          commandHistory: [
+            ...context.commandHistory,
+            { text: command, timestamp: new Date() }
+          ]
+        };
+      }),
+      updateOutput: assign(({ event }) => {
+        const { command } = event as SubmitCommand;
+        return {
+          //   output: `${context.output}\n${command}`
+          output: `${command}`
+        };
+      })
     }
   }
-});
+);
 
 export default terminalMachine;
