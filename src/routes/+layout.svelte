@@ -3,7 +3,7 @@
 
   import { AppShell } from '@skeletonlabs/skeleton';
   import Navbar from '@/components/Navbar.svelte';
-  import Terminal from '@/components/Terminal.svelte';
+  import Terminal from '@/components/terminal/Terminal.svelte';
 </script>
 
 <AppShell>

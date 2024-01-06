@@ -22,11 +22,11 @@ const terminalMachine = createMachine(
       output: ''
     },
     on: {
-      ENTER_COMMAND: {
-        actions: 'setCurrentCommand'
-      },
+      // ENTER_COMMAND: {
+      //   actions: 'setCurrentCommand'
+      // },
       SUBMIT_COMMAND: {
-        actions: ['addCommandToHistory', 'updateOutput']
+        actions: ['setCurrentCommand', 'addCommandToHistory']
       }
     },
 
