@@ -120,10 +120,10 @@ export type TerminalEvent =
 export interface Command {
   text: string;
   timestamp: Date;
+  output: string;
 }
 
 export interface TerminalContext {
   commandHistory: Command[];
   currentCommand: string;
-  output: string;
 }
