@@ -1,18 +1,17 @@
 <script lang="ts">
+  import type { TerminalContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
+  import { formatDate } from '@/lib/helper';
   import terminalMachine from '@/machines/terminal-machine';
   import { useActor } from '@xstate/svelte';
-  import { fade, slide } from 'svelte/transition';
+  import { onMount } from 'svelte';
+  import { slide } from 'svelte/transition';
+  import type { Snapshot } from 'xstate';
+  import ChevronRight from '../icons/ChevronRight.svelte';
   import ExpendIcon from '../icons/ExpendIcon.svelte';
   import MinimizeIcon from '../icons/MinimizeIcon.svelte';
   import TerminalIcon from '../icons/TerminalIcon.svelte';
   import Prompt from './Prompt.svelte';
-  import { formatDate } from '@/lib/helper';
-  import ChevronRight from '../icons/ChevronRight.svelte';
-  import type { TerminalContext } from '@/lib/@types/app.types';
-  import type { Snapshot } from 'xstate';
-  import { onMount } from 'svelte';
-  import { flip } from 'svelte/animate';
 
   let inputEl: HTMLSpanElement;
 
@@ -23,14 +22,32 @@
   });
 
   onMount(() => {
-    actorRef.subscribe(() => {
+    const storeRef = actorRef.subscribe(() => {
       const persistedState = actorRef.getPersistedSnapshot();
       localStorage.setItem(
         'terminal_persisted_state',
         JSON.stringify(persistedState)
       );
     });
+
+    return () => storeRef.unsubscribe();
   });
+
+  type Event = KeyboardEvent & {
+    currentTarget: EventTarget & HTMLSpanElement;
+  };
+
+  function submitCommand(e: Event) {
+    if (e.currentTarget && e.key === 'Enter') {
+      e.preventDefault();
+      send({
+        type: 'SUBMIT_COMMAND',
+        command: e.currentTarget.innerText
+      });
+      e.currentTarget.innerText = '';
+    }
+  }
+
   function focusInputElement() {
     inputEl.focus();
   }
@@ -98,16 +115,7 @@
         <!-- svelte-ignore a11y-interactive-supports-focus -->
         <span
           bind:this={inputEl}
-          on:keydown={(e) => {
-            if (e.currentTarget && e.key === 'Enter') {
-              e.preventDefault();
-              send({
-                type: 'SUBMIT_COMMAND',
-                command: e.currentTarget.innerText
-              });
-              e.currentTarget.innerText = '';
-            }
-          }}
+          on:keydown={submitCommand}
           data-placeholder="Type help to get started."
           class="flex-1 h-fit bg-transparent border-none outline-none overflow-hidden resize-y block"
           role="textbox"
