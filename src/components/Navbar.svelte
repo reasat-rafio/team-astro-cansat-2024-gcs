@@ -4,11 +4,36 @@
   import HomeIcon from './icons/HomeIcon.svelte';
   import VisualIcon from './icons/VisualIcon.svelte';
   import { navbarHeight } from '@/stores/ui.store.';
+  import DownloadIcon from './icons/DownloadIcon.svelte';
+  import ImportIcon from './icons/ImportIcon.svelte';
+  import { onMount } from 'svelte';
+  import Papa from 'papaparse';
 
+  let importCSVEl: HTMLInputElement;
   const navItems = [
     { name: 'Home', icon: HomeIcon, url: '/' },
-    { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' }
+    { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' },
   ];
+
+  function handleCSVUpload() {
+    if (!importCSVEl?.files?.length) return;
+
+    Papa.parse(importCSVEl.files[0], {
+      complete: function (results) {
+        console.log('Finished:', results.data);
+      },
+    });
+  }
+
+  onMount(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+      e.returnValue = '';
+      return 'Are you sure you want to leave? You are in the middle of something.';
+    }
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+  });
 </script>
 
 <div bind:clientHeight={$navbarHeight}>
@@ -18,10 +43,9 @@
         {#each navItems as { icon, name, url }}
           <li>
             <a
-              class="btn variant-ghost hover:variant-filled-secondary {$page.url
+              class="variant-ghost btn hover:variant-filled-secondary {$page.url
                 .pathname === url && '!variant-filled-secondary'}"
-              href={url}
-            >
+              href={url}>
               <span>{name}</span>
               <svelte:component this={icon} />
             </a>
@@ -31,24 +55,24 @@
     </svelte:fragment>
     <svelte:fragment slot="trail">
       <button
-        class="btn variant-outline-secondary hover:variant-filled-secondary"
-        ><span>Export CSV</span>
-
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke-width="1.5"
-          stroke="currentColor"
-          class="w-5 h-5"
-        >
-          <path
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"
-          />
-        </svg>
+        on:click={() => importCSVEl.click()}
+        class="variant-outline-secondary btn hover:variant-filled-secondary">
+        <span>Import CSV</span>
+        <ImportIcon />
       </button>
+      <button
+        class="variant-outline-secondary btn hover:variant-filled-secondary">
+        <span>Export CSV</span>
+        <DownloadIcon />
+      </button>
+
+      <input
+        class="hidden"
+        bind:this={importCSVEl}
+        on:change={handleCSVUpload}
+        type="file"
+        name="importCSV"
+        accept=".csv" />
     </svelte:fragment>
   </AppBar>
 </div>
