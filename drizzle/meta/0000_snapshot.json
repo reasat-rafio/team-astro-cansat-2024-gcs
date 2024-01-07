@@ -1,7 +1,7 @@
 {
   "version": "5",
   "dialect": "sqlite",
-  "id": "66cf505d-f193-4711-b48e-4abeaf55c847",
+  "id": "d809c822-7332-4549-bc6e-867ed4dc79e1",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "sensor_data": {

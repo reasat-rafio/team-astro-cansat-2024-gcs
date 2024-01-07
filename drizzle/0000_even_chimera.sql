@@ -1,4 +1,4 @@
-CREATE TABLE `sensor_data` (
+CREATE TABLE IF NOT EXISTS `sensor_data` (
 	`id` integer PRIMARY KEY AUTOINCREMENT NOT NULL,
 	`timestamp` text DEFAULT CURRENT_TIMESTAMP,
 	`acceleration_x` real,

@@ -6,7 +6,7 @@ export default defineConfig({
   driver: 'better-sqlite',
   verbose: true,
   strict: true,
-  //   dbCredentials: {
-  // connectionString: process.env.DB_URL,
-  //   },
+  dbCredentials: {
+    url: 'sqlite.db',
+  },
 });
