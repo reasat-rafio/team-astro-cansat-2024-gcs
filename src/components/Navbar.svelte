@@ -15,16 +15,6 @@
     { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' },
   ];
 
-  function handleCSVUpload() {
-    if (!importCSVEl?.files?.length) return;
-
-    Papa.parse(importCSVEl.files[0], {
-      complete: function (results) {
-        console.log('Finished:', results.data);
-      },
-    });
-  }
-
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
       e.preventDefault();
@@ -34,6 +24,16 @@
 
     window.addEventListener('beforeunload', handleBeforeUnload);
   });
+
+  function handleCSVUpload() {
+    if (!importCSVEl?.files?.length) return;
+
+    Papa.parse(importCSVEl.files[0], {
+      complete: function (results) {
+        console.log('Finished:', results.data);
+      },
+    });
+  }
 </script>
 
 <div bind:clientHeight={$navbarHeight}>
