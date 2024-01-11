@@ -6,21 +6,21 @@
 
   let interval: number;
 
-  onMount(() => {
-    gcsService.send({ type: 'ACTIVATE' });
+  // onMount(() => {
+  //   gcsService.send({ type: 'ACTIVATE' });
 
-    mqttClient.payload.subscribe.all();
-    interval = setInterval(() => {
-      mqttClient.payload.publish.temperature();
-      mqttClient.payload.publish.acceleration();
-      mqttClient.payload.publish.altitude();
-      mqttClient.payload.publish.gyroscope();
-      mqttClient.payload.publish.humidity();
-      mqttClient.payload.publish.pressure();
-    }, 5000);
+  //   mqttClient.payload.subscribe.all();
+  //   interval = setInterval(() => {
+  //     mqttClient.payload.publish.temperature();
+  //     mqttClient.payload.publish.acceleration();
+  //     mqttClient.payload.publish.altitude();
+  //     mqttClient.payload.publish.gyroscope();
+  //     mqttClient.payload.publish.humidity();
+  //     mqttClient.payload.publish.pressure();
+  //   }, 5000);
 
-    return () => clearInterval(interval);
-  });
+  //   return () => clearInterval(interval);
+  // });
 </script>
 
 <section class="w-full [&>*]:border-surface-600 [&>*]:p-5">

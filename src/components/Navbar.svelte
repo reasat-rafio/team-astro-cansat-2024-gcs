@@ -10,6 +10,7 @@
   import Papa from 'papaparse';
 
   let importCSVEl: HTMLInputElement;
+  let csvData = [];
   const navItems = [
     { name: 'Home', icon: HomeIcon, url: '/' },
     { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' },
@@ -30,7 +31,7 @@
 
     Papa.parse(importCSVEl.files[0], {
       complete: function (results) {
-        console.log('Finished:', results.data);
+        csvData = results.data;
       },
     });
   }

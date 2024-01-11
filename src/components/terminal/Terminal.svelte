@@ -2,7 +2,7 @@
   import type { TerminalContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
   import { formatDate } from '@/lib/helper';
-  import terminalMachine from '@/machines/terminal-machine';
+  import terminalMachine, { validCommands } from '@/machines/terminal-machine';
   import { useActor } from '@xstate/svelte';
   import { onMount } from 'svelte';
   import { slide } from 'svelte/transition';
@@ -14,11 +14,14 @@
   import Prompt from './Prompt.svelte';
 
   let inputEl: HTMLSpanElement;
+  let suggestedCommands: string[] | null = null;
+  let activeSuggestedCommand: string | null = null;
+  let activeSuggestedCommandIndex = 0;
 
   const { snapshot, send, actorRef } = useActor(terminalMachine, {
     snapshot: JSON.parse(
-      localStorage?.getItem('terminal_persisted_state') as string
-    ) as Snapshot<TerminalContext>
+      localStorage?.getItem('terminal_persisted_state') as string,
+    ) as Snapshot<TerminalContext>,
   });
 
   onMount(() => {
@@ -26,30 +29,75 @@
       const persistedState = actorRef.getPersistedSnapshot();
       localStorage.setItem(
         'terminal_persisted_state',
-        JSON.stringify(persistedState)
+        JSON.stringify(persistedState),
       );
     });
 
     return () => storeRef.unsubscribe();
   });
 
-  type Event = KeyboardEvent & {
+  type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;
   };
 
-  function submitCommand(e: Event) {
+  function keyPressAction(e: KEvent) {
+    suggestCommand(e);
+    cycleSuggestedCommand(e);
+    submitCommand(e);
+    autoWriteSuggestedCommand(e);
+  }
+
+  function autoWriteSuggestedCommand(e: KEvent) {
+    if (!!suggestedCommands?.length) {
+      if (e.currentTarget && e.key === 'Control') {
+        e.preventDefault();
+        inputEl.innerHTML = activeSuggestedCommand || '';
+      }
+    }
+  }
+
+  function cycleSuggestedCommand(e: KEvent) {
+    if (!!suggestedCommands?.length) {
+      if (e.currentTarget && e.key === 'ArrowDown') {
+        activeSuggestedCommandIndex =
+          (activeSuggestedCommandIndex - 1 + suggestedCommands.length) %
+          suggestedCommands.length;
+        activeSuggestedCommand = suggestedCommands[activeSuggestedCommandIndex];
+      } else if (e.currentTarget && e.key === 'ArrowUp') {
+        activeSuggestedCommandIndex =
+          (activeSuggestedCommandIndex + 1) % suggestedCommands.length;
+        activeSuggestedCommand = suggestedCommands[activeSuggestedCommandIndex];
+      }
+    }
+  }
+
+  function suggestCommand(e: KEvent) {
+    let userInput = e.currentTarget.innerText;
+
+    if (
+      (typeof userInput === 'string' && userInput.length === 0) ||
+      userInput === null
+    )
+      return null;
+
+    const suggestions = Object.keys(validCommands).filter((command) =>
+      command.toLowerCase().includes(userInput.toLowerCase()),
+    );
+    suggestedCommands = suggestions;
+    activeSuggestedCommand = !!suggestions?.length
+      ? suggestions[activeSuggestedCommandIndex]
+      : null;
+  }
+
+  function submitCommand(e: KEvent) {
     if (e.currentTarget && e.key === 'Enter') {
       e.preventDefault();
       send({
         type: 'SUBMIT_COMMAND',
-        command: e.currentTarget.innerText
+        command: e.currentTarget.innerText.trim(),
       });
       e.currentTarget.innerText = '';
     }
-  }
-
-  function focusInputElement() {
-    inputEl.focus();
   }
 </script>
 
@@ -58,15 +106,14 @@
 <aside
   role="button"
   tabindex="0"
-  on:click={focusInputElement}
+  on:click={() => inputEl.focus()}
   class={cn(
-    'fixed bottom-0 right-0 rounded-md overflow-hidden w-full z-50 transition-all duration-300',
+    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md transition-all duration-300',
     {
       'max-w-xs': $snapshot.matches('minimize'),
-      'max-w-4xl': $snapshot.matches('maximize')
-    }
-  )}
->
+      'max-w-4xl': $snapshot.matches('maximize'),
+    },
+  )}>
   <div class="flex justify-between bg-surface-500 p-2">
     <TerminalIcon />
     <div class="flex gap-4">
@@ -81,8 +128,7 @@
   {#if $snapshot.matches('maximize')}
     <div
       transition:slide
-      class="p-2 bg-black/40 backdrop-blur-lg h-[450px] overflow-y-auto space-y-2"
-    >
+      class="h-[450px] space-y-2 overflow-y-auto bg-black/40 p-2 backdrop-blur-lg">
       <!-- HISTORY -->
       {#if !!$snapshot.context.commandHistory?.length}
         <div class="flex flex-col gap-y-2">
@@ -90,7 +136,7 @@
             <div transition:slide={{ duration: 300 }} class="flex flex-col">
               <div class="flex justify-between gap-x-2">
                 <Prompt />
-                <div class="flex-1 flex-wrap break-words w-fit">
+                <div class="w-fit flex-1 flex-wrap break-words">
                   {text}
                 </div>
                 <span class="text-xs text-green-300">
@@ -98,8 +144,8 @@
                 </span>
               </div>
 
-              <p class="text-sm flex">
-                <ChevronRight class="text-green-300 pt-1" />
+              <p class="flex text-sm">
+                <ChevronRight class="pt-1 text-green-300" />
                 <span class="whitespace-pre-line">
                   {output}
                 </span>
@@ -113,14 +159,20 @@
         <Prompt />
 
         <!-- svelte-ignore a11y-interactive-supports-focus -->
-        <span
-          bind:this={inputEl}
-          on:keydown={submitCommand}
-          data-placeholder="Type help to get started."
-          class="flex-1 h-fit bg-transparent border-none outline-none overflow-hidden resize-y block"
-          role="textbox"
-          contenteditable
-        />
+        <div class="relative flex-1">
+          {#if !!activeSuggestedCommand}
+            <div transition:slide class="absolute left-0 top-0 opacity-50">
+              {activeSuggestedCommand}
+            </div>
+          {/if}
+          <span
+            bind:this={inputEl}
+            on:keyup={keyPressAction}
+            data-placeholder="Type help to get started."
+            class="block h-fit resize-y overflow-hidden border-none bg-transparent outline-none"
+            role="textbox"
+            contenteditable />
+        </div>
       </div>
     </div>
   {/if}
