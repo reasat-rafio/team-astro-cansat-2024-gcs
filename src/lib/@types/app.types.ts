@@ -33,74 +33,28 @@ export interface MachineContext {
 }
 
 export type MachineEvent =
-  | { type: 'ACTIVATE' }
-  | UpdateAcceleration
-  | UpdateAirPressure
-  | UpdateAirSpeed
-  | UpdateAltitude
-  | UpdateTemperature
-  | UpdateBatteryVoltage
-  | UpdateGpsCoordinates
-  | UpdateGyroscope
-  | UpdateLongitude
-  | UpdateSatellitesTracked
-  | UpdateTiltAngle
+  | { type: 'ENABLE_SIMULATION' }
+  | { type: 'ENABLE_FLIGHT' }
+  | { type: 'ACTIVATE_SIMULATION' }
+  | { type: 'ACTIVATE_FLIGHT' }
+  | { type: 'TRIGGER_DESCENDING' }
+  | { type: 'TRIGGER_LANDING' }
+  | { type: 'UPDATE_DATA'; data: MachineData }
   | { type: 'KILL' };
 
-export type UpdateAcceleration = {
-  type: 'UPDATE_ACCELERATION';
-  acceleration: XYZNumberData;
-};
-
-export type UpdateAirPressure = {
-  type: 'UPDATE_AIR_PRESSURE';
+interface MachineData {
+  acceleration?: XYZNumberData;
   airPressure: StringData;
-};
-
-export type UpdateAirSpeed = {
-  type: 'UPDATE_AIR_SPEED';
   airSpeed: StringData;
-};
-
-export type UpdateAltitude = {
-  type: 'UPDATE_ALTITUDE';
   altitude: StringData;
-};
-
-export type UpdateTemperature = {
-  type: 'UPDATE_TEMPERATURE';
   temperature: StringData;
-};
-
-export type UpdateBatteryVoltage = {
-  type: 'UPDATE_BATTERY_VOLTAGE';
   batteryVoltage: StringData;
-};
-
-export type UpdateGpsCoordinates = {
-  type: 'UPDATE_GPS_COORDINATES';
   gpsCoordinates: StringData;
-};
-
-export type UpdateGyroscope = {
-  type: 'UPDATE_GYROSCOPE';
-  gyroscope: XYZNumberData;
-};
-
-export type UpdateLongitude = {
-  type: 'UPDATE_LONGITUDE';
   longitude: StringData;
-};
-
-export type UpdateSatellitesTracked = {
-  type: 'UPDATE_SATELLITES_TRACKED';
+  gyroscope: XYZNumberData;
   satellitesTracked: StringData;
-};
-
-export type UpdateTiltAngle = {
-  type: 'UPDATE_TILT_ANGLE';
   tiltAngle: StringData;
-};
+}
 
 export type EnterCommand = {
   type: 'ENTER_COMMAND';

@@ -1,29 +1,15 @@
-import type {
-  MachineContext,
-  MachineEvent,
-  UpdateAcceleration,
-  UpdateAirPressure,
-  UpdateAirSpeed,
-  UpdateAltitude,
-  UpdateBatteryVoltage,
-  UpdateGpsCoordinates,
-  UpdateGyroscope,
-  UpdateLongitude,
-  UpdateSatellitesTracked,
-  UpdateTemperature,
-  UpdateTiltAngle
-} from '$lib/@types/app.types';
+import type { MachineContext, MachineEvent } from '$lib/@types/app.types';
 import { assign, createActor, createMachine } from 'xstate';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiAIx8A7ADYAdAA4l27UoCsJgMz2HAX0ca0WXIWJl0lWvSZGsORgYCLMAIIEACrsAGrhUQCi-EJIIGKS0rJpigjaBgCcGlp52rZWpuaWNg5OLiBuOPhEpBTUdAyMRqg42BLYUMwAqgAKACIJiQD6kQSJnIkASgnsAPIAcilyGVIy2HK5tip6RlYGKlbFOnzmRny22hfOrhhNnq0+7f5dPdh9A8NxpMZuxFlMRotElQqENIVs0jssvscoh7HwjNYHhcrggCtY7noTI8rM8Gq8PC1vL4OgFfv9BqMJkkQWCqCNEokxvDROJdtlQId8ZYzLY9JdNIgzAUjMTSY0KV42n5Ot1ev0GUDmeFODEokMxslBNteUiDqilCZKqLxSUxbYZXptCYxXLyc1FZ9lbS1QDGcCkgBZdnLPVwo0Ik17M0INEYwxnbEShAGKwnFROl31eXuj7U76qv7qwFM6YAIQSSUWAE0prFVjrwshDakeZkoyiY5YCfdiTiztojCoU+cSVm3e8qV8VXSi37mcgRlQpgRVqtFmN2OtJlRuelI-yFKjHkY9EOEzblCmjFjRy93DnJ16fj6NSWpsgq4tVlQV+zd4j2wFVFbEtC8Y0Ka8rAKa1XXvCclRpZ9C19TVpk4DZkHYPUDX-fdkSAmNbkdPhoLFHFjntJQ+BHWC3kpBD8xnFC3yoSZuCwqEpiiZYCFYTlcLbA9Dj4FRThHHFtD0E5MVlMc4Poz1EILeli39LgohmdZkAWAS+Xww9CIHYdExKIlTmcepsHQCA4DkbN4MU75jUE-TcgAWgMHEPNohVcynAIghCERnL06NVAk7QoLuAwpL4OxansHyHwY6cXxC00O1sJQTlIsCLFuAoRUzO86I9PMVQYVBGH6ABDBgIHSwCDPyIok10KTryqax4tqCzHCAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5GjADgDMKgKw7dlywF97GtFlyFiZdJVr0m+2ORgYCLMAKIAcgCCAEKcoQD6VOwAsgCqnJEAKuwA8uH8QkggYpLSskWKCACMAGxKhsZWllVVOkpKOhpa1Xz1lsZGOm01AJw6I0qOzhg4+ESkFNR0DIz+gcFhUbEJAGKc7MgAEpkFciVSMthylbX1A00tbR1d2nwj+iOfn70jJiojKj4KimIBcs3cCy8S18q0kjEw5AAhmVsPEwNhEQAjQLMSIEbIANSyCSSaQy2TypyK5xR10QNXUmkQVSMKn0dT4NRqnLaVQsJhBYLc8083mWfjhCORl3iiIAxtIAG5gZipAAKABFifEtZlIlTROILuVQJUapYaoYRmYTJ9WiMqiM+J0mQhLKp9P0jI8zJZfjUzIKZsKPIsfCt-BJ4UiUbKFRJlfpEbA5eiIBJsFBmJkAEoHZChHM60JUAgRDXscLIA3FI20irKSwmfQ6c16PntFomWovHpDfRmJ01EytsxmPhVBxOUHBuahqHhiVRqWx+VKsD6CBwVO4DNZ3P5wvxDLhCtVms0y50hDmKotkajSdKMxtZ0mXss-uDzkjgPjydBq4c6QmKML6AAZuQEhQAAFiQaIYtiKp4oS2p7AcxwXnWV4Nm6jLdC0Tr6LanL+q0XaONO2DoFu8BFEKwGitCKxnNhJoKIgAC0NS9pxlgfF8glCdagHgiKYbirC6wiKxpQ4aayj4cyLT6EotRcgMjomFO0xARCTGLqsDCoIwGbIpAsnGlcuF8paKjmjUVTtJ2nIWL2ugGF6Ri+oCrKiSGIHMUu0bSsQCFYoEln1gpCA2nZVQjm0I4vv8Fq9t2nr3N2Kjjh0gbTgx+kSWBkoxjKa4JmAUXyRxCAqBlZhVFYNgJWp9UjJYvYTGyJFckoJg1DYD5VP5jHFRGpWhaiFWJsmO7ppm1XsZUFjvI1zUqK1TW2p1rqfjoxFDr+Y4Th0o1FQukmRiFq7xomtHzXuS3WTFoxsgy-Q6HyOhmIN-Ufs6B29cd-5nQVs4XaBE3LmVYUzRuSK4BZ1JsS9tUsr6qmbQ+XK1HwtpmAD-bA6OoM6Od4mXWBkHQXB4VIc915mEolq+taHVvCOgJOR+A0CV8Vi+raJjaRT85Q34NOwfB8OM7hKhKO8SiWI1k7NDozTOh+tRA06eicu6Nhg44QA */
     id: 'Ground Control System',
 
     initial: 'sleep',
     types: {
       context: {} as MachineContext,
-      events: {} as MachineEvent
+      events: {} as MachineEvent,
     },
     context: {
       acceleration: { values: [{ x: 0, y: 0, z: 0 }], time: [] },
@@ -36,181 +22,196 @@ const gcsMachine = createMachine(
       gyroscope: { values: [], time: [] },
       longitude: { values: [], time: [] },
       satellitesTracked: { values: [], time: [] },
-      tiltAngle: { values: [], time: [] }
+      tiltAngle: { values: [], time: [] },
     },
 
     states: {
       sleep: {
         on: {
-          ACTIVATE: {
-            target: 'running',
-            actions: 'activate'
-          }
-        }
+          ENABLE_SIMULATION: 'simulation_enable',
+          ENABLE_FLIGHT: 'flight_enable',
+        },
       },
 
-      running: {
-        entry: 'notifyActive',
-        exit: 'notifyInactive',
+      terminated: {},
+
+      simulation_enable: {
+        entry: 'notifySimulationEnable',
+
         on: {
-          UPDATE_ACCELERATION: {
-            actions: 'updateAcceleration'
-          },
-          UPDATE_AIR_PRESSURE: {
-            actions: 'updateAirPressure'
-          },
-          UPDATE_AIR_SPEED: {
-            actions: 'updateAirSpeed'
-          },
-          UPDATE_ALTITUDE: {
-            actions: 'updateAltitude'
-          },
-          UPDATE_TEMPERATURE: {
-            actions: 'updateTemperature'
-          },
-          UPDATE_BATTERY_VOLTAGE: {
-            actions: 'updateBatteryVoltage'
-          },
-          UPDATE_GPS_COORDINATES: {
-            actions: 'updateGpsCoordinates'
-          },
-          UPDATE_GYROSCOPE: {
-            actions: 'updateGyroscope'
-          },
-          UPDATE_LONGITUDE: {
-            actions: 'updateLongitude'
-          },
-          UPDATE_SATELLITES_TRACKED: {
-            actions: 'updateSatellitesTracked'
-          },
-          UPDATE_TILT_ANGLE: {
-            actions: 'updateTiltAngle'
-          }
-        }
+          ACTIVATE_SIMULATION: 'simulation_active',
+        },
       },
 
-      terminated: {}
+      simulation_active: {
+        entry: 'notifySimulationActivated',
+        on: {
+          UPDATE_DATA: {
+            actions: [
+              'updateAcceleration',
+              'updateAirPressure',
+              'updateAirSpeed',
+              'updateAirSpeed',
+              'updateAltitude',
+              'updateTemperature',
+              'updateBatteryVoltage',
+              'updateGpsCoordinates',
+              'updateGpsCoordinates',
+              'updateGyroscope',
+              'updateLongitude',
+              'updateSatellitesTracked',
+              'updateTiltAngle',
+            ],
+          },
+        },
+        states: {
+          ascending: {
+            on: {
+              TRIGGER_DESCENDING: 'descending',
+            },
+          },
+
+          descending: {
+            on: {
+              TRIGGER_LANDING: 'landed',
+            },
+          },
+
+          landed: {},
+        },
+
+        initial: 'ascending',
+      },
+
+      flight_enable: {
+        entry: 'notifyFlightEnable',
+        on: {
+          ACTIVATE_FLIGHT: 'flight_active',
+        },
+      },
+
+      flight_active: {
+        entry: 'notifyFlightActive',
+      },
     },
 
     on: {
-      KILL: '.terminated'
-    }
+      KILL: '.terminated',
+    },
   },
   {
     actions: {
-      activate: () => {
-        console.log('activating...');
+      notifySimulationEnable: () => {
+        console.log('Simulation Enabled');
       },
-      notifyActive: () => {
-        console.log('active!');
+      notifySimulationActivated: () => {
+        console.log('Simulation Activated');
       },
-      notifyInactive: () => {
-        console.log('inactive!');
-      },
+
       updateAcceleration: assign(({ event, context }) => {
-        const { acceleration } = event as UpdateAcceleration;
+        const { acceleration } = event as unknown;
         return {
           acceleration: {
             values: [...context.acceleration.values, acceleration.value],
-            time: [...context.acceleration.time, acceleration.time]
-          }
+            time: [...context.acceleration.time, acceleration.time],
+          },
         };
       }),
       updateAirPressure: assign(({ event, context }) => {
-        const { airPressure } = event as UpdateAirPressure;
+        const { airPressure } = event as unknown;
         return {
           airPressure: {
             values: [...context.airPressure.values, airPressure.value],
-            time: [...context.airPressure.time, airPressure.time]
-          }
+            time: [...context.airPressure.time, airPressure.time],
+          },
         };
       }),
       updateAirSpeed: assign(({ event, context }) => {
-        const { airSpeed } = event as UpdateAirSpeed;
+        const { airSpeed } = event as unknown;
         return {
           airSpeed: {
             values: [...context.airSpeed.values, airSpeed.value],
-            time: [...context.airSpeed.time, airSpeed.time]
-          }
+            time: [...context.airSpeed.time, airSpeed.time],
+          },
         };
       }),
       updateAltitude: assign(({ event, context }) => {
-        const { altitude } = event as UpdateAltitude;
+        const { altitude } = event as unknown;
         return {
           altitude: {
             values: [...context.altitude.values, altitude.value],
-            time: [...context.altitude.time, altitude.time]
-          }
+            time: [...context.altitude.time, altitude.time],
+          },
         };
       }),
       updateTemperature: assign(({ event, context }) => {
-        const { temperature } = event as UpdateTemperature;
+        const { temperature } = event as unknown;
         return {
           temperature: {
             values: [...context.temperature.values, temperature.value],
-            time: [...context.temperature.time, temperature.time]
-          }
+            time: [...context.temperature.time, temperature.time],
+          },
         };
       }),
       updateBatteryVoltage: assign(({ event, context }) => {
-        const { batteryVoltage } = event as UpdateBatteryVoltage;
+        const { batteryVoltage } = event as unknown;
         return {
           batteryVoltage: {
             values: [...context.batteryVoltage.values, batteryVoltage.value],
-            time: [...context.batteryVoltage.time, batteryVoltage.time]
-          }
+            time: [...context.batteryVoltage.time, batteryVoltage.time],
+          },
         };
       }),
       updateGpsCoordinates: assign(({ event, context }) => {
-        const { gpsCoordinates } = event as UpdateGpsCoordinates;
+        const { gpsCoordinates } = event as unknown;
         return {
           gpsCoordinates: {
             values: [...context.gpsCoordinates.values, gpsCoordinates.value],
-            time: [...context.gpsCoordinates.time, gpsCoordinates.time]
-          }
+            time: [...context.gpsCoordinates.time, gpsCoordinates.time],
+          },
         };
       }),
       updateGyroscope: assign(({ event, context }) => {
-        const { gyroscope } = event as UpdateGyroscope;
+        const { gyroscope } = event as unknown;
         return {
           gyroscope: {
             values: [...context.gyroscope.values, gyroscope.value],
-            time: [...context.gyroscope.time, gyroscope.time]
-          }
+            time: [...context.gyroscope.time, gyroscope.time],
+          },
         };
       }),
       updateLongitude: assign(({ event, context }) => {
-        const { longitude } = event as UpdateLongitude;
+        const { longitude } = event as unknown;
         return {
           longitude: {
             values: [...context.longitude.values, longitude.value],
-            time: [...context.longitude.time, longitude.time]
-          }
+            time: [...context.longitude.time, longitude.time],
+          },
         };
       }),
       updateSatellitesTracked: assign(({ event, context }) => {
-        const { satellitesTracked } = event as UpdateSatellitesTracked;
+        const { satellitesTracked } = event as unknown;
         return {
           satellitesTracked: {
             values: [
               ...context.satellitesTracked.values,
-              satellitesTracked.value
+              satellitesTracked.value,
             ],
-            time: [...context.satellitesTracked.time, satellitesTracked.time]
-          }
+            time: [...context.satellitesTracked.time, satellitesTracked.time],
+          },
         };
       }),
       updateTiltAngle: assign(({ event, context }) => {
-        const { tiltAngle } = event as UpdateTiltAngle;
+        const { tiltAngle } = event as unknown;
         return {
           tiltAngle: {
             values: [...context.tiltAngle.values, tiltAngle.value],
-            time: [...context.tiltAngle.time, tiltAngle.time]
-          }
+            time: [...context.tiltAngle.time, tiltAngle.time],
+          },
         };
-      })
-    }
-  }
+      }),
+    },
+  },
 );
 
 export const gcsService = createActor(gcsMachine).start();
