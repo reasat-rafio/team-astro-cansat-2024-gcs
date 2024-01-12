@@ -3,7 +3,7 @@ import { assign, createMachine } from 'xstate';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQDYAnADo9xvQA4A7EqXmVK0wF97GtFlyFiZdJVr0mBiRDkYMwAogByAIIAQpwhAPpU7ACyAKqcEQAq7ADyYfxCSCBiktKyhYoIAIw6SgZ89fU6AMx8AKxKpqZ65hpaVXy1rQ2Vrebm3d2djs4YOPhEpBTUdAyM-oHB4dGxcQBinOzIABIZ+XLFUjLYchXVtQ2NLe2d3b3alXx1w6aVLTqtOkqSmmIBcc3ciy8y18a0kjEw5AAhqVsHEwNhEQAjILMCIELIANUy8USqXSWVyZ0KFxRN0QOnUmkQHz4KgMNT4OjaljGA3MILBbgWnm8Kz8cIRyKucURAGNpAA3YIpAAKABFiXENRkIlTROJLmVQBV-jo6nomj9qmZ9DodG8EO02UoTOYdOZKnoVC7WgLZkKPEsfKsDBKkSiZfKJEqDIjYLL0RAJNgoMwMgAlQ7IELprUhKgEcJq9hhZB6ooG2nlZStUwGN0A2xKD4MpQ1B0fMYGJp6Tl8D1mIb8pyg-3zQNQ4PiiTw8PSuWKsAGCBwBO4ZOpjNZnNxdJhYul8s0q50hCmJqVet6HRdG9NZudVod-vmbu9rkD0xDv2uceQ0UwgYABm5ASFAAAWJBohi2LBHihKavshwnEelYntWjqMn0lSep8XRtBafBNLYtiVI4I7YOgK7wIUgp-iK0KrOcaFGgoiAALT2kyCCcV8Dz8fUdg-uCwpBmKawBEEzElOhxrKFh2gDHU55NACozmF0zY6MJAb-oxfgMKgjDJsikDSYa1wYb8Zq6ACLRNG6uiaQ6KjmJ8LrGBYVg2EJI50RCDFTrCM6ShG6JYlJ1IsZZckIJaNmVBYozGA5HRNA6PwGB5Ji6LZVjaX5Y4BWJgFhlKxCRou5lVrFdiXhe3p6K0Hy-ACIwOnoqgGPhrTdKpQJtsOMy-sVk7iaGIVzhVC7RkucZrkmKbVbJbFxSohgNT6LWqYCT7cZ2r74R+npfv2On0SVIZlRGM0xtRC0bstrEml67IqEMugui0fA-M+XZHf2J3foVI2iWNpWTeVqK3UuSK4GZUUyc9zJEa0WUqJ6tb6FYSgOX9h3voDg5nSDIkTgBIYgWBkHQRFYBPTFq33maqkWhaQyEd6HYWHx9TVK1lR2MCpO6YF41UxBUEwwzp6NVlrQNZyPaJQrXHYdUBPcv8Iz9hY5H2EAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+SgIymdSkwE4AbAF97GtFlyFiZdJVr0m+iRDkYMwAogByAIIAQpwhAPpU7ACyAKqcEQAq7ADyYfxCSCBiktKyhYoIprZKhsZ8OrYAHACsAMwqLRpalSb6zXUtekqNrTqmjs4YOPhEpBTUdAyM-oHB4dGxcQBinOzIABIZ+XLFUjLYchVVNXX1TW0dzV3apgZ1Fo2NfK1KSrY6ExALmm7jmXgWvmWkkYmHIAENStg4mBsHCAEZBZgRAhZABqmXiiVS6SyuWOhVOiMuiFs6k0iFefBU+mqfFs7Os1hUzWagOBblmnm8iz80NhCPOcThAGNpAA3YIAJRCEQAIttFdkknECFRceTROIzmVQBUHvolNYWo1bK1Wo1TNYxs8ELTbPoVKYRqM2qNHY0+VMBR55j4lvoxfDEVLZRIFcwUgAFVUEuIpjIRA1FI1U8qIRoqaz6H0maq-HQ6EYu5qqPrGT2mdrWPg1wOuGYh8Fh0USGFRyUy+VgfRw2DSlEQCTYKDMDKKvbIEKKtMhKgEcKq9hhZBZynnakIOw1Vr-PR8Uwqe2NJStF3mUzH17NaqfZqXpltkGC0MiqG98XRoOcbDhAcDjrgU4znOC5LnE6RhJu267jm+55pUdo6MWVpWmM9Q3i2d7mI+LYvi075KJ+wZgsKkIRv+-bEDGQ4rJi0HIIuy4RGuG5bjuggnChJoKDSrzFm+fDWKYzTNteOi3vSlREcWT6kW+rQmJRHbURC4YAGbkBIUAABYkMiqIYsE2J4qmOx7IcyElKhpqIG+hHNvojTNrYNYFv0SitoC2DoKB8CFPyWlCjpTACY5QkVAAtLYLrxc0+iculVSfPUrRcg4ThAkGEU-rRARBDFxoXGhqiEaYFpVP8PJ8A6TrjPl4WgpF3bLAwqCMFOCKQOVubOeh7oqN5tJPl8b7WEoLq6AY-RGI6-TstyLaaR1xXhpGEqMSi6JlRSgmVSN9pjV6DSSZyGEVi6Dp1sYlh+p6wybd+Xa-nRfZ7UiQEKkNTnCQgvwGK04kjM2PJev8LpOkWDotjo3LNHo3IqO9nY0Tt9G-UxwEjmOE6QYDcX5j8aUPrYXpmP8BbWDVNSI8+wxkepGNtYVW2fbRu2AbGCr6CF4GTtOpOncD5hWh6ujmJ6hZfHNCn3kzKms2pH6c+23PYz2P388x8K4INx2xRLVw1rVTJWJ60m2ioTWMx5auvu+HOTNrH263++sDgLw6lWA4sHqzYkO5DLbNDDOhO8zqlu5j2ldfo+mGSZZmHUHpsVQePzuuD1j2s01qfCjd6NJh7yNupF62onnVfanxmmf9WeGmbB4qJaFptNX1Ndz8nqEf8HleaogwtY4jhAA */
     id: 'Ground Control System',
 
     initial: 'idle',
@@ -12,6 +12,8 @@ const gcsMachine = createMachine(
       events: {} as MachineEvent,
     },
     context: {
+      csvData: undefined,
+      output: '',
       sensorData: {
         acceleration: { values: [{ x: 0, y: 0, z: 0 }], time: [] },
         airPressure: { values: [], time: [] },
@@ -48,6 +50,12 @@ const gcsMachine = createMachine(
       simulation_active: {
         entry: 'notifySimulationActivated',
         on: {
+          STORE_CSV_DATA: {
+            actions: 'storeCsvData',
+          },
+          START_SIMULATION: {
+            actions: 'startSimulation',
+          },
           UPDATE_DATA: {
             actions: [
               'updateAcceleration',
@@ -80,9 +88,14 @@ const gcsMachine = createMachine(
           },
 
           landed: {},
+          idle: {
+            on: {
+              TRIGGER_ASCENDING: 'ascending',
+            },
+          },
         },
 
-        initial: 'ascending',
+        initial: 'idle',
       },
 
       flight_enable: {
@@ -103,12 +116,24 @@ const gcsMachine = createMachine(
   },
   {
     actions: {
-      notifySimulationEnable: () => {
-        console.log('Simulation Enabled');
-      },
-      notifySimulationActivated: () => {
-        console.log('Simulation Activated');
-      },
+      notifySimulationEnable: assign(() => {
+        return {
+          output: 'Simulation Enabled',
+        };
+      }),
+      notifySimulationActivated: assign(() => {
+        return {
+          output: 'Simulation Activated',
+        };
+      }),
+      storeCsvData: assign(({ event }) => {
+        const { csvData } = event as unknown;
+        return { csvData };
+      }),
+      startSimulation: assign(({ context }) => {
+        const simData = context.csvData;
+        // return { csvData };
+      }),
 
       //   updateAcceleration: assign(({ event, context }) => {
       //     const { acceleration } = event as unknown;

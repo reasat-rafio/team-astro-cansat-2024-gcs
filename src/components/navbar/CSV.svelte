@@ -3,12 +3,13 @@
   import Papa from 'papaparse';
   import ImportIcon from '../icons/ImportIcon.svelte';
   import { onDestroy } from 'svelte';
+  import gcsStore from '@/stores/gcs.store';
 
   let importCSVEl: HTMLInputElement;
   let csvData: string[][][] = [];
-
   let currentIndex = 1;
   let intervalId: NodeJS.Timeout | null = null;
+  const { send } = $gcsStore;
 
   const processLine = () => {
     if (currentIndex < csvData.length) {

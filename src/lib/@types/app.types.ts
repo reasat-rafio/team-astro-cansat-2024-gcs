@@ -1,3 +1,4 @@
+import type csvProcessingMachine from '@/machines/csv-machine';
 import type gcsMachine from '@/machines/gcs-machine';
 import type terminalMachine from '@/machines/terminal-machine';
 import type { Readable } from 'svelte/store';
@@ -24,6 +25,8 @@ export interface XYZNumberData {
 }
 
 export interface MachineContext {
+  csvData?: string[][][];
+  output: string;
   sensorData: {
     acceleration: XYZNumberArrayData;
     airPressure: StringArrayData;
@@ -97,3 +100,4 @@ export type ActorContext<T> = {
 
 export type TerminalActorContext = ActorContext<typeof terminalMachine>;
 export type GCSActorContext = ActorContext<typeof gcsMachine>;
+export type CSVActorContext = ActorContext<typeof csvProcessingMachine>;

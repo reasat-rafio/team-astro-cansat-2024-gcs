@@ -5,8 +5,9 @@ import type {
   TerminalEvent,
 } from '@/lib/@types/app.types';
 import { validCommands } from '@/lib/helper';
-import { assign, createActor, createMachine } from 'xstate';
-import gcsMachine from './gcs-machine';
+import { assign, createMachine } from 'xstate';
+import { get } from 'svelte/store';
+import gcsStore from '@/stores/gcs.store';
 
 const terminalMachine = createMachine(
   {
@@ -54,9 +55,13 @@ const terminalMachine = createMachine(
       }),
       triggerCommandAnsSaveToHistory: assign(({ event, context }) => {
         const { command } = event as SubmitCommand;
-        const gcsService = createActor(gcsMachine).start();
+        const $gcsStore = get(gcsStore);
 
-        let output: string;
+        let output: string = '';
+        const subscription = $gcsStore.actorRef.subscribe((state) => {
+          output = state.context.output;
+        });
+
         let helpText = 'Available commands:\n';
 
         switch (command as (keyof typeof validCommands)[number]) {
@@ -65,20 +70,11 @@ const terminalMachine = createMachine(
             break;
 
           case 'CMD,2043,SIM,ENABLE':
-            // gcsService.send({ type: 'ENABLE_SIMULATION' });
-            console.log('=================ENABLED===================');
-            console.log(gcsService);
-            console.log('====================================');
-            output = 'SIM ENABLED';
+            $gcsStore.send({ type: 'ENABLE_SIMULATION' });
             break;
 
           case 'CMD,2043,SIM,ACTIVATE':
-            // gcsService.send({ type: 'ACTIVATE_SIMULATION' });
-            console.log('===========ACTIVATED=========================');
-            console.log(gcsService);
-            console.log('====================================');
-            output = 'SIM ACTIVATED';
-
+            $gcsStore.send({ type: 'ACTIVATE_SIMULATION' });
             break;
 
           case 'CMD,2043,SIM,DISABLE':
@@ -117,6 +113,8 @@ const terminalMachine = createMachine(
 
         if (command === 'clear')
           return { commandHistory: [], currentCommand: '' };
+
+        subscription.unsubscribe();
         return {
           commandHistory: [
             ...context.commandHistory,

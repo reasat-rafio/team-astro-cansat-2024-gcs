@@ -3,8 +3,10 @@
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
   import type { TerminalContext } from '@/lib/@types/app.types';
+  import csvProcessingMachine from '@/machines/csv-machine';
   import gcsMachine from '@/machines/gcs-machine';
   import terminalMachine from '@/machines/terminal-machine';
+  import csvStore from '@/stores/csv.store';
   import gcsStore from '@/stores/gcs.store';
   import terminalStore from '@/stores/terminal.store';
   import { AppShell } from '@skeletonlabs/skeleton';
@@ -13,6 +15,7 @@
   import type { Snapshot } from 'xstate';
 
   const gcsService = useActor(gcsMachine);
+  const csvService = useActor(csvProcessingMachine);
   const terminalService = useActor(terminalMachine, {
     snapshot: JSON.parse(
       localStorage?.getItem('terminal_persisted_state') as string,
@@ -21,6 +24,22 @@
 
   gcsStore.setStore(gcsService);
   terminalStore.setStore(terminalService);
+  csvStore.setStore(csvService);
+
+  onMount(() => {
+    // LOGGER
+    const gcsSub = $gcsStore.actorRef.subscribe((state) => {
+      console.log({ gcs: state });
+    });
+    const terminalSub = $terminalStore.actorRef.subscribe((state) => {
+      console.log({ terminal: state });
+    });
+
+    return () => {
+      gcsSub.unsubscribe();
+      terminalSub.unsubscribe();
+    };
+  });
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
