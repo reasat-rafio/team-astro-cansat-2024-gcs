@@ -1,3 +1,5 @@
+import type gcsMachine from '@/machines/gcs-machine';
+import type terminalMachine from '@/machines/terminal-machine';
 import type { Readable } from 'svelte/store';
 import type { ActorRefFrom, EventFrom, SnapshotFrom } from 'xstate';
 
@@ -90,3 +92,6 @@ export type ActorContext<T> = {
   send: (event: EventFrom<T>) => void;
   actorRef: ActorRefFrom<T>;
 };
+
+export type TerminalActorContext = ActorContext<typeof terminalMachine>;
+export type GCSActorContext = ActorContext<typeof gcsMachine>;

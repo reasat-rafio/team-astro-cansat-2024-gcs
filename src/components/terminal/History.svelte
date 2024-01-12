@@ -3,14 +3,11 @@
 
   import Prompt from './Prompt.svelte';
   import ChevronRight from '../icons/ChevronRight.svelte';
-  import type { ActorContext } from '@/lib/@types/app.types';
-  import type terminalMachine from '@/machines/terminal-machine';
+  import type { TerminalActorContext } from '@/lib/@types/app.types';
   import { getContext } from 'svelte';
   import { slide } from 'svelte/transition';
 
-  const { snapshot } = getContext('terminalService') as ActorContext<
-    typeof terminalMachine
-  >;
+  const { snapshot } = getContext<TerminalActorContext>('terminalService');
 </script>
 
 {#if !!$snapshot.context.commandHistory?.length}

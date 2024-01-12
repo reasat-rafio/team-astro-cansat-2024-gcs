@@ -1,15 +1,14 @@
 <script lang="ts">
   import '../app.css';
-
-  import Navbar from '@/components/Navbar.svelte';
+  import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
+  import type { TerminalContext } from '@/lib/@types/app.types';
+  import gcsMachine from '@/machines/gcs-machine';
   import terminalMachine from '@/machines/terminal-machine';
   import { AppShell } from '@skeletonlabs/skeleton';
   import { useActor } from '@xstate/svelte';
   import { onMount, setContext } from 'svelte';
   import type { Snapshot } from 'xstate';
-  import type { TerminalContext } from '@/lib/@types/app.types';
-  import gcsMachine from '@/machines/gcs-machine';
 
   const gcsService = useActor(gcsMachine);
   const terminalService = useActor(terminalMachine, {

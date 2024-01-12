@@ -1,16 +1,12 @@
 <script lang="ts">
   import { AppBar } from '@skeletonlabs/skeleton';
   import { page } from '$app/stores';
-  import HomeIcon from './icons/HomeIcon.svelte';
-  import VisualIcon from './icons/VisualIcon.svelte';
+  import HomeIcon from '../icons/HomeIcon.svelte';
+  import VisualIcon from '../icons/VisualIcon.svelte';
   import { navbarHeight } from '@/stores/ui.store.';
-  import DownloadIcon from './icons/DownloadIcon.svelte';
-  import ImportIcon from './icons/ImportIcon.svelte';
   import { onMount } from 'svelte';
-  import Papa from 'papaparse';
+  import Csv from './CSV.svelte';
 
-  let importCSVEl: HTMLInputElement;
-  let csvData = [];
   const navItems = [
     { name: 'Home', icon: HomeIcon, url: '/' },
     { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' },
@@ -25,16 +21,6 @@
 
     window.addEventListener('beforeunload', handleBeforeUnload);
   });
-
-  function handleCSVUpload() {
-    if (!importCSVEl?.files?.length) return;
-
-    Papa.parse(importCSVEl.files[0], {
-      complete: function (results) {
-        csvData = results.data;
-      },
-    });
-  }
 </script>
 
 <div bind:clientHeight={$navbarHeight}>
@@ -55,25 +41,7 @@
       </ul>
     </svelte:fragment>
     <svelte:fragment slot="trail">
-      <button
-        on:click={() => importCSVEl.click()}
-        class="variant-outline-secondary btn hover:variant-filled-secondary">
-        <span>Import CSV</span>
-        <ImportIcon />
-      </button>
-      <button
-        class="variant-outline-secondary btn hover:variant-filled-secondary">
-        <span>Export CSV</span>
-        <DownloadIcon />
-      </button>
-
-      <input
-        class="hidden"
-        bind:this={importCSVEl}
-        on:change={handleCSVUpload}
-        type="file"
-        name="importCSV"
-        accept=".csv" />
+      <Csv />
     </svelte:fragment>
   </AppBar>
 </div>

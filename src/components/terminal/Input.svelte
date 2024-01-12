@@ -1,8 +1,7 @@
 <script lang="ts">
   import { validCommands } from '@/lib/helper';
   import Prompt from './Prompt.svelte';
-  import type terminalMachine from '@/machines/terminal-machine';
-  import type { ActorContext } from '@/lib/@types/app.types';
+  import type { TerminalActorContext } from '@/lib/@types/app.types';
   import { getContext } from 'svelte';
 
   export let inputEl: HTMLSpanElement;
@@ -10,9 +9,7 @@
 
   let suggestedCommands: string[] | null = null;
   let activeSuggestedCommandIndex = 0;
-  const { send } = getContext('terminalService') as ActorContext<
-    typeof terminalMachine
-  >;
+  const { send } = getContext<TerminalActorContext>('terminalService');
 
   type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;

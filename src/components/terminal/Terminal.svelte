@@ -1,7 +1,6 @@
 <script lang="ts">
-  import type { ActorContext } from '@/lib/@types/app.types';
+  import type { TerminalActorContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
-  import type terminalMachine from '@/machines/terminal-machine';
   import { getContext } from 'svelte';
   import { slide } from 'svelte/transition';
   import ExpendIcon from '../icons/ExpendIcon.svelte';
@@ -13,9 +12,8 @@
   let inputEl: HTMLSpanElement;
   let activeSuggestedCommand: string | null = null;
 
-  const { send, snapshot } = getContext('terminalService') as ActorContext<
-    typeof terminalMachine
-  >;
+  const { send, snapshot } =
+    getContext<TerminalActorContext>('terminalService');
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
