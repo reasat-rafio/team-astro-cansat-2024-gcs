@@ -3,13 +3,14 @@
   import Prompt from './Prompt.svelte';
   import type { TerminalActorContext } from '@/lib/@types/app.types';
   import { getContext } from 'svelte';
+  import terminalStore from '@/stores/terminal.store';
 
   export let inputEl: HTMLSpanElement;
   export let activeSuggestedCommand: string | null = null;
 
   let suggestedCommands: string[] | null = null;
   let activeSuggestedCommandIndex = 0;
-  const { send } = getContext<TerminalActorContext>('terminalService');
+  const { send } = $terminalStore;
 
   type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;

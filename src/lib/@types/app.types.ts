@@ -24,17 +24,19 @@ export interface XYZNumberData {
 }
 
 export interface MachineContext {
-  acceleration: XYZNumberArrayData;
-  airPressure: StringArrayData;
-  airSpeed: StringArrayData;
-  altitude: StringArrayData;
-  temperature: StringArrayData;
-  batteryVoltage: StringArrayData;
-  gpsCoordinates: StringArrayData;
-  gyroscope: XYZNumberArrayData;
-  longitude: StringArrayData;
-  satellitesTracked: StringArrayData;
-  tiltAngle: StringArrayData;
+  sensorData: {
+    acceleration: XYZNumberArrayData;
+    airPressure: StringArrayData;
+    airSpeed: StringArrayData;
+    altitude: StringArrayData;
+    temperature: StringArrayData;
+    batteryVoltage: StringArrayData;
+    gpsCoordinates: StringArrayData;
+    gyroscope: XYZNumberArrayData;
+    longitude: StringArrayData;
+    satellitesTracked: StringArrayData;
+    tiltAngle: StringArrayData;
+  };
 }
 
 export type MachineEvent =

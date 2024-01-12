@@ -8,12 +8,12 @@
   import TerminalIcon from '../icons/TerminalIcon.svelte';
   import History from './History.svelte';
   import Input from './Input.svelte';
+  import terminalStore from '@/stores/terminal.store';
 
   let inputEl: HTMLSpanElement;
   let activeSuggestedCommand: string | null = null;
 
-  const { send, snapshot } =
-    getContext<TerminalActorContext>('terminalService');
+  const { actorRef, send, snapshot } = $terminalStore;
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->

@@ -5,6 +5,8 @@
   import type { TerminalContext } from '@/lib/@types/app.types';
   import gcsMachine from '@/machines/gcs-machine';
   import terminalMachine from '@/machines/terminal-machine';
+  import gcsStore from '@/stores/gcs.store';
+  import terminalStore from '@/stores/terminal.store';
   import { AppShell } from '@skeletonlabs/skeleton';
   import { useActor } from '@xstate/svelte';
   import { onMount, setContext } from 'svelte';
@@ -17,8 +19,8 @@
     ) as Snapshot<TerminalContext>,
   });
 
-  setContext('terminalService', terminalService);
-  setContext('gcsService', gcsService);
+  gcsStore.setStore(gcsService);
+  terminalStore.setStore(terminalService);
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {

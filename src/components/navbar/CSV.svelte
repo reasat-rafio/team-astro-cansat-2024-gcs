@@ -7,20 +7,28 @@
   let importCSVEl: HTMLInputElement;
   let csvData: string[][][] = [];
 
-  let currentIndex = 0;
+  let currentIndex = 1;
   let intervalId: NodeJS.Timeout | null = null;
 
-  function processLine() {
+  const processLine = () => {
     if (currentIndex < csvData.length) {
       const currentLine = csvData[currentIndex];
-      console.log('Processing line:', currentLine);
+      const headerRow = csvData[0];
+
+      const lineObject = {};
+      headerRow.forEach((columnName, index) => {
+        // TODO: Add type checking
+        lineObject[columnName] = currentLine[index];
+      });
+
+      console.log('Processing line:', lineObject);
       currentIndex++;
     } else {
       clearInterval(intervalId!);
       intervalId = null;
       console.log('Processing complete');
     }
-  }
+  };
 
   function handleCSVUpload() {
     if (!importCSVEl?.files?.length) return;

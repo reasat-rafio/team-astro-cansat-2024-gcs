@@ -1,13 +1,11 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-
   import Prompt from './Prompt.svelte';
   import ChevronRight from '../icons/ChevronRight.svelte';
-  import type { TerminalActorContext } from '@/lib/@types/app.types';
-  import { getContext } from 'svelte';
   import { slide } from 'svelte/transition';
+  import terminalStore from '@/stores/terminal.store';
 
-  const { snapshot } = getContext<TerminalActorContext>('terminalService');
+  const { snapshot } = $terminalStore;
 </script>
 
 {#if !!$snapshot.context.commandHistory?.length}

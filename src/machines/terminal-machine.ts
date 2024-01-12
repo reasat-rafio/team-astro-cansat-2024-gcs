@@ -5,11 +5,12 @@ import type {
   TerminalEvent,
 } from '@/lib/@types/app.types';
 import { validCommands } from '@/lib/helper';
-import { assign, createMachine } from 'xstate';
+import { assign, createActor, createMachine } from 'xstate';
+import gcsMachine from './gcs-machine';
 
 const terminalMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QBUwCcC2BLAdgQwBsACAZQE9YAXMDAYgFEA5ZegJQH0BhAeQFleAgowAiAbQAMAXUSgADgHtYWSlnk4ZIAB6IAjABYAzADodAJgCsAGhBldBvUb3iAbBYC+b66ky5CpCtR0JACqAEK8AJLIXHyCIhLSSCAKSipqGtoIOgbmJuIAnAYA7FY2uqYeXujY+MTkVDRGGHiaWNgAXmC0kYwRkQBa9AkaKcqq6kmZOkUO+S4W1rYIObk5hSWVIN41fvWBTbhtWJ3dAgAafRGDw0mjaROgUzNGc66lSwbiDgAc5uvmHk8IBw8ggcA0218dQCNBGijG6UmiAAtDpFohTNMjGtigCgZDav4Ghgmi0jp04alxhlEHoiujljpxC89KYiuJvgYudyDJsCbsYSSauSwJSEQ8tIgDNlHM5viUGdLjHpWezOTyuUVAW4gA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QBUwCcC2BLAdgQwBsACAZQE9YAXMDAYhIFUAhAWQElkB9AYQHkWWAQQByAEQDaABgC6iUAAcA9rCyUsinHJAAPRADYArADoAjJICcAZgDsBgDQgyiawF8XD1JlyFSFahiMMPG0sbAAvMFp2YTZ2AC0AUSlZJBAlFTUNLV0EMwAWI3NJPQAme0dESwNJIyqrWzcPdGx8YnIqGkDcUKwIqMEADVi2ROStdNV1TVSckxsjPINLEzKHJwQSywKADgN6gzd3EBxFCDgtTxafdv9x5UmsmcQAWmsTNcQTPOtavZsDo6XbxtPydIIhcJgO4ZKbZF6bD4ISySYzmPIlaySbaWHG4yyNEBA1q+DoBFo9CLQh7TUA5Ep5SwLPTbWyI5HbBbozHYvE41yHIA */
     id: 'Terminal System',
 
     types: {
@@ -53,6 +54,7 @@ const terminalMachine = createMachine(
       }),
       triggerCommandAnsSaveToHistory: assign(({ event, context }) => {
         const { command } = event as SubmitCommand;
+        const gcsService = createActor(gcsMachine).start();
 
         let output: string;
         let helpText = 'Available commands:\n';
@@ -64,11 +66,19 @@ const terminalMachine = createMachine(
 
           case 'CMD,2043,SIM,ENABLE':
             // gcsService.send({ type: 'ENABLE_SIMULATION' });
+            console.log('=================ENABLED===================');
+            console.log(gcsService);
+            console.log('====================================');
             output = 'SIM ENABLED';
             break;
 
           case 'CMD,2043,SIM,ACTIVATE':
+            // gcsService.send({ type: 'ACTIVATE_SIMULATION' });
+            console.log('===========ACTIVATED=========================');
+            console.log(gcsService);
+            console.log('====================================');
             output = 'SIM ACTIVATED';
+
             break;
 
           case 'CMD,2043,SIM,DISABLE':
