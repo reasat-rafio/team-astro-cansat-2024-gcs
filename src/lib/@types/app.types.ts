@@ -9,8 +9,8 @@ interface StringArrayData {
   time: string[];
 }
 
-interface XYZNumberArrayData {
-  values: { x: number; y: number; z: number }[];
+interface XYZStringArrayData {
+  values: { x: string; y: string; z: string }[];
   time: string[];
 }
 
@@ -19,8 +19,17 @@ export interface StringData {
   time: string;
 }
 
-export interface XYZNumberData {
-  value: { x: number; y: number; z: number };
+export interface XYZStringData {
+  value: { x: string; y: string; z: string };
+  time: string;
+}
+export interface XYStringArrayData {
+  values: { x: string; y: string }[];
+  time: string[];
+}
+
+export interface XYStringData {
+  value: { x: string; y: string };
   time: string;
 }
 
@@ -28,26 +37,51 @@ export interface MachineContext {
   csvData?: string[][][];
   output: string;
   sensorData: {
-    acceleration: XYZNumberArrayData;
+    acceleration: XYZStringArrayData;
     airPressure: StringArrayData;
     airSpeed: StringArrayData;
     altitude: StringArrayData;
     temperature: StringArrayData;
     batteryVoltage: StringArrayData;
-    gpsCoordinates: StringArrayData;
-    gyroscope: XYZNumberArrayData;
+    gpsCoordinates: XYZStringArrayData;
+    gyroscope: XYZStringArrayData;
     longitude: StringArrayData;
     satellitesTracked: StringArrayData;
-    tiltAngle: StringArrayData;
+    tiltAngle: XYZStringArrayData;
   };
 }
 
 export type UpdateAltitude = {
   type: 'UPDATE_ALTITUDE';
-  data: {
-    value: number;
-    time: string;
-  };
+  data: StringData;
+};
+export type UpdateTemperature = {
+  type: 'UPDATE_TEMPERATURE';
+  data: StringData;
+};
+
+export type UpdateAirPressure = {
+  type: 'UPDATE_AIR_PRESSURE';
+  data: StringData;
+};
+export type UpdateAirSpeed = {
+  type: 'UPDATE_AIR_SPEED';
+  data: StringData;
+};
+
+export type UpdateBatteryVoltage = {
+  type: 'UPDATE_BATTERY_VOLTAGE';
+  data: StringData;
+};
+
+export type UpdateGPSCoordinates = {
+  type: 'UPDATE_GPS_COORDINATES';
+  data: XYZStringData;
+};
+
+export type UpdateTiltAngle = {
+  type: 'UPDATE_TILT_ANGLE';
+  data: XYZStringData;
 };
 
 export type MachineEvent =
@@ -55,6 +89,12 @@ export type MachineEvent =
   | { type: 'ENABLE_FLIGHT' }
   | { type: 'ACTIVATE_SIMULATION' }
   | UpdateAltitude
+  | UpdateTemperature
+  | UpdateAirPressure
+  | UpdateAirSpeed
+  | UpdateBatteryVoltage
+  | UpdateGPSCoordinates
+  | UpdateTiltAngle
   | { type: 'TRIGGER_ASCENDING' }
   | { type: 'START_SIMULATION' }
   | { type: 'UPDATE_ALTITUDE' }
@@ -65,7 +105,7 @@ export type MachineEvent =
   | { type: 'KILL' };
 
 interface MachineData {
-  acceleration?: XYZNumberData;
+  acceleration?: XYZStringData;
   airPressure: StringData;
   airSpeed: StringData;
   altitude: StringData;
@@ -73,7 +113,7 @@ interface MachineData {
   batteryVoltage: StringData;
   gpsCoordinates: StringData;
   longitude: StringData;
-  gyroscope: XYZNumberData;
+  gyroscope: XYZStringData;
   satellitesTracked: StringData;
   tiltAngle: StringData;
 }

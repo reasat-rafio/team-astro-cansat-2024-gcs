@@ -65,24 +65,66 @@ const csvProcessingMachine = createMachine(
       }),
 
       startProcessing: ({ context }) => {
-        const gcsService = get(gcsStore);
+        const $gcsService = get(gcsStore);
 
         context.intervalId = setInterval(() => {
           if (context.currentIndex < context.csvData.length) {
             const currentLine = context.csvData[context.currentIndex];
             const headerRow = context.csvData[0];
-            const time = new Date().toISOString();
 
             const lineObject: unknown = {};
             headerRow.forEach((columnName, index) => {
               lineObject[columnName] = currentLine[index];
             });
 
-            const { ALTITUDE } = lineObject as MissionData;
+            const {
+              ALTITUDE,
+              TEMPERATURE,
+              AIR_SPEED,
+              PRESSURE,
+              VOLTAGE,
+              GPS_LONGITUDE,
+              GPS_LATITUDE,
+              GPS_ALTITUDE,
+              TILT_X,
+              TILT_Y,
+              ROT_Z,
+              MISSION_TIME,
+            } = lineObject as MissionData;
 
-            gcsService.send({
+            $gcsService.send({
               type: 'UPDATE_ALTITUDE',
-              data: { value: Number(ALTITUDE), time },
+              data: { value: ALTITUDE, time: MISSION_TIME },
+            });
+            $gcsService.send({
+              type: 'UPDATE_TEMPERATURE',
+              data: { value: TEMPERATURE, time: MISSION_TIME },
+            });
+            $gcsService.send({
+              type: 'UPDATE_AIR_SPEED',
+              data: { value: AIR_SPEED, time: MISSION_TIME },
+            });
+            $gcsService.send({
+              type: 'UPDATE_AIR_PRESSURE',
+              data: { value: PRESSURE, time: MISSION_TIME },
+            });
+            $gcsService.send({
+              type: 'UPDATE_BATTERY_VOLTAGE',
+              data: { value: VOLTAGE, time: MISSION_TIME },
+            });
+            $gcsService.send({
+              type: 'UPDATE_GPS_COORDINATES',
+              data: {
+                value: { x: GPS_LONGITUDE, y: GPS_LATITUDE, z: GPS_ALTITUDE },
+                time: MISSION_TIME,
+              },
+            });
+            $gcsService.send({
+              type: 'UPDATE_TILT_ANGLE',
+              data: {
+                value: { x: TILT_X, y: TILT_Y, z: ROT_Z },
+                time: MISSION_TIME,
+              },
             });
 
             console.log('Processing line:', lineObject);
@@ -100,6 +142,8 @@ const csvProcessingMachine = createMachine(
         context.intervalId = null;
         console.log('Processing complete');
       },
+
+      //   updateSensorData: assign(({ event, context }) => {}),
     },
   },
 );

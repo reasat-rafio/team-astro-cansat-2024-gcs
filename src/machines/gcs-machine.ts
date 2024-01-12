@@ -1,7 +1,12 @@
 import type {
   MachineContext,
   MachineEvent,
+  UpdateAirPressure,
+  UpdateAirSpeed,
   UpdateAltitude,
+  UpdateBatteryVoltage,
+  UpdateGPSCoordinates,
+  UpdateTemperature,
 } from '$lib/@types/app.types';
 import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
@@ -21,7 +26,7 @@ const gcsMachine = createMachine(
       csvData: undefined,
       output: '',
       sensorData: {
-        acceleration: { values: [{ x: 0, y: 0, z: 0 }], time: [] },
+        acceleration: { values: [], time: [] },
         airPressure: { values: [], time: [] },
         airSpeed: { values: [], time: [] },
         altitude: { values: [], time: [] },
@@ -56,28 +61,29 @@ const gcsMachine = createMachine(
       simulation_active: {
         entry: 'notifySimulationActivated',
         on: {
-          // UPDATE_DATA: {
-          //   actions: [
-          //     'updateAcceleration',
-          //     'updateAirPressure',
-          //     'updateAirSpeed',
-          //     'updateAirSpeed',
-          //     'updateAltitude',
-          //     'updateTemperature',
-          //     'updateBatteryVoltage',
-          //     'updateGpsCoordinates',
-          //     'updateGpsCoordinates',
-          //     'updateGyroscope',
-          //     'updateLongitude',
-          //     'updateSatellitesTracked',
-          //     'updateTiltAngle',
-          //   ],
-          // },
           START_SIMULATION: {
             actions: ['startCSVProcessing'],
           },
           UPDATE_ALTITUDE: {
             actions: 'updateAltitude',
+          },
+          UPDATE_TEMPERATURE: {
+            actions: 'updateTemperature',
+          },
+          UPDATE_AIR_SPEED: {
+            actions: 'updateAirSpeed',
+          },
+          UPDATE_AIR_PRESSURE: {
+            actions: 'updateAirPressure',
+          },
+          UPDATE_BATTERY_VOLTAGE: {
+            actions: 'updateBatteryVoltage',
+          },
+          UPDATE_GPS_COORDINATES: {
+            actions: 'updateGPSCoordinates',
+          },
+          UPDATE_TILT_ANGLE: {
+            actions: 'updateTiltAngle',
           },
         },
         states: {
@@ -135,37 +141,10 @@ const gcsMachine = createMachine(
         };
       }),
       startCSVProcessing: () => {
-        const csvService = get(csvStore);
-        csvService.send({ type: 'START_PROCESS' });
+        const $csvService = get(csvStore);
+        $csvService.send({ type: 'START_PROCESS' });
       },
 
-      //   updateAcceleration: assign(({ event, context }) => {
-      //     const { acceleration } = event as unknown;
-      //     return {
-      //       acceleration: {
-      //         values: [...context.acceleration.values, acceleration.value],
-      //         time: [...context.acceleration.time, acceleration.time],
-      //       },
-      //     };
-      //   }),
-      //   updateAirPressure: assign(({ event, context }) => {
-      //     const { airPressure } = event as unknown;
-      //     return {
-      //       airPressure: {
-      //         values: [...context.airPressure.values, airPressure.value],
-      //         time: [...context.airPressure.time, airPressure.time],
-      //       },
-      //     };
-      //   }),
-      //   updateAirSpeed: assign(({ event, context }) => {
-      //     const { airSpeed } = event as unknown;
-      //     return {
-      //       airSpeed: {
-      //         values: [...context.airSpeed.values, airSpeed.value],
-      //         time: [...context.airSpeed.time, airSpeed.time],
-      //       },
-      //     };
-      //   }),
       updateAltitude: assign(({ event, context }) => {
         const {
           data: { time, value },
@@ -181,77 +160,114 @@ const gcsMachine = createMachine(
           },
         };
       }),
+      updateTemperature: assign(({ event, context }) => {
+        const {
+          data: { time, value },
+        } = event as UpdateTemperature;
 
-      // altitude: {
-      // values: [...context.altitude.values, altitude.value],
-      // time: [...context.altitude.time, altitude.time],
-      // },
-      //   updateTemperature: assign(({ event, context }) => {
-      //     const { temperature } = event as unknown;
-      //     return {
-      //       temperature: {
-      //         values: [...context.temperature.values, temperature.value],
-      //         time: [...context.temperature.time, temperature.time],
-      //       },
-      //     };
-      //   }),
-      //   updateBatteryVoltage: assign(({ event, context }) => {
-      //     const { batteryVoltage } = event as unknown;
-      //     return {
-      //       batteryVoltage: {
-      //         values: [...context.batteryVoltage.values, batteryVoltage.value],
-      //         time: [...context.batteryVoltage.time, batteryVoltage.time],
-      //       },
-      //     };
-      //   }),
-      //   updateGpsCoordinates: assign(({ event, context }) => {
-      //     const { gpsCoordinates } = event as unknown;
-      //     return {
-      //       gpsCoordinates: {
-      //         values: [...context.gpsCoordinates.values, gpsCoordinates.value],
-      //         time: [...context.gpsCoordinates.time, gpsCoordinates.time],
-      //       },
-      //     };
-      //   }),
-      //   updateGyroscope: assign(({ event, context }) => {
-      //     const { gyroscope } = event as unknown;
-      //     return {
-      //       gyroscope: {
-      //         values: [...context.gyroscope.values, gyroscope.value],
-      //         time: [...context.gyroscope.time, gyroscope.time],
-      //       },
-      //     };
-      //   }),
-      //   updateLongitude: assign(({ event, context }) => {
-      //     const { longitude } = event as unknown;
-      //     return {
-      //       longitude: {
-      //         values: [...context.longitude.values, longitude.value],
-      //         time: [...context.longitude.time, longitude.time],
-      //       },
-      //     };
-      //   }),
-      //   updateSatellitesTracked: assign(({ event, context }) => {
-      //     const { satellitesTracked } = event as unknown;
-      //     return {
-      //       satellitesTracked: {
-      //         values: [
-      //           ...context.satellitesTracked.values,
-      //           satellitesTracked.value,
-      //         ],
-      //         time: [...context.satellitesTracked.time, satellitesTracked.time],
-      //       },
-      //     };
-      //   }),
-      //   updateTiltAngle: assign(({ event, context }) => {
-      //     const { tiltAngle } = event as unknown;
-      //     return {
-      //       tiltAngle: {
-      //         values: [...context.tiltAngle.values, tiltAngle.value],
-      //         time: [...context.tiltAngle.time, tiltAngle.time],
-      //       },
-      //     };
-      //   }),
+        return {
+          sensorData: {
+            ...context.sensorData,
+            temperature: {
+              values: [
+                ...context.sensorData.temperature.values,
+                value.toString(),
+              ],
+              time: [...context.sensorData.temperature.time, time],
+            },
+          },
+        };
+      }),
+      updateBatteryVoltage: assign(({ event, context }) => {
+        const {
+          data: { time, value },
+        } = event as UpdateBatteryVoltage;
+
+        return {
+          sensorData: {
+            ...context.sensorData,
+            batteryVoltage: {
+              values: [
+                ...context.sensorData.batteryVoltage.values,
+                value.toString(),
+              ],
+              time: [...context.sensorData.batteryVoltage.time, time],
+            },
+          },
+        };
+      }),
+      updateAirPressure: assign(({ event, context }) => {
+        const {
+          data: { time, value },
+        } = event as UpdateAirPressure;
+
+        return {
+          sensorData: {
+            ...context.sensorData,
+            airPressure: {
+              values: [
+                ...context.sensorData.airPressure.values,
+                value.toString(),
+              ],
+              time: [...context.sensorData.airPressure.time, time],
+            },
+          },
+        };
+      }),
+      updateAirSpeed: assign(({ event, context }) => {
+        const {
+          data: { time, value },
+        } = event as UpdateAirSpeed;
+
+        return {
+          sensorData: {
+            ...context.sensorData,
+            airSpeed: {
+              values: [...context.sensorData.airSpeed.values, value.toString()],
+              time: [...context.sensorData.airSpeed.time, time],
+            },
+          },
+        };
+      }),
+      updateGpsCoordinate: assign(({ event, context }) => {
+        const {
+          data: {
+            time,
+            value: { x, y, z },
+          },
+        } = event as UpdateGPSCoordinates;
+
+        return {
+          sensorData: {
+            ...context.sensorData,
+            gpsCoordinates: {
+              values: [
+                ...context.sensorData.gpsCoordinates.values,
+                { x, y, z },
+              ],
+              time: [...context.sensorData.gpsCoordinates.time, time],
+            },
+          },
+        };
+      }),
+      updateTiltAngle: assign(({ event, context }) => {
+        const {
+          data: {
+            time,
+            value: { x, y, z },
+          },
+        } = event as UpdateTiltAngle;
+
+        return {
+          sensorData: {
+            ...context.sensorData,
+            tiltAngle: {
+              values: [...context.sensorData.tiltAngle.values, { x, y, z }],
+              time: [...context.sensorData.tiltAngle.time, time],
+            },
+          },
+        };
+      }),
     },
   },
 );
