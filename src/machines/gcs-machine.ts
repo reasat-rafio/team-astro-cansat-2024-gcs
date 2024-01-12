@@ -1,11 +1,15 @@
-import type { MachineContext, MachineEvent } from '$lib/@types/app.types';
+import type {
+  MachineContext,
+  MachineEvent,
+  UpdateAltitude,
+} from '$lib/@types/app.types';
 import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
 import csvStore from '@/stores/csv.store';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+SgIymdSkwE4AbAF97GtFlyFiZdJVr0m+iRDkYMwAogByAIIAQpwhAPpU7ACyAKqcEQAq7ADyYfxCSCBiktKyhYoIprZKhsZ8OrYAHACsAMwqLRpalSb6zXUtekqNrTqmjs4YOPhEpBTUdAyM-oHB4dGxcQBinOzIABIZ+XLFUjLYchVVNXX1TW0dzV3apgZ1Fo2NfK1KSrY6ExALmm7jmXgWvmWkkYmHIAENStg4mBsHCAEZBZgRAhZABqmXiiVS6SyuWOhVOiMuiFs6k0iFefBU+mqfFs7Os1hUzWagOBblmnm8iz80NhCPOcThAGNpAA3YJUDIRABKGQSyTSmRyeUEJ3EZzKoCuo2a+m5-T4LWaKlMrSqzwQ7NMfVMbWaSh+DWslj5UwFHnmPiW+jF8MRUtlEgVzBSAAUACIEuJJ5Xk0QGqnlRCNFTWfSmkzVX46HQjR0e5mWpnmdrWPgev2uGaB8HB0USGHhyUy+VgfRw2DSlEQCTYKDMDIqvbIEIqlMhKgEcIJ9hhZDpoqZ87Uno6ZnWV4qFRGRrWYZMx3mZr51r26w8vSNMu5psgwVBkVQzviiO96P9hAcDDrgY4TlOM5znE6RhKu66bpSO7ZpUvxmuebr1PUrRMrYrRXm6t73o+Vovkob4BmCwqQqGP7dsQkZ9ismIQcgs7zhES4rmuG56hS25GgoiBjI0+hnn817NMW9r4TeBZEc0T6keRLaURCIYAGbkBIUAABYkMiqIYsE2J4smOx7IcCH8RcyE2vh9aifWtgerm-RKI2gLYOgQHwIU-IqUKalMPqJRIcaiAALS2I6EVoZy8WmI05h2GYvJOEC-oBZ+1EBEEIWGjZ4UIKo+EumY7I6DyVqmD64zpf5oKBe2ywMKgjBjgikD5VmRV2rY5rObSrzNF8Nrno6ugGNWNX9Oy3INspjXZSGYYSvRKLonlfGhQJFStI0-W2s+tiHpyd6ljojpJX0dSWKMpi2sMi0fm2X40V2a1Iv+CrdWFgkIC5jl-N8z7mKYvxXkyNQjIlXIjDorTOc9rZUSttGfQxAEDkOI5gb9u2IOerT6O5Yz7ftKijAdMn5jDD4KSRnwqMjqnNe9v49lGCr6D5IGjuO+OFf9dpsvo3q4SeD6tPFNOifJilMyzTVvatf5c-28K4F120Fbu1z5pJzmpbYNVVJd9KVARcszQzz6K-VmVLa91Gq5zjG5WAgu7je-VibYINjOYEMW9etPy4zr4O82Tuo34mnaXpBmbZ7Os9f9Pz9a0N77SNI1MzyV7PrURi1thD24Ury1x1pun6d9KcZjtQsVCoSj5u59p3ibrc-La+H-I5bKqIMtWOI4QA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+ugBxGAzAFYVAX1sa0WXIWJl0lWvSb6JEcmDMAKIAcgCCAEKcQQD6VOwAsgCqnGEAKuwA8iH8QkggYpLSsvmKCACMAGwW+gCc9fVWFipKFjqmlRpaFXxW+lbGfLUtNkpW5Tr2jhg4+ESkFNR0DIy+-oGhkdExAGKc7MgAEmm5coVSMthyZVU1DY3Nre2dmtrlBve1prV8Os2mpimICcs1cCw8S28q0kjEw5AAhsVsDEwNh4QAjALMMIEDIANXSsXiyVSGWyp3y5yR10QlXUrwQOh0tX05Ss1SsVlq5S+pnKSiBIJc83cnmWPhhcMRlxi8IAxtIAG6BKhpMIAJTScUSKXSWRygjO4guJVAZVqVh0+j5FkqtUqfDG7zpXUQ43K+h0dqUpisql0wz4lUFM2FbkWXhW+klCKRsoVEmVzCSAAUACKEmJhThpJK5tNBCmiY3U0pupRKfS2pS9NrlCY-HSuhDjK08pSVSpclQWUxKWoh5xzcMQyMSiSw2My+VKsD6eGwOWoiASbBQZhpdUHZBBdUxAtUAihNPsELIIsFEuXGkIWr960qcq9zm10wqendDqViy1Np2my+nwEyDqCIoRuK0ITlKcYzomc4QHAS64Ku66btuu4xKkIQnmeF5UteZYVM0KjWjYzLWCorYvJ+lTfr+XoWiogHAQ4wKhsO4JilC0ZQVOxDxrOaxYmhyA7nuYSHsep7noalJXqaChuha1q9DoqjlC0XaVE2DJflW9H-kxAwsdMQ5gqKkJRgAZuQEhQAAFiQKJopigQ4vimZ7Acxx4fJVyETYzb2laNbVCoJj2hY1gWPYrHYOgCHwPkQocRZY6MEaRQEWaiAALTUXlfSfI8Kh3paTIgWGnGWT4fgBJlJr+TlCCqM29YekoVRaRadLmMGrEpeZ4HcQwqCMKuiKQA1pbNU+lYqFp9bafytqds2C0sgMRgaXoShMk+lWpcNUYxtK-Gohi9VyVlCllL283lKYOicn6v5DEozZ8v0gx8P83z1gOA3sUNo4QTxk5ncisHKtN2WKS1lEqZaHbmCY7T8s2Oilda9Hsm0WMtIdINcSdvGQwJcHzouy4obDt2IG+Bi2m+tGdRMFhPp9tE43+jHMZMQNmWBoPcadMEJsq+iJUhK5rnTTXw-Wpg1JU5hq5pDoY7p3PfLzAHGQLpmgSOJPjhD4uCQiuBTddjU3myC36Ht7TK891Qfdrla6wx+tAYbbFCybNWQeb04S3OdVgPLN57TU5jI6rRhmFrNFewZfMG0Twum6sNl2Y5zmXVHtszfDFgVlWXK2lYT0E-aBUVB0dT3MrfY13y-uDdnwf6HnDlOdDxfFjdCtlC0LJjBzWmOo0Dd3pWoUc2r7ZPbFthAA */
     id: 'Ground Control System',
 
     initial: 'idle',
@@ -52,25 +56,28 @@ const gcsMachine = createMachine(
       simulation_active: {
         entry: 'notifySimulationActivated',
         on: {
+          // UPDATE_DATA: {
+          //   actions: [
+          //     'updateAcceleration',
+          //     'updateAirPressure',
+          //     'updateAirSpeed',
+          //     'updateAirSpeed',
+          //     'updateAltitude',
+          //     'updateTemperature',
+          //     'updateBatteryVoltage',
+          //     'updateGpsCoordinates',
+          //     'updateGpsCoordinates',
+          //     'updateGyroscope',
+          //     'updateLongitude',
+          //     'updateSatellitesTracked',
+          //     'updateTiltAngle',
+          //   ],
+          // },
           START_SIMULATION: {
             actions: ['startCSVProcessing'],
           },
-          UPDATE_DATA: {
-            actions: [
-              'updateAcceleration',
-              'updateAirPressure',
-              'updateAirSpeed',
-              'updateAirSpeed',
-              'updateAltitude',
-              'updateTemperature',
-              'updateBatteryVoltage',
-              'updateGpsCoordinates',
-              'updateGpsCoordinates',
-              'updateGyroscope',
-              'updateLongitude',
-              'updateSatellitesTracked',
-              'updateTiltAngle',
-            ],
+          UPDATE_ALTITUDE: {
+            actions: 'updateAltitude',
           },
         },
         states: {
@@ -120,18 +127,17 @@ const gcsMachine = createMachine(
           output: 'Simulation Enabled',
         };
       }),
-      notifySimulationActivated: assign(() => {
-        const csvService = get(csvStore);
-        csvService.send({ type: 'START_PROCESS' });
+      notifySimulationActivated: assign(({ self }) => {
+        self.send({ type: 'START_SIMULATION' });
+
         return {
           output: 'Simulation Activated',
         };
       }),
-      startCSVProcessing: () => {},
-      startSimulation: assign(({ context }) => {
-        const simData = context.csvData;
-        // return { csvData };
-      }),
+      startCSVProcessing: () => {
+        const csvService = get(csvStore);
+        csvService.send({ type: 'START_PROCESS' });
+      },
 
       //   updateAcceleration: assign(({ event, context }) => {
       //     const { acceleration } = event as unknown;
@@ -160,15 +166,26 @@ const gcsMachine = createMachine(
       //       },
       //     };
       //   }),
-      //   updateAltitude: assign(({ event, context }) => {
-      //     const { altitude } = event as unknown;
-      //     return {
-      //       altitude: {
-      //         values: [...context.altitude.values, altitude.value],
-      //         time: [...context.altitude.time, altitude.time],
-      //       },
-      //     };
-      //   }),
+      updateAltitude: assign(({ event, context }) => {
+        const {
+          data: { time, value },
+        } = event as UpdateAltitude;
+
+        return {
+          sensorData: {
+            ...context.sensorData,
+            altitude: {
+              values: [...context.sensorData.altitude.values, value.toString()],
+              time: [...context.sensorData.altitude.time, time],
+            },
+          },
+        };
+      }),
+
+      // altitude: {
+      // values: [...context.altitude.values, altitude.value],
+      // time: [...context.altitude.time, altitude.time],
+      // },
       //   updateTemperature: assign(({ event, context }) => {
       //     const { temperature } = event as unknown;
       //     return {

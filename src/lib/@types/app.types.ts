@@ -42,10 +42,22 @@ export interface MachineContext {
   };
 }
 
+export type UpdateAltitude = {
+  type: 'UPDATE_ALTITUDE';
+  data: {
+    value: number;
+    time: string;
+  };
+};
+
 export type MachineEvent =
   | { type: 'ENABLE_SIMULATION' }
   | { type: 'ENABLE_FLIGHT' }
   | { type: 'ACTIVATE_SIMULATION' }
+  | UpdateAltitude
+  | { type: 'TRIGGER_ASCENDING' }
+  | { type: 'START_SIMULATION' }
+  | { type: 'UPDATE_ALTITUDE' }
   | { type: 'ACTIVATE_FLIGHT' }
   | { type: 'TRIGGER_DESCENDING' }
   | { type: 'TRIGGER_LANDING' }
@@ -101,3 +113,27 @@ export type ActorContext<T> = {
 export type TerminalActorContext = ActorContext<typeof terminalMachine>;
 export type GCSActorContext = ActorContext<typeof gcsMachine>;
 export type CSVActorContext = ActorContext<typeof csvProcessingMachine>;
+
+export interface MissionData {
+  TEAM_ID: string;
+  MISSION_TIME: string;
+  PACKET_COUNT: string;
+  MODE: string;
+  STATE: string;
+  ALTITUDE: string;
+  AIR_SPEED: string;
+  HS_DEPLOYED: string;
+  PC_DEPLOYED: string;
+  TEMPERATURE: string;
+  VOLTAGE: string;
+  PRESSURE: string;
+  GPS_TIME: string;
+  GPS_ALTITUDE: string;
+  GPS_LATITUDE: string;
+  GPS_LONGITUDE: string;
+  GPS_SATS: string;
+  TILT_X: string;
+  TILT_Y: string;
+  ROT_Z: string;
+  CMD_ECHO: string;
+}

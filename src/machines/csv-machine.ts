@@ -1,3 +1,6 @@
+import type { MissionData } from '@/lib/@types/app.types';
+import gcsStore from '@/stores/gcs.store';
+import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
 
 type IMPORT_CSV = { type: 'IMPORT_CSV'; data: string[][] };
@@ -22,7 +25,7 @@ const csvProcessingMachine = createMachine(
     },
     context: {
       csvData: [],
-      currentIndex: 0,
+      currentIndex: 1,
       intervalId: null,
     },
     states: {
@@ -62,22 +65,30 @@ const csvProcessingMachine = createMachine(
       }),
 
       startProcessing: ({ context }) => {
+        const gcsService = get(gcsStore);
+
         context.intervalId = setInterval(() => {
           if (context.currentIndex < context.csvData.length) {
             const currentLine = context.csvData[context.currentIndex];
             const headerRow = context.csvData[0];
+            const time = new Date().toISOString();
 
-            const lineObject = {};
+            const lineObject: unknown = {};
             headerRow.forEach((columnName, index) => {
               lineObject[columnName] = currentLine[index];
             });
 
+            const { ALTITUDE } = lineObject as MissionData;
+
+            gcsService.send({
+              type: 'UPDATE_ALTITUDE',
+              data: { value: Number(ALTITUDE), time },
+            });
+
             console.log('Processing line:', lineObject);
 
-            // Update the index for the next iteration
             context.currentIndex++;
           } else {
-            // If all lines are processed, stop the interval
             clearInterval(context.intervalId as NodeJS.Timeout);
             context.intervalId = null;
             console.log('Processing complete');
