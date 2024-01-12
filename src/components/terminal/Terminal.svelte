@@ -1,88 +1,21 @@
 <script lang="ts">
+  import type { ActorContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
-  import { formatDate, validCommands } from '@/lib/helper';
+  import type terminalMachine from '@/machines/terminal-machine';
   import { getContext } from 'svelte';
   import { slide } from 'svelte/transition';
-  import ChevronRight from '../icons/ChevronRight.svelte';
   import ExpendIcon from '../icons/ExpendIcon.svelte';
   import MinimizeIcon from '../icons/MinimizeIcon.svelte';
   import TerminalIcon from '../icons/TerminalIcon.svelte';
-  import Prompt from './Prompt.svelte';
-  import type terminalMachine from '@/machines/terminal-machine';
-  import type { ActorContext } from '@/lib/@types/app.types';
+  import History from './History.svelte';
+  import Input from './Input.svelte';
 
   let inputEl: HTMLSpanElement;
-  let suggestedCommands: string[] | null = null;
   let activeSuggestedCommand: string | null = null;
-  let activeSuggestedCommandIndex = 0;
 
   const { send, snapshot } = getContext('terminalService') as ActorContext<
     typeof terminalMachine
   >;
-
-  type KEvent = KeyboardEvent & {
-    currentTarget: EventTarget & HTMLSpanElement;
-  };
-
-  function keyPressAction(e: KEvent) {
-    suggestCommand(e);
-    cycleSuggestedCommand(e);
-    submitCommand(e);
-    autoWriteSuggestedCommand(e);
-  }
-
-  function autoWriteSuggestedCommand(e: KEvent) {
-    if (!!suggestedCommands?.length) {
-      if (e.currentTarget && e.key === 'Control') {
-        e.preventDefault();
-        inputEl.innerHTML = activeSuggestedCommand || '';
-      }
-    }
-  }
-
-  function cycleSuggestedCommand(e: KEvent) {
-    if (!!suggestedCommands?.length) {
-      if (e.currentTarget && e.key === 'ArrowDown') {
-        activeSuggestedCommandIndex =
-          (activeSuggestedCommandIndex - 1 + suggestedCommands.length) %
-          suggestedCommands.length;
-        activeSuggestedCommand = suggestedCommands[activeSuggestedCommandIndex];
-      } else if (e.currentTarget && e.key === 'ArrowUp') {
-        activeSuggestedCommandIndex =
-          (activeSuggestedCommandIndex + 1) % suggestedCommands.length;
-        activeSuggestedCommand = suggestedCommands[activeSuggestedCommandIndex];
-      }
-    }
-  }
-
-  function suggestCommand(e: KEvent) {
-    let userInput = e.currentTarget.innerText;
-
-    if (
-      (typeof userInput === 'string' && userInput.length === 0) ||
-      userInput === null
-    )
-      return null;
-
-    const suggestions = Object.keys(validCommands).filter((command) =>
-      command.toLowerCase().includes(userInput.toLowerCase()),
-    );
-    suggestedCommands = suggestions;
-    activeSuggestedCommand = !!suggestions?.length
-      ? suggestions[activeSuggestedCommandIndex]
-      : null;
-  }
-
-  function submitCommand(e: KEvent) {
-    if (e.currentTarget && e.key === 'Enter') {
-      e.preventDefault();
-      send({
-        type: 'SUBMIT_COMMAND',
-        command: e.currentTarget.innerText.trim(),
-      });
-      e.currentTarget.innerText = '';
-    }
-  }
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
@@ -113,51 +46,9 @@
     <div
       transition:slide
       class="h-[450px] space-y-2 overflow-y-auto bg-black/40 p-2 backdrop-blur-lg">
-      <!-- HISTORY -->
-      {#if !!$snapshot.context.commandHistory?.length}
-        <div class="flex flex-col gap-y-2">
-          {#each $snapshot.context.commandHistory as { text, timestamp, output }}
-            <div transition:slide={{ duration: 300 }} class="flex flex-col">
-              <div class="flex justify-between gap-x-2">
-                <Prompt />
-                <div class="w-fit flex-1 flex-wrap break-words">
-                  {text}
-                </div>
-                <span class="text-xs text-green-300">
-                  {formatDate(timestamp)}
-                </span>
-              </div>
+      <History />
 
-              <p class="flex text-sm">
-                <ChevronRight class="pt-1 text-green-300" />
-                <span class="whitespace-pre-line">
-                  {output}
-                </span>
-              </p>
-            </div>
-          {/each}
-        </div>
-      {/if}
-      <!-- HISTORY END -->
-      <div class="flex gap-x-2">
-        <Prompt />
-
-        <!-- svelte-ignore a11y-interactive-supports-focus -->
-        <div class="relative flex-1">
-          {#if !!activeSuggestedCommand}
-            <div class="absolute left-0 top-0 opacity-50">
-              {activeSuggestedCommand}
-            </div>
-          {/if}
-          <span
-            bind:this={inputEl}
-            on:keyup={keyPressAction}
-            data-placeholder="Type help to get started."
-            class="block h-fit resize-y overflow-hidden border-none bg-transparent outline-none"
-            role="textbox"
-            contenteditable />
-        </div>
-      </div>
+      <Input bind:inputEl bind:activeSuggestedCommand />
     </div>
   {/if}
 </aside>

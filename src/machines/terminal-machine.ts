@@ -5,7 +5,7 @@ import type {
   TerminalEvent,
 } from '@/lib/@types/app.types';
 import { validCommands } from '@/lib/helper';
-import { assign, createActor, createMachine, interpret } from 'xstate';
+import { assign, createMachine } from 'xstate';
 
 const terminalMachine = createMachine(
   {
