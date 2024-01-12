@@ -1,9 +1,11 @@
 import type { MachineContext, MachineEvent } from '$lib/@types/app.types';
+import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
+import csvStore from '@/stores/csv.store';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+SgIymdSkwE4AbAF97GtFlyFiZdJVr0m+iRDkYMwAogByAIIAQpwhAPpU7ACyAKqcEQAq7ADyYfxCSCBiktKyhYoIprZKhsZ8OrYAHACsAMwqLRpalSb6zXUtekqNrTqmjs4YOPhEpBTUdAyM-oHB4dGxcQBinOzIABIZ+XLFUjLYchVVNXX1TW0dzV3apgZ1Fo2NfK1KSrY6ExALmm7jmXgWvmWkkYmHIAENStg4mBsHCAEZBZgRAhZABqmXiiVS6SyuWOhVOiMuiFs6k0iFefBU+mqfFs7Os1hUzWagOBblmnm8iz80NhCPOcThAGNpAA3YIAJRCEQAIttFdkknECFRceTROIzmVQBUHvolNYWo1bK1Wo1TNYxs8ELTbPoVKYRqM2qNHY0+VMBR55j4lvoxfDEVLZRIFcwUgAFVUEuIpjIRA1FI1U8qIRoqaz6H0maq-HQ6EYu5qqPrGT2mdrWPg1wOuGYh8Fh0USGFRyUy+VgfRw2DSlEQCTYKDMDKKvbIEKKtMhKgEcKq9hhZBZynnakIOw1Vr-PR8Uwqe2NJStF3mUzH17NaqfZqXpltkGC0MiqG98XRoOcbDhAcDjrgU4znOC5LnE6RhJu267jm+55pUdo6MWVpWmM9Q3i2d7mI+LYvi075KJ+wZgsKkIRv+-bEDGQ4rJi0HIIuy4RGuG5bjuggnChJoKDSrzFm+fDWKYzTNteOi3vSlREcWT6kW+rQmJRHbURC4YAGbkBIUAABYkMiqIYsE2J4qmOx7IcyElKhpqIG+hHNvojTNrYNYFv0SitoC2DoKB8CFPyWlCjpTACY5QkVAAtLYLrxc0+iculVSfPUrRcg4ThAkGEU-rRARBDFxoXGhqiEaYFpVP8PJ8A6TrjPl4WgpF3bLAwqCMFOCKQOVubOeh7oqN5tJPl8b7WEoLq6AY-RGI6-TstyLaaR1xXhpGEqMSi6JlRSgmVSN9pjV6DSSZyGEVi6Dp1sYlh+p6wybd+Xa-nRfZ7UiQEKkNTnCQgvwGK04kjM2PJev8LpOkWDotjo3LNHo3IqO9nY0Tt9G-UxwEjmOE6QYDcX5j8aUPrYXpmP8BbWDVNSI8+wxkepGNtYVW2fbRu2AbGCr6CF4GTtOpOncD5hWh6ujmJ6hZfHNCn3kzKms2pH6c+23PYz2P388x8K4INx2xRLVw1rVTJWJ60m2ioTWMx5auvu+HOTNrH263++sDgLw6lWA4sHqzYkO5DLbNDDOhO8zqlu5j2ldfo+mGSZZmHUHpsVQePzuuD1j2s01qfCjd6NJh7yNupF62onnVfanxmmf9WeGmbB4qJaFptNX1Ndz8nqEf8HleaogwtY4jhAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+SgIymdSkwE4AbAF97GtFlyFiZdJVr0m+iRDkYMwAogByAIIAQpwhAPpU7ACyAKqcEQAq7ADyYfxCSCBiktKyhYoIprZKhsZ8OrYAHACsAMwqLRpalSb6zXUtekqNrTqmjs4YOPhEpBTUdAyM-oHB4dGxcQBinOzIABIZ+XLFUjLYchVVNXX1TW0dzV3apgZ1Fo2NfK1KSrY6ExALmm7jmXgWvmWkkYmHIAENStg4mBsHCAEZBZgRAhZABqmXiiVS6SyuWOhVOiMuiFs6k0iFefBU+mqfFs7Os1hUzWagOBblmnm8iz80NhCPOcThAGNpAA3YJUDIRABKGQSyTSmRyeUEJ3EZzKoCuo2a+m5-T4LWaKlMrSqzwQ7NMfVMbWaSh+DWslj5UwFHnmPiW+jF8MRUtlEgVzBSAAUACIEuJJ5Xk0QGqnlRCNFTWfSmkzVX46HQjR0e5mWpnmdrWPgev2uGaB8HB0USGHhyUy+VgfRw2DSlEQCTYKDMDIqvbIEIqlMhKgEcIJ9hhZDpoqZ87Uno6ZnWV4qFRGRrWYZMx3mZr51r26w8vSNMu5psgwVBkVQzviiO96P9hAcDDrgY4TlOM5znE6RhKu66bpSO7ZpUvxmuebr1PUrRMrYrRXm6t73o+Vovkob4BmCwqQqGP7dsQkZ9ismIQcgs7zhES4rmuG56hS25GgoiBjI0+hnn817NMW9r4TeBZEc0T6keRLaURCIYAGbkBIUAABYkMiqIYsE2J4smOx7IcCH8RcyE2vh9aifWtgerm-RKI2gLYOgQHwIU-IqUKalMPqJRIcaiAALS2I6EVoZy8WmI05h2GYvJOEC-oBZ+1EBEEIWGjZ4UIKo+EumY7I6DyVqmD64zpf5oKBe2ywMKgjBjgikD5VmRV2rY5rObSrzNF8Nrno6ugGNWNX9Oy3INspjXZSGYYSvRKLonlfGhQJFStI0-W2s+tiHpyd6ljojpJX0dSWKMpi2sMi0fm2X40V2a1Iv+CrdWFgkIC5jl-N8z7mKYvxXkyNQjIlXIjDorTOc9rZUSttGfQxAEDkOI5gb9u2IOerT6O5Yz7ftKijAdMn5jDD4KSRnwqMjqnNe9v49lGCr6D5IGjuO+OFf9dpsvo3q4SeD6tPFNOifJilMyzTVvatf5c-28K4F120Fbu1z5pJzmpbYNVVJd9KVARcszQzz6K-VmVLa91Gq5zjG5WAgu7je-VibYINjOYEMW9etPy4zr4O82Tuo34mnaXpBmbZ7Os9f9Pz9a0N77SNI1MzyV7PrURi1thD24Ury1x1pun6d9KcZjtQsVCoSj5u59p3ibrc-La+H-I5bKqIMtWOI4QA */
     id: 'Ground Control System',
 
     initial: 'idle',
@@ -50,11 +52,8 @@ const gcsMachine = createMachine(
       simulation_active: {
         entry: 'notifySimulationActivated',
         on: {
-          STORE_CSV_DATA: {
-            actions: 'storeCsvData',
-          },
           START_SIMULATION: {
-            actions: 'startSimulation',
+            actions: ['startCSVProcessing'],
           },
           UPDATE_DATA: {
             actions: [
@@ -122,14 +121,13 @@ const gcsMachine = createMachine(
         };
       }),
       notifySimulationActivated: assign(() => {
+        const csvService = get(csvStore);
+        csvService.send({ type: 'START_PROCESS' });
         return {
           output: 'Simulation Activated',
         };
       }),
-      storeCsvData: assign(({ event }) => {
-        const { csvData } = event as unknown;
-        return { csvData };
-      }),
+      startCSVProcessing: () => {},
       startSimulation: assign(({ context }) => {
         const simData = context.csvData;
         // return { csvData };

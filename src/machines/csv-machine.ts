@@ -1,8 +1,15 @@
-import { createMachine } from 'xstate';
+import { assign, createMachine } from 'xstate';
+
+type IMPORT_CSV = { type: 'IMPORT_CSV'; data: string[][] };
+type MachineEvent =
+  | IMPORT_CSV
+  | { type: 'PROCESS_COMPLETE' }
+  | { type: 'COMPLETE' }
+  | { type: 'START_PROCESS' };
 
 const csvProcessingMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QGNYDcAKAnA9susAlgHZQB0hEANmAMQCqGAMgPICCAIgPoDCAygDUA2gAYAuolAAHHEQAuhHMUkgAHogDsAVgCcZAGw6NOgBwBmAIzaTAJmMAaEAE9ENkWbIjdAFn0idNmb6ZjbeOgC+4Y6omLj4sESkZFJxBCRQtBgASiw8AKJ8fLwsALLMeQAqeaISSCAy8orKdeoI2jZkuiYiIm6h+loWJo4ubUOdQ-6hOjo9GhaRUSDEOBBwKjHYeGmkKg2ECkoqrQC0Gh5aujohFt7egWZ3I4gWFlqdPvoaNm82ARomSLRdBbeKJciUGh7WQHJrHRAnGzvS4zG53B53MzPBBIkxkbxma4WQm9bpaIEgTapBLpZLU8HQxpHFqIfTdMhWEwWHT3WwDDTYkIeMzdYneQZ+ILeClU7Y0pLIHAAWykNDkkEZsOZoFaNjZZDMxhsJm0t3FxKxzkQJv0BqNAJ0WkJGmMi3CQA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QGNYDcAKAnA9susAlgHZQB0hEANmAMQCSAshgPIBKAKgPoDCAygDUA2gAYAuolAAHHEQAuhHMUkgAHogCMANgDMZAJyHDO-ToDsG0wA4ALABoQAT00izZM2Z02ATAFZXGiJa3jreAL5hDqiYuPiwRKRk0VyEsFywcjhYkLQYbCw8AKJ8fKISSCAy8orKFeoINma+ZF7mQX46Wr5NDs4IGjoiZP4ioyK+3oGDVhFR6Nh4BCTkUrFLpLQ8LMwAMoUchWUqVYQKSir1VlpDVt5WIjb63jaWd769moNkj4a241oaMzeLoRSIgYg4CBwFTRBZxBJQY6yU41C6IAC0Wg+CExsxAsLW8WWFGoYCR1XOdUQPmxAyGRn0f18AKBILBBMWRMSyVS6Uy2Qg5JRlNA9VCenMjzMIkmGm65lpOg0ZDGYwmUxEM3Z80JCLIq05CKFZ1qosQ130ZA0z30j2uAKsGg02Md3yMVn8AMlWjMeI58OJyBwAFspDQ5JBjaiqf1Rlpvlorrd9BadL59LTvJazD8rLY846ujZQWEgA */
     id: 'csvProcessing',
     initial: 'idle',
     types: {
@@ -11,6 +18,7 @@ const csvProcessingMachine = createMachine(
         currentIndex: number;
         intervalId: NodeJS.Timeout | null;
       },
+      events: {} as MachineEvent,
     },
     context: {
       csvData: [],
@@ -20,18 +28,25 @@ const csvProcessingMachine = createMachine(
     states: {
       idle: {
         on: {
-          UPLOAD_CSV: 'processing',
+          IMPORT_CSV: {
+            actions: 'saveCSVData',
+            target: 'csv_is_stored',
+            reenter: true,
+          },
         },
       },
-      processing: {
-        entry: 'startProcessing',
-        invoke: {
-          id: 'processLineInterval',
-          src: 'processLineInterval',
-        },
+
+      csv_is_stored: {
         on: {
-          PROCESS_COMPLETE: 'completed',
+          START_PROCESS: 'processing',
         },
+      },
+
+      processing: {
+        on: {
+          COMPLETE: 'completed',
+        },
+        entry: 'startProcessing',
         exit: 'stopProcessing',
       },
       completed: {
@@ -41,6 +56,11 @@ const csvProcessingMachine = createMachine(
   },
   {
     actions: {
+      saveCSVData: assign(({ event }) => {
+        const { data } = event as IMPORT_CSV;
+        return { csvData: data };
+      }),
+
       startProcessing: ({ context }) => {
         context.intervalId = setInterval(() => {
           if (context.currentIndex < context.csvData.length) {
@@ -70,13 +90,6 @@ const csvProcessingMachine = createMachine(
         console.log('Processing complete');
       },
     },
-    // services: {
-    //   processLineInterval:
-    //     ({}) =>
-    //     (sendBack) => {
-    //       sendBack('PROCESS_LINE');
-    //     },
-    // },
   },
 );
 

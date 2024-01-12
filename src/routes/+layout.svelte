@@ -1,5 +1,4 @@
 <script lang="ts">
-  import '../app.css';
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
   import type { TerminalContext } from '@/lib/@types/app.types';
@@ -11,8 +10,9 @@
   import terminalStore from '@/stores/terminal.store';
   import { AppShell } from '@skeletonlabs/skeleton';
   import { useActor } from '@xstate/svelte';
-  import { onMount, setContext } from 'svelte';
+  import { onMount } from 'svelte';
   import type { Snapshot } from 'xstate';
+  import '../app.css';
 
   const gcsService = useActor(gcsMachine);
   const csvService = useActor(csvProcessingMachine);
@@ -34,10 +34,14 @@
     const terminalSub = $terminalStore.actorRef.subscribe((state) => {
       console.log({ terminal: state });
     });
+    const csvSub = $csvStore.actorRef.subscribe((state) => {
+      console.log({ csv: state });
+    });
 
     return () => {
       gcsSub.unsubscribe();
       terminalSub.unsubscribe();
+      csvSub.unsubscribe();
     };
   });
 
