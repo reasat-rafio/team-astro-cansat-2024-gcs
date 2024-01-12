@@ -8,14 +8,14 @@
     LineElement,
     LinearScale,
     PointElement,
-    CategoryScale
+    CategoryScale,
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
   // import airPressureStore from '@stores/payload/air-pressure';
 
   import { delay } from '$lib/helper';
-  import { gcsService } from '@/machines/gcs-machine';
+  import gcsMachine from '@/machines/gcs-machine';
 
   ChartJS.register(
     Title,
@@ -24,7 +24,7 @@
     LineElement,
     LinearScale,
     PointElement,
-    CategoryScale
+    CategoryScale,
   );
 
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
@@ -60,12 +60,12 @@
       chart.data.datasets[0].data.push(
         +$gcsService?.context?.airPressure?.values[
           $gcsService?.context?.airPressure?.values?.length - 1
-        ]
+        ],
       );
       chart.data.labels?.push(
         +$gcsService?.context?.airPressure?.time[
           $gcsService?.context?.airPressure?.time?.length - 1
-        ]
+        ],
       );
 
       await delay(10);
@@ -90,8 +90,7 @@
       <input
         class="checkbox h-3 w-3"
         type="checkbox"
-        bind:checked={lockToTheEnd}
-      />
+        bind:checked={lockToTheEnd} />
       <p class="text-xs">Lock</p>
     </label>
   </div>
@@ -99,8 +98,7 @@
     <div
       class="h-[300px]"
       style="width: {500 +
-        $gcsService?.context?.airPressure?.values?.length * 50}px; "
-    >
+        $gcsService?.context?.airPressure?.values?.length * 50}px; ">
       <Line
         bind:chart
         data={{
@@ -124,23 +122,22 @@
               pointHoverBorderWidth: 2,
               pointRadius: 1,
               pointHitRadius: 10,
-              data
-            }
-          ]
+              data,
+            },
+          ],
         }}
         options={{
           maintainAspectRatio: false,
           scales: { x: { beginAtZero: true } },
           plugins: {
             legend: {
-              display: false
+              display: false,
             },
             title: {
-              display: false
-            }
-          }
-        }}
-      />
+              display: false,
+            },
+          },
+        }} />
     </div>
   </div>
 </section>

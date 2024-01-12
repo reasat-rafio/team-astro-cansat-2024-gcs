@@ -1,12 +1,12 @@
 import type { MachineContext, MachineEvent } from '$lib/@types/app.types';
-import { assign, createActor, createMachine } from 'xstate';
+import { assign, createMachine } from 'xstate';
 
 const gcsMachine = createMachine(
   {
     /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5GjADgDMKgKw7dlywF97GtFlyFiZdJVr0m+2ORgYCLMAKIAcgCCAEKcoQD6VOwAsgCqnJEAKuwA8uH8QkggYpLSskWKCACMAGxKhsZWllVVOkpKOhpa1Xz1lsZGOm01AJw6I0qOzhg4+ESkFNR0DIz+gcFhUbEJAGKc7MgAEpkFciVSMthylbX1A00tbR1d2nwj+iOfn70jJiojKj4KimIBcs3cCy8S18q0kjEw5AAhmVsPEwNhEQAjQLMSIEbIANSyCSSaQy2TypyK5xR10QNXUmkQVSMKn0dT4NRqnLaVQsJhBYLc8083mWfjhCORl3iiIAxtIAG5gZipAAKABFifEtZlIlTROILuVQJUapYaoYRmYTJ9WiMqiM+J0mQhLKp9P0jI8zJZfjUzIKZsKPIsfCt-BJ4UiUbKFRJlfpEbA5eiIBJsFBmJkAEoHZChHM60JUAgRDXscLIA3FI20irKSwmfQ6c16PntFomWovHpDfRmJ01EytsxmPhVBxOUHBuahqHhiVRqWx+VKsD6CBwVO4DNZ3P5wvxDLhCtVms0y50hDmKotkajSdKMxtZ0mXss-uDzkjgPjydBq4c6QmKML6AAZuQEhQAAFiQaIYtiKp4oS2p7AcxwXnWV4Nm6jLdC0Tr6LanL+q0XaONO2DoFu8BFEKwGitCKxnNhJoKIgAC0NS9pxlgfF8glCdagHgiKYbirC6wiKxpQ4aayj4cyLT6EotRcgMjomFO0xARCTGLqsDCoIwGbIpAsnGlcuF8paKjmjUVTtJ2nIWL2ugGF6Ri+oCrKiSGIHMUu0bSsQCFYoEln1gpCA2nZVQjm0I4vv8Fq9t2nr3N2Kjjh0gbTgx+kSWBkoxjKa4JmAUXyRxCAqBlZhVFYNgJWp9UjJYvYTGyJFckoJg1DYD5VP5jHFRGpWhaiFWJsmO7ppm1XsZUFjvI1zUqK1TW2p1rqfjoxFDr+Y4Th0o1FQukmRiFq7xomtHzXuS3WTFoxsgy-Q6HyOhmIN-Ufs6B29cd-5nQVs4XaBE3LmVYUzRuSK4BZ1JsS9tUsr6qmbQ+XK1HwtpmAD-bA6OoM6Od4mXWBkHQXB4VIc915mEolq+taHVvCOgJOR+A0CV8Vi+raJjaRT85Q34NOwfB8OM7hKhKO8SiWI1k7NDozTOh+tRA06eicu6Nhg44QA */
     id: 'Ground Control System',
 
-    initial: 'sleep',
+    initial: 'idle',
     types: {
       context: {} as MachineContext,
       events: {} as MachineEvent,
@@ -26,7 +26,7 @@ const gcsMachine = createMachine(
     },
 
     states: {
-      sleep: {
+      idle: {
         on: {
           ENABLE_SIMULATION: 'simulation_enable',
           ENABLE_FLIGHT: 'flight_enable',
@@ -214,4 +214,4 @@ const gcsMachine = createMachine(
   },
 );
 
-export const gcsService = createActor(gcsMachine).start();
+export default gcsMachine;

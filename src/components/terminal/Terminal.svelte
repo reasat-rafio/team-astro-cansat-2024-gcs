@@ -1,40 +1,24 @@
 <script lang="ts">
-  import type { TerminalContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
-  import { formatDate } from '@/lib/helper';
-  import terminalMachine, { validCommands } from '@/machines/terminal-machine';
-  import { useActor } from '@xstate/svelte';
-  import { onMount } from 'svelte';
+  import { formatDate, validCommands } from '@/lib/helper';
+  import { getContext } from 'svelte';
   import { slide } from 'svelte/transition';
-  import type { Snapshot } from 'xstate';
   import ChevronRight from '../icons/ChevronRight.svelte';
   import ExpendIcon from '../icons/ExpendIcon.svelte';
   import MinimizeIcon from '../icons/MinimizeIcon.svelte';
   import TerminalIcon from '../icons/TerminalIcon.svelte';
   import Prompt from './Prompt.svelte';
+  import type terminalMachine from '@/machines/terminal-machine';
+  import type { ActorContext } from '@/lib/@types/app.types';
 
   let inputEl: HTMLSpanElement;
   let suggestedCommands: string[] | null = null;
   let activeSuggestedCommand: string | null = null;
   let activeSuggestedCommandIndex = 0;
 
-  const { snapshot, send, actorRef } = useActor(terminalMachine, {
-    snapshot: JSON.parse(
-      localStorage?.getItem('terminal_persisted_state') as string,
-    ) as Snapshot<TerminalContext>,
-  });
-
-  onMount(() => {
-    const storeRef = actorRef.subscribe(() => {
-      const persistedState = actorRef.getPersistedSnapshot();
-      localStorage.setItem(
-        'terminal_persisted_state',
-        JSON.stringify(persistedState),
-      );
-    });
-
-    return () => storeRef.unsubscribe();
-  });
+  const { send, snapshot } = getContext('terminalService') as ActorContext<
+    typeof terminalMachine
+  >;
 
   type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;
@@ -161,7 +145,7 @@
         <!-- svelte-ignore a11y-interactive-supports-focus -->
         <div class="relative flex-1">
           {#if !!activeSuggestedCommand}
-            <div transition:slide class="absolute left-0 top-0 opacity-50">
+            <div class="absolute left-0 top-0 opacity-50">
               {activeSuggestedCommand}
             </div>
           {/if}

@@ -1,3 +1,6 @@
+import type { Readable } from 'svelte/store';
+import type { ActorRefFrom, EventFrom, SnapshotFrom } from 'xstate';
+
 interface StringArrayData {
   values: string[];
   time: string[];
@@ -81,3 +84,9 @@ export interface TerminalContext {
   commandHistory: Command[];
   currentCommand: string;
 }
+
+export type ActorContext<T> = {
+  snapshot: Readable<SnapshotFrom<T>>;
+  send: (event: EventFrom<T>) => void;
+  actorRef: ActorRefFrom<T>;
+};

@@ -2,33 +2,10 @@ import type {
   EnterCommand,
   SubmitCommand,
   TerminalContext,
-  TerminalEvent
+  TerminalEvent,
 } from '@/lib/@types/app.types';
-import { assign, createMachine } from 'xstate';
-
-export const validCommands = {
-  'CMD,2043,CX,ON': 'Active container telemetry transmission',
-
-  CAL: 'Calibrate the telemetry data altitude to 0 meters',
-
-  'CMD,2043,ST,GPS':
-    'Sets the flights software time to the current time read from the GPS module',
-
-  'CMD,2043,SIM,ENABLE':
-    'Disable the flight mode and switch to the simulation mode',
-
-  'CMD,2043,SIM,ACTIVATE': 'Activates the simulation mode',
-
-  'CMD,2043,SIM,<PRESSURE>':
-    'Replace the pressure sensor data with the revived pressure',
-
-  'CMD,2043,SIM,DISABLE':
-    'Disable the simulation mode and switch back to the flight mode',
-
-  help: 'Display available commands and their descriptions',
-
-  clear: 'Clear the terminal history'
-} as const;
+import { validCommands } from '@/lib/helper';
+import { assign, createActor, createMachine, interpret } from 'xstate';
 
 const terminalMachine = createMachine(
   {
@@ -37,109 +14,108 @@ const terminalMachine = createMachine(
 
     types: {
       context: {} as TerminalContext,
-      events: {} as TerminalEvent
+      events: {} as TerminalEvent,
     },
 
     context: {
       commandHistory: [],
-      currentCommand: ''
+      currentCommand: '',
     },
     on: {
       SUBMIT_COMMAND: {
-        actions: ['setCurrentCommand', 'addCommandToHistory']
-      }
+        actions: ['setCurrentCommand', 'triggerCommandAnsSaveToHistory'],
+      },
     },
 
     states: {
       maximize: {
         on: {
-          MINIMIZE: 'minimize'
-        }
+          MINIMIZE: 'minimize',
+        },
       },
 
       minimize: {
         on: {
-          MAXIMIZE: 'maximize'
-        }
-      }
+          MAXIMIZE: 'maximize',
+        },
+      },
     },
 
-    initial: 'maximize'
+    initial: 'maximize',
   },
   {
     actions: {
       setCurrentCommand: assign(({ event }) => {
         const { command } = event as EnterCommand;
         return {
-          currentCommand: command
+          currentCommand: command,
         };
       }),
-      addCommandToHistory: assign(({ event, context }) => {
+      triggerCommandAnsSaveToHistory: assign(({ event, context }) => {
         const { command } = event as SubmitCommand;
-        const output = setOutput(command);
+
+        let output: string;
+        let helpText = 'Available commands:\n';
+
+        switch (command as (keyof typeof validCommands)[number]) {
+          case 'CMD,2043,CX,ON':
+            output = 'CX ON';
+            break;
+
+          case 'CMD,2043,SIM,ENABLE':
+            // gcsService.send({ type: 'ENABLE_SIMULATION' });
+            output = 'SIM ENABLED';
+            break;
+
+          case 'CMD,2043,SIM,ACTIVATE':
+            output = 'SIM ACTIVATED';
+            break;
+
+          case 'CMD,2043,SIM,DISABLE':
+            output = 'SIM DISABLED';
+            break;
+
+          case 'CMD,2043,ST,GPS':
+            output = 'GPS STATUS';
+            break;
+
+          case 'CAL':
+            output = 'CALIBRATING';
+            break;
+
+          case 'CMD,2043,SIM,<PRESSURE>':
+            output = 'SIM PRESSURE';
+            break;
+
+          case 'help':
+            for (const [command, description] of Object.entries(
+              validCommands,
+            )) {
+              helpText += `\n- ${command}: ${description}`;
+            }
+            output = helpText;
+            break;
+
+          case 'clear':
+            output = '';
+            break;
+
+          default:
+            output = 'Invalid command';
+            break;
+        }
 
         if (command === 'clear')
           return { commandHistory: [], currentCommand: '' };
         return {
           commandHistory: [
             ...context.commandHistory,
-            { text: command, timestamp: new Date(), output }
-          ]
+            { text: command, timestamp: new Date(), output },
+          ],
         };
-      })
-    }
-  }
+      }),
+    },
+  },
 );
 
 export default terminalMachine;
-
-function setOutput(command: string): string {
-  let output: string;
-  let helpText = 'Available commands:\n';
-
-  switch (command as (keyof typeof validCommands)[number]) {
-    case 'CMD,2043,CX,ON':
-      output = 'CX ON';
-      break;
-
-    case 'CMD,2043,SIM,ACTIVATE':
-      output = 'SIM ACTIVATED';
-      break;
-
-    case 'CMD,2043,SIM,DISABLE':
-      output = 'SIM DISABLED';
-      break;
-
-    case 'CMD,2043,SIM,ENABLE':
-      output = 'SIM ENABLED';
-      break;
-
-    case 'CMD,2043,ST,GPS':
-      output = 'GPS STATUS';
-      break;
-
-    case 'CAL':
-      output = 'CALIBRATING';
-      break;
-
-    case 'CMD,2043,SIM,<PRESSURE>':
-      output = 'SIM PRESSURE';
-      break;
-
-    case 'help':
-      for (const [command, description] of Object.entries(validCommands)) {
-        helpText += `\n- ${command}: ${description}`;
-      }
-      output = helpText;
-      break;
-
-    case 'clear':
-      output = '';
-      break;
-
-    default:
-      output = 'Invalid command';
-      break;
-  }
-  return output;
-}

@@ -2,7 +2,7 @@
   import mqttClient from '$lib/mqtt/mqtt';
   import { onMount } from 'svelte';
   import Payload from '@/components/pages/visualization/payload/Payload.svelte';
-  import { gcsService } from '@/machines/gcs-machine';
+  import gcsMachine from '@/machines/gcs-machine';
 
   let interval: number;
 
@@ -25,6 +25,6 @@
 
 <section class="w-full [&>*]:border-surface-600 [&>*]:p-5">
   <div class="divide-y divide-surface-500">
-    <Payload />
+    <!-- <Payload /> -->
   </div>
 </section>

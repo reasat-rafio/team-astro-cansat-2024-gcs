@@ -3,8 +3,23 @@
 
   import Navbar from '@/components/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
+  import terminalMachine from '@/machines/terminal-machine';
   import { AppShell } from '@skeletonlabs/skeleton';
-  import { onMount } from 'svelte';
+  import { useActor } from '@xstate/svelte';
+  import { onMount, setContext } from 'svelte';
+  import type { Snapshot } from 'xstate';
+  import type { TerminalContext } from '@/lib/@types/app.types';
+  import gcsMachine from '@/machines/gcs-machine';
+
+  const gcsService = useActor(gcsMachine);
+  const terminalService = useActor(terminalMachine, {
+    snapshot: JSON.parse(
+      localStorage?.getItem('terminal_persisted_state') as string,
+    ) as Snapshot<TerminalContext>,
+  });
+
+  setContext('terminalService', terminalService);
+  setContext('gcsService', gcsService);
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -15,6 +30,18 @@
 
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
+
+  onMount(() => {
+    const storeRef = terminalService.actorRef.subscribe(() => {
+      const persistedState = terminalService.actorRef.getPersistedSnapshot();
+      localStorage.setItem(
+        'terminal_persisted_state',
+        JSON.stringify(persistedState),
+      );
+    });
+
+    return () => storeRef.unsubscribe();
   });
 </script>
 

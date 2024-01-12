@@ -9,11 +9,10 @@
 
 <section
   style="height: calc(100vh - {$navbarHeight}px);"
-  class="px-5 grid grid-cols-12 grid-rows-2 py-5 gap-5"
->
+  class="grid grid-cols-12 grid-rows-2 gap-5 px-5 py-5">
   <DataGroups />
   <Outputs />
   <SystemSteps />
   <Streams />
-  <Charts />
+  <!-- <Charts /> -->
 </section>

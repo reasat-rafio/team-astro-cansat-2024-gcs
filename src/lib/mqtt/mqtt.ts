@@ -1,7 +1,7 @@
 // import mqtt from 'mqtt';
 // import type { Topics } from './types';
 // import payload from './payload';
-// import { gcsService } from '../../machines/gcs-machine';
+// import gcsMachine  from '../../machines/gcs-machine';
 // import type { StringData, XYZNumberData } from '$lib/@types/app.types';
 
 // // MQTT handler
