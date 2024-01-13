@@ -35,7 +35,9 @@ export interface XYStringData {
 
 export interface MachineContext {
   state: string;
+  mode: string;
   output: string;
+  teamId: string;
   sensorData: {
     acceleration: XYZStringArrayData;
     airPressure: StringArrayData;
@@ -44,11 +46,15 @@ export interface MachineContext {
     temperature: StringArrayData;
     batteryVoltage: StringArrayData;
     gpsCoordinates: XYZStringArrayData;
+    gpsTime: string[];
+    missionTime: string[];
     gyroscope: XYZStringArrayData;
     longitude: StringArrayData;
     satellitesTracked: StringArrayData;
     tiltAngle: XYZStringArrayData;
     packetCount: string;
+    pcDeployed: boolean;
+    hSDeployed: boolean;
   };
 }
 
@@ -59,6 +65,16 @@ export type UpdateAltitude = {
 export type UpdateTemperature = {
   type: 'UPDATE_TEMPERATURE';
   data: StringData;
+};
+
+export type UpdatePcDeployed = {
+  type: 'UPDATE_PC_DEPLOYED';
+  data: boolean;
+};
+
+export type UpdateHsDeployed = {
+  type: 'UPDATE_HS_DEPLOYED';
+  data: boolean;
 };
 
 export type UpdateAirPressure = {
@@ -92,6 +108,24 @@ export type UpdatePacketCount = {
   type: 'UPDATE_PACKET_COUNT';
   data: string;
 };
+export type UpdateMode = {
+  type: 'UPDATE_MODE';
+  data: string;
+};
+
+export type UpdateGpsTime = {
+  type: 'UPDATE_GPS_TIME';
+  data: string;
+};
+
+export type UpdateMissionTime = {
+  type: 'UPDATE_MISSION_TIME';
+  data: string;
+};
+export type SetTeamId = {
+  type: 'SET_TEAM_ID';
+  data: string;
+};
 
 export type MachineEvent =
   | { type: 'ENABLE_SIMULATION' }
@@ -106,6 +140,12 @@ export type MachineEvent =
   | UpdateTiltAngle
   | UpdateState
   | UpdatePacketCount
+  | UpdateMode
+  | UpdatePcDeployed
+  | UpdateHsDeployed
+  | UpdateGpsTime
+  | UpdateMissionTime
+  | SetTeamId
   | { type: 'TRIGGER_ASCENDING' }
   | { type: 'START_SIMULATION' }
   | { type: 'UPDATE_ALTITUDE' }

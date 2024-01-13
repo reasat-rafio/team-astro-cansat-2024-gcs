@@ -3,10 +3,10 @@ import gcsStore from '@/stores/gcs.store';
 import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
 
-type IMPORT_CSV = { type: 'IMPORT_CSV'; data: string[][] };
+type ImportCSV = { type: 'IMPORT_CSV'; data: string[][] };
 type UpdateStream = { type: 'UPDATE_STREAM'; data: string };
 type MachineEvent =
-  | IMPORT_CSV
+  | ImportCSV
   | UpdateStream
   | { type: 'PROCESS_COMPLETE' }
   | { type: 'COMPLETE' }
@@ -68,7 +68,7 @@ const csvProcessingMachine = createMachine(
   {
     actions: {
       saveCSVData: assign(({ event }) => {
-        const { data } = event as IMPORT_CSV;
+        const { data } = event as ImportCSV;
         return { csvData: data };
       }),
 
@@ -132,8 +132,26 @@ function updateSeonsorData(data: MissionData) {
     MISSION_TIME,
     STATE,
     PACKET_COUNT,
+    MODE,
+    HS_DEPLOYED,
+    PC_DEPLOYED,
+    TEAM_ID,
+    GPS_TIME,
+    GPS_SATS,
   } = data;
 
+  $gcsService.send({
+    type: 'UPDATE_MISSION_TIME',
+    data: MISSION_TIME,
+  });
+  $gcsService.send({
+    type: 'UPDATE_GPS_TIME',
+    data: GPS_TIME,
+  });
+  $gcsService.send({
+    type: 'SET_TEAM_ID',
+    data: TEAM_ID,
+  });
   $gcsService.send({
     type: 'UPDATE_ALTITUDE',
     data: { value: ALTITUDE, time: MISSION_TIME },
@@ -157,6 +175,18 @@ function updateSeonsorData(data: MissionData) {
   $gcsService.send({
     type: 'UPDATE_STATE',
     data: STATE,
+  });
+  $gcsService.send({
+    type: 'UPDATE_MODE',
+    data: MODE,
+  });
+  $gcsService.send({
+    type: 'UPDATE_HS_DEPLOYED',
+    data: Boolean(HS_DEPLOYED),
+  });
+  $gcsService.send({
+    type: 'UPDATE_PC_DEPLOYED',
+    data: Boolean(PC_DEPLOYED),
   });
   $gcsService.send({
     type: 'UPDATE_PACKET_COUNT',

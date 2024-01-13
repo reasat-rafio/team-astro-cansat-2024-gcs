@@ -1,12 +1,17 @@
 import type {
   MachineContext,
   MachineEvent,
+  SetTeamId,
   UpdateAirPressure,
   UpdateAirSpeed,
   UpdateAltitude,
   UpdateBatteryVoltage,
   UpdateGPSCoordinates,
+  UpdateHsDeployed,
+  UpdateMissionTime,
+  UpdateMode,
   UpdatePacketCount,
+  UpdatePcDeployed,
   UpdateState,
   UpdateTemperature,
   UpdateTiltAngle,
@@ -27,7 +32,9 @@ const gcsMachine = createMachine(
     },
     context: {
       state: 'idle',
+      mode: 'idle',
       output: '',
+      teamId: '',
       sensorData: {
         acceleration: { values: [], time: [] },
         airPressure: { values: [], time: [] },
@@ -40,7 +47,11 @@ const gcsMachine = createMachine(
         longitude: { values: [], time: [] },
         satellitesTracked: { values: [], time: [] },
         tiltAngle: { values: [], time: [] },
+        gpsTime: [],
+        missionTime: [],
         packetCount: '0',
+        hSDeployed: false,
+        pcDeployed: false,
       },
     },
 
@@ -94,6 +105,27 @@ const gcsMachine = createMachine(
           },
           UPDATE_PACKET_COUNT: {
             actions: 'updatePacketCount',
+          },
+          UPDATE_MODE: {
+            actions: 'updateMode',
+          },
+          UPDATE_PC_DEPLOYED: {
+            actions: 'updatePCDeployed',
+          },
+          UPDATE_HS_DEPLOYED: {
+            actions: 'updateHSDeployed',
+          },
+          UPDATE_MISSION_TIME: {
+            actions: 'updateMissionTime',
+          },
+          UPDATE_GPS_TIME: {
+            actions: 'updateGpsTime',
+          },
+          SET_TEAM_ID: {
+            actions: assign(({ event }) => {
+              const { data } = event as SetTeamId;
+              return { teamId: data };
+            }),
           },
         },
         states: {
@@ -283,6 +315,52 @@ const gcsMachine = createMachine(
         const { data } = event as UpdateState;
         return {
           state: data,
+        };
+      }),
+
+      updateMode: assign(({ event }) => {
+        const { data } = event as UpdateMode;
+        return {
+          state: data,
+        };
+      }),
+
+      updatePCDeployed: assign(({ event, context }) => {
+        const { data } = event as UpdatePcDeployed;
+        return {
+          sensorData: {
+            ...context.sensorData,
+            pcDeployed: data,
+          },
+        };
+      }),
+
+      updateHSDeployed: assign(({ event, context }) => {
+        const { data } = event as UpdateHsDeployed;
+        return {
+          sensorData: {
+            ...context.sensorData,
+            hSDeployed: data,
+          },
+        };
+      }),
+      updateMissionTime: assign(({ event, context }) => {
+        const { data } = event as UpdateMissionTime;
+        return {
+          sensorData: {
+            ...context.sensorData,
+            missionTime: [...context.sensorData.missionTime, data],
+          },
+        };
+      }),
+
+      updateGpsTime: assign(({ event, context }) => {
+        const { data } = event as UpdateMissionTime;
+        return {
+          sensorData: {
+            ...context.sensorData,
+            gpsTime: [...context.sensorData.gpsTime, data],
+          },
         };
       }),
 
