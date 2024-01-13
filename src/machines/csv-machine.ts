@@ -1,4 +1,5 @@
 import type { MissionData } from '@/lib/@types/app.types';
+import { calculatedAltitude } from '@/lib/helper';
 import gcsStore from '@/stores/gcs.store';
 import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
@@ -118,6 +119,7 @@ function updateSeonsorData(data: MissionData) {
   const $gcsService = get(gcsStore);
 
   const {
+    ATMOSPHERIC_PRESSURE,
     ALTITUDE,
     TEMPERATURE,
     AIR_SPEED,
@@ -137,7 +139,7 @@ function updateSeonsorData(data: MissionData) {
     PC_DEPLOYED,
     TEAM_ID,
     GPS_TIME,
-    GPS_SATS,
+    // GPS_SATS,
   } = data;
 
   $gcsService.send({
@@ -154,7 +156,10 @@ function updateSeonsorData(data: MissionData) {
   });
   $gcsService.send({
     type: 'UPDATE_ALTITUDE',
-    data: { value: ALTITUDE, time: MISSION_TIME },
+    data: {
+      value: String(calculatedAltitude(+ATMOSPHERIC_PRESSURE)),
+      time: MISSION_TIME,
+    },
   });
   $gcsService.send({
     type: 'UPDATE_TEMPERATURE',

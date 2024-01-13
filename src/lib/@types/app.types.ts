@@ -208,6 +208,7 @@ export type CSVActorContext = ActorContext<typeof csvProcessingMachine>;
 export interface MissionData {
   TEAM_ID: string;
   MISSION_TIME: string;
+  ATMOSPHERIC_PRESSURE: string;
   PACKET_COUNT: string;
   MODE: string;
   STATE: string;
