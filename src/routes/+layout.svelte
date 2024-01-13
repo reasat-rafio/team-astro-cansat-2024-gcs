@@ -1,7 +1,6 @@
 <script lang="ts">
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
-  import type { TerminalContext } from '@/lib/@types/app.types';
   import csvProcessingMachine from '@/machines/csv-machine';
   import gcsMachine from '@/machines/gcs-machine';
   import terminalMachine from '@/machines/terminal-machine';
@@ -11,15 +10,18 @@
   import { AppShell } from '@skeletonlabs/skeleton';
   import { useActor } from '@xstate/svelte';
   import { onMount } from 'svelte';
-  import type { Snapshot } from 'xstate';
   import '../app.css';
 
-  const gcsService = useActor(gcsMachine);
   const csvService = useActor(csvProcessingMachine);
+  const gcsService = useActor(gcsMachine, {
+    // snapshot: JSON.parse(
+    //   localStorage?.getItem('gcs_persisted_state') as string,
+    // ),
+  });
   const terminalService = useActor(terminalMachine, {
     snapshot: JSON.parse(
       localStorage?.getItem('terminal_persisted_state') as string,
-    ) as Snapshot<TerminalContext>,
+    ),
   });
 
   gcsStore.setStore(gcsService);
@@ -56,15 +58,25 @@
   });
 
   onMount(() => {
-    const storeRef = terminalService.actorRef.subscribe(() => {
+    const terminalStoreRef = terminalService.actorRef.subscribe(() => {
       const persistedState = terminalService.actorRef.getPersistedSnapshot();
       localStorage.setItem(
         'terminal_persisted_state',
         JSON.stringify(persistedState),
       );
     });
+    // const gcsStoreRef = gcsService.actorRef.subscribe(() => {
+    //   const persistedState = gcsService.actorRef.getPersistedSnapshot();
+    //   localStorage.setItem(
+    //     'gcs_persisted_state',
+    //     JSON.stringify(persistedState),
+    //   );
+    // });
 
-    return () => storeRef.unsubscribe();
+    return () => {
+      terminalStoreRef.unsubscribe();
+      // gcsStoreRef.unsubscribe();
+    };
   });
 </script>
 

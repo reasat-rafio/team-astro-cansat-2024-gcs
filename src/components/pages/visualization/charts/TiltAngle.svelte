@@ -33,12 +33,6 @@
   let data: { x: string; y: string; z: string }[] = [];
 
   $: {
-    console.log('====================================');
-    console.log({ labels, data });
-    console.log('====================================');
-  }
-
-  $: {
     chart?.data.datasets[0].data.push(+data[data.length - 1]?.x);
     chart?.data.datasets[1].data.push(+data[data.length - 1]?.y);
     chart?.data.datasets[2].data.push(+data[data.length - 1]?.z);

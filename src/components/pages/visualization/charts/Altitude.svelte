@@ -58,6 +58,23 @@
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
+
+  // onMount(() => {
+  //   if (data?.length && labels?.length && chart) {
+  //     $gcsStore.actorRef
+  //       .getSnapshot()
+  //       .context.sensorData.altitude.values.forEach((value) => {
+  //         chart?.data.datasets[0].data.push(+value);
+  //       });
+  //     $gcsStore.actorRef
+  //       .getSnapshot()
+  //       .context.sensorData.altitude.time.forEach((value) => {
+  //         chart?.data.datasets[0].data.push(+value);
+  //       });
+
+  //     chart?.update();
+  //   }
+  // });
 </script>
 
 <section class={$$props.class}>

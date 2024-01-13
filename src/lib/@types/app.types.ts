@@ -34,7 +34,7 @@ export interface XYStringData {
 }
 
 export interface MachineContext {
-  csvData?: string[][][];
+  state: string;
   output: string;
   sensorData: {
     acceleration: XYZStringArrayData;
@@ -48,6 +48,7 @@ export interface MachineContext {
     longitude: StringArrayData;
     satellitesTracked: StringArrayData;
     tiltAngle: XYZStringArrayData;
+    packetCount: string;
   };
 }
 
@@ -83,6 +84,14 @@ export type UpdateTiltAngle = {
   type: 'UPDATE_TILT_ANGLE';
   data: XYZStringData;
 };
+export type UpdateState = {
+  type: 'UPDATE_STATE';
+  data: string;
+};
+export type UpdatePacketCount = {
+  type: 'UPDATE_PACKET_COUNT';
+  data: string;
+};
 
 export type MachineEvent =
   | { type: 'ENABLE_SIMULATION' }
@@ -95,6 +104,8 @@ export type MachineEvent =
   | UpdateBatteryVoltage
   | UpdateGPSCoordinates
   | UpdateTiltAngle
+  | UpdateState
+  | UpdatePacketCount
   | { type: 'TRIGGER_ASCENDING' }
   | { type: 'START_SIMULATION' }
   | { type: 'UPDATE_ALTITUDE' }

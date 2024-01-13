@@ -6,6 +6,8 @@ import type {
   UpdateAltitude,
   UpdateBatteryVoltage,
   UpdateGPSCoordinates,
+  UpdatePacketCount,
+  UpdateState,
   UpdateTemperature,
   UpdateTiltAngle,
 } from '$lib/@types/app.types';
@@ -24,7 +26,7 @@ const gcsMachine = createMachine(
       events: {} as MachineEvent,
     },
     context: {
-      csvData: undefined,
+      state: 'idle',
       output: '',
       sensorData: {
         acceleration: { values: [], time: [] },
@@ -38,6 +40,7 @@ const gcsMachine = createMachine(
         longitude: { values: [], time: [] },
         satellitesTracked: { values: [], time: [] },
         tiltAngle: { values: [], time: [] },
+        packetCount: '0',
       },
     },
 
@@ -85,6 +88,12 @@ const gcsMachine = createMachine(
           },
           UPDATE_TILT_ANGLE: {
             actions: 'updateTiltAngle',
+          },
+          UPDATE_STATE: {
+            actions: 'updateState',
+          },
+          UPDATE_PACKET_COUNT: {
+            actions: 'updatePacketCount',
           },
         },
         states: {
@@ -266,6 +275,23 @@ const gcsMachine = createMachine(
               values: [...context.sensorData.tiltAngle.values, { x, y, z }],
               time: [...context.sensorData.tiltAngle.time, time],
             },
+          },
+        };
+      }),
+
+      updateState: assign(({ event }) => {
+        const { data } = event as UpdateState;
+        return {
+          state: data,
+        };
+      }),
+
+      updatePacketCount: assign(({ event, context }) => {
+        const { data } = event as UpdatePacketCount;
+        return {
+          sensorData: {
+            ...context.sensorData,
+            packetCount: data,
           },
         };
       }),

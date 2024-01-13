@@ -4,15 +4,17 @@ import { get } from 'svelte/store';
 import { assign, createMachine } from 'xstate';
 
 type IMPORT_CSV = { type: 'IMPORT_CSV'; data: string[][] };
+type UpdateStream = { type: 'UPDATE_STREAM'; data: string };
 type MachineEvent =
   | IMPORT_CSV
+  | UpdateStream
   | { type: 'PROCESS_COMPLETE' }
   | { type: 'COMPLETE' }
   | { type: 'START_PROCESS' };
 
 const csvProcessingMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QGNYDcAKAnA9susAlgHZQB0hEANmAMQCSAshgPIBKAKgPoDCAygDUA2gAYAuolAAHHEQAuhHMUkgAHogCMANgDMZAJyHDO-ToDsG0wA4ALABoQAT00izZM2Z02ATAFZXGiJa3jreAL5hDqiYuPiwRKRk0VyEsFywcjhYkLQYbCw8AKJ8fKISSCAy8orKFeoINma+ZF7mQX46Wr5NDs4IGjoiZP4ioyK+3oGDVhFR6Nh4BCTkUrFLpLQ8LMwAMoUchWUqVYQKSir1VlpDVt5WIjb63jaWd769moNkj4a241oaMzeLoRSIgYg4CBwFTRBZxBJQY6yU41C6IAC0Wg+CExsxAsLW8WWFGoYCR1XOdUQPmxAyGRn0f18AKBILBBMWRMSyVS6Uy2Qg5JRlNA9VCenMjzMIkmGm65lpOg0ZDGYwmUxEM3Z80JCLIq05CKFZ1qosQ130ZA0z30j2uAKsGg02Md3yMVn8AMlWjMeI58OJyBwAFspDQ5JBjaiqf1Rlpvlorrd9BadL59LTvJazD8rLY846ujZQWEgA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QGNYDcAKAnA9susAlgHZQB0hEANmAMQCSAshgPIBKAKgPoDCAygDUA2gAYAuolAAHHEQAuhHMUkgAHogCMANgDMZAJyHDO-ToDsG0wA4ALABoQAT00izZM2Z02ATAFZXGiJa3jreAL5hDqiYuPiwRKRk0VyEsFywcjhYkLR8HACCnFwYbCw8AKJ8fKISSCAy8orKdeoIvh5kNr46Ivq+3hoa7TpWDs4IA1oGRlb+WhrmNlpmEVHo2HgEJORSsVuktDwszAAy5RzlNSoNhApKKq1WWiJkVt5WIjb63jaW775jTQ9TozGwiXzzMzeLS+VYgaIbOIJHZ7eLbWgAVQwABF8hcuHlyvlGFc6jc7s1QK0Rr4yBofvovs95lZBoCEABaDRWdz+EQ9SxmX42EwRSIgYg4CBwFQI1HI66yW5NB6IDladlcoJkPwifkiQXC0XiuWbNGJSg0RWNe4tRA+dkLF5GfS2cGQ6Gwk3reXbJLoFJpDJZSDW5W2qmIUJ6Rb6MwiAZDTxmR06DRkPWZ8EDfVWOGmpF+3ZmhVkpUU1UIZ76OkMplBblspyIVkgwyzBuLZb5n0lv3IHAAWykNDkobLNspahc2qWTze+mrOl8+kd3hrQvbtisO+0vhsYrCQA */
     id: 'csvProcessing',
     initial: 'idle',
     types: {
@@ -20,6 +22,7 @@ const csvProcessingMachine = createMachine(
         csvData: string[][];
         currentIndex: number;
         intervalId: NodeJS.Timeout | null;
+        streams: string[];
       },
       events: {} as MachineEvent,
     },
@@ -27,6 +30,7 @@ const csvProcessingMachine = createMachine(
       csvData: [],
       currentIndex: 1,
       intervalId: null,
+      streams: [],
     },
     states: {
       idle: {
@@ -48,6 +52,10 @@ const csvProcessingMachine = createMachine(
       processing: {
         on: {
           COMPLETE: 'completed',
+          UPDATE_STREAM: {
+            target: 'processing',
+            actions: 'updateStream',
+          },
         },
         entry: 'startProcessing',
         exit: 'stopProcessing',
@@ -64,7 +72,7 @@ const csvProcessingMachine = createMachine(
         return { csvData: data };
       }),
 
-      startProcessing: ({ context }) => {
+      startProcessing: ({ context, self }) => {
         context.intervalId = setInterval(() => {
           if (context.currentIndex < context.csvData.length) {
             const currentLine = context.csvData[context.currentIndex];
@@ -75,6 +83,7 @@ const csvProcessingMachine = createMachine(
               lineObject[columnName] = currentLine[index];
             });
 
+            self.send({ type: 'UPDATE_STREAM', data: currentLine.join(',') });
             updateSeonsorData(lineObject as MissionData);
 
             console.log('Processing line:', lineObject);
@@ -92,6 +101,13 @@ const csvProcessingMachine = createMachine(
         context.intervalId = null;
         console.log('Processing complete');
       },
+
+      updateStream: assign(({ context, event }) => {
+        const { data } = event as UpdateStream;
+        return {
+          streams: [...context.streams, data],
+        };
+      }),
     },
   },
 );
@@ -114,6 +130,8 @@ function updateSeonsorData(data: MissionData) {
     TILT_Y,
     ROT_Z,
     MISSION_TIME,
+    STATE,
+    PACKET_COUNT,
   } = data;
 
   $gcsService.send({
@@ -135,6 +153,14 @@ function updateSeonsorData(data: MissionData) {
   $gcsService.send({
     type: 'UPDATE_BATTERY_VOLTAGE',
     data: { value: VOLTAGE, time: MISSION_TIME },
+  });
+  $gcsService.send({
+    type: 'UPDATE_STATE',
+    data: STATE,
+  });
+  $gcsService.send({
+    type: 'UPDATE_PACKET_COUNT',
+    data: PACKET_COUNT,
   });
   $gcsService.send({
     type: 'UPDATE_GPS_COORDINATES',
