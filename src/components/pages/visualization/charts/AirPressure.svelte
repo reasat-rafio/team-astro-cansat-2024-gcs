@@ -12,8 +12,9 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import gcsMachine from '@/machines/gcs-machine';
+
   import { delay } from '$lib/helper';
+  import gcsStore from '@/stores/gcs.store';
 
   ChartJS.register(
     Title,
@@ -28,60 +29,41 @@
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
-  let labels = [];
-  let data = [];
 
-  function getRandomValue() {
-    return Math.floor(Math.random() * 100);
+  let labels: string[] = [];
+  let data: string[] = [];
+
+  $: {
+    chart?.data.datasets[0].data.push(+data[data.length - 1]);
+    chart?.data.labels?.push(labels[labels.length - 1]);
+
+    chart?.update();
+    delay(10).then(() => autoScrollAction());
   }
 
-  for (let i = 0; i < 5; i++) {
-    data.push(getRandomValue());
-    labels.push(getRandomValue());
-  }
   onMount(() => {
-    // if (chart) {
-    //   $gcsService?.context?.airPressure?.values?.forEach((d) =>
-    //     chart?.data.datasets[0].data.push(+d)
-    //   );
-    //   $gcsService?.context?.airPressure?.time?.forEach((d) =>
-    //     chart?.data.datasets[0].data.push(+d)
-    //   );
-    //   chart.update();
-    // }
-  });
-
-  async function updateGraph() {
     if (chart) {
-      chart.data.datasets[0].data.push(
-        +$gcsService?.context?.airPressure?.values[
-          $gcsService?.context?.airPressure?.values.length - 1
-        ],
-      );
-      chart.data.labels?.push(
-        +$gcsService?.context?.airPressure?.time[
-          $gcsService?.context?.airPressure?.time.length - 1
-        ],
-      );
+      const subscriber = $gcsStore.actorRef.subscribe((state) => {
+        if (state.context.sensorData.airPressure) {
+          labels = state.context.sensorData.airPressure.time;
+          data = state.context.sensorData.airPressure.values;
+        }
+      });
 
-      await delay(10);
-      autoScrollAction();
-      chart.update();
+      return () => subscriber.unsubscribe();
     }
-  }
+  });
 
   function autoScrollAction() {
     if (containerEl && lockToTheEnd) {
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-
-  // $: $gcsService?.context?.airPressure, updateGraph();
 </script>
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Air Speed</h4>
+    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Air Pressure</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
@@ -91,17 +73,14 @@
     </label>
   </div>
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
-    <div
-      class="h-[300px]"
-      style="width: {500 +
-        $gcsService?.context?.airSpeed?.values?.length * 50}px; ">
+    <div class="h-[300px]" style="width: {500 + data?.length * 50}px; ">
       <Line
         bind:chart
         data={{
-          labels,
+          labels: [],
           datasets: [
             {
-              label: 'Air Speed',
+              label: 'Airpressure',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
               borderColor: 'rgb(75, 75, 192)',
@@ -118,7 +97,7 @@
               pointHoverBorderWidth: 2,
               pointRadius: 1,
               pointHitRadius: 10,
-              data,
+              data: [],
             },
           ],
         }}

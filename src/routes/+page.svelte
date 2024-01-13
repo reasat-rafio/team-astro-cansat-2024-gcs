@@ -14,5 +14,5 @@
   <Outputs />
   <SystemSteps />
   <Streams />
-  <!-- <Charts /> -->
+  <Charts />
 </section>

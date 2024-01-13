@@ -12,8 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import gcsMachine from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
+  import gcsStore from '@/stores/gcs.store';
 
   ChartJS.register(
     Title,
@@ -29,49 +29,40 @@
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
 
+  let labels: string[] = [];
+  let data: string[] = [];
+
+  $: {
+    chart?.data.datasets[0].data.push(+data[data.length - 1]);
+    chart?.data.labels?.push(labels[labels.length - 1]);
+
+    chart?.update();
+    delay(10).then(() => autoScrollAction());
+  }
+
   onMount(() => {
     if (chart) {
-      $gcsService?.context?.gpsCoordinates?.values?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d),
-      );
-      $gcsService?.context?.gpsCoordinates?.time?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d),
-      );
-      chart.update();
+      const subscriber = $gcsStore.actorRef.subscribe((state) => {
+        if (state.context.sensorData.altitude) {
+          labels = state.context.sensorData.altitude.time;
+          data = state.context.sensorData.altitude.values;
+        }
+      });
+
+      return () => subscriber.unsubscribe();
     }
   });
-
-  async function updateGraph() {
-    if (chart) {
-      chart.data.datasets[0].data.push(
-        +$gcsService?.context?.gpsCoordinates?.values[
-          $gcsService?.context?.gpsCoordinates?.values.length - 1
-        ],
-      );
-      chart.data.labels?.push(
-        +$gcsService?.context?.gpsCoordinates?.time[
-          $gcsService?.context?.gpsCoordinates?.time.length - 1
-        ],
-      );
-
-      await delay(10);
-      autoScrollAction();
-      chart.update();
-    }
-  }
 
   function autoScrollAction() {
     if (containerEl && lockToTheEnd) {
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-
-  $: $gcsService?.context?.gpsCoordinates, updateGraph();
 </script>
 
-<section>
+<section class={$$props.class}>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Gps Coordinates</h4>
+    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Altitude</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
@@ -81,17 +72,14 @@
     </label>
   </div>
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
-    <div
-      class="h-[300px]"
-      style="width: {500 +
-        $gcsService?.context?.gpsCoordinates?.values?.length * 50}px; ">
+    <div class="min-h-[300px]" style="width: {500 + data?.length * 50}px; ">
       <Line
         bind:chart
         data={{
           labels: [],
           datasets: [
             {
-              label: 'Gps Coordinates',
+              label: 'Altitude',
               fill: true,
               backgroundColor: 'rgba(54, 162, 235, 0.3)',
               borderColor: 'rgb(75, 75, 192)',
