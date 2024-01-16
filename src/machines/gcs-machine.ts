@@ -1,4 +1,5 @@
 import type {
+  ImportCsv,
   MachineContext,
   MachineEvent,
   SetTeamId,
@@ -22,7 +23,7 @@ import csvStore from '@/stores/csv.store';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+ARgCsADgDMfAGwWdOpQF9nGtFlyFiZdJVr0TPoSEORgzACiAHIAggBCnBEA+lTsALIAqpwxACrsAPJR-EJIIGKS0rKliggmtkqGxia6tnwAnBYmbeqaiCZ8DWZNJp1mVkpjOq7uGDj4RKQU1HQMjMGh4dHxiUkAYpzsyAASOcVy5VIy2HI1dQ3Gpi3tnd0aWggq-Y1GVjoqHXwVGYpm4QB45t5Fn5loE1pJGJhyABDSrYJJgbBIgBGYWYMQIeQAarlkqlMtk8oUzqULqibohbD13p8VINjGYVLYnEorLZbNMwbMvAtfP4VkF4YiUVckkiAMbSABu4SoORiACUcil0llcgUioJzuJLlVQDVrFZ9FYVHxeUMgay2ko3n0OiZ9Do2rYOo47Cp-RYBeDhT4lgFVvpJcjUbKFRJlcwMgAFAAiJKSMU4eRyGRTEWpomNdOqiGsOn0Xv6gKsFgsSiMbRdtVrZn0dZrOms7TGtqDQvmoeh4YlEgR0Zl8qV4WTaZyyTnaSTEXVuQy6vzhppRau9IQL30ZjaNb4HN5A10TZMnbabbafB09jazTLZj7ngHULFsMjo6lMcn8bTqm6YxOw6opEuEQpgWZTbqaCiluM+icmY3rmDyDgjJe3qWkeD6HmYdQmEoSiBqCwYfqKMIRlG0rELGU6JsBc4ZmBSRJuuVBUGuG4lIWFQ7iWe5dAeehWGYShch0XKXoe5YdBMQwmF0EwqFYb4QiKYbinCv7jvRAEJjO6ZxLkc7qgAmkkhL5FmMTILxRoCfB5q2voIw6JY1pXkMthmLJgKGFYJg1uYnYWK0KgaSGn7USOY50WihlAbOyTIEmVBJAQ+T5OqKbsLEc5UDBtKCWapamG2GFWKFTpepe9a2IYna6J8FifFyIIzO+kJUcOukJf+cZGcx85cFqMRRMgiQlXB1xCV2Ho6OJ-SqGp7U6JewUGM0hGMp2EmeSY0WUdp360UNjHGSxqokrNznzeVe5DBWrRtJ6vzmO0TJ9J8DRXjaYw1g47X8uR-a9WdNF6YlDGAUxqXsfirARFq2UZFEpybvxJqPQhwkNH5tjWpJ9ZtB0l7KRYyEjO1wLnk+J2Q0OOk-oNE7DSl6ZpPkeb3bju4WIRHoWE+zRAsFHIWJegIqMhfmHhYpjveTLjgz1Wks+dMOXfD13JEmBBJHmSacPkFlQfzxZPe17rEULQxKG0wLjNLvQIN0TXBaytaMtt3pM5rX7Q+zBmcwj6ZHJlJtmxb0HY7BD2CzabYDErtjmMRd4mE2i3iXh3SckoxFq91mmDsH8V-hzV2jUkaTsFx+pJHkaSOVuScLSnfLFxnzsWqhTbLQ0jWch0-x-F0gcV3FA3V2HteI+lmWt+3OPW-jZZtu1Xo2s0R7KU2xPUxMwWtDyNj-Op6vl7F-Vs-PSXh1QqMtxEMRpEk7Dx3xicCwtwJ9AZz+HoesvJOQ-QQBJOWQwjCEVtMTXkZEy4xT6qzC6NdAL6CRLAOUGIIASGwFAZgOR1SHAcuBPMVACDRHylNK2ZVN4nitLocmxN6gcgpu7T45NkJKRtKyYmThp533QTrTByp9AQDgHg3AhDiGkPIcuJI2Qoh0OQAwlyfQrzU3zpJB0hESKQJ4TeIEjxASSV+KXQUGsZ73wwQvLBIRcSKOQBQjM1DaEFQ0QnUqWiEATHdN7YuD5JJ+SvE2ExfDzGCKsSItB34ABm5AJBQAABYkHRJiHE4R8REnTPsQ4JxNF4xqBySJ3sPSwM7DoO4fJXCgmwOgaR8BSgUWZpXRgTl-5PQALS2CbP074DwRlGC6jY2+CSIzOLAN0jeNRVCU3dL3LkVgnQSTsKoeJUMggMFQIwQhKJIBzMYbcQBphUKsjCp6DoVhIl6APMYH29ReRcjBig06WsQ6PyydiMIJz-E1iam1JwfIuj9E7Lnd0sCfhOj5KhI82yvlV30k-KcALSnaE6FaZoTszyZ1Fv5bhmyqkNlqYCJ8YwkWdIfqiuGkicGyIIUQjFu4uStgcKRB8NZJLnkiV0G8nkYmWOETfVBOy550uSlImR+D5GsqEv0NZ7kHCWFtEeCKD5+W8KFc0CxQjrHtKDrPWlsNpXIlwMcjuPT8YhWxQpEiQs1L1AGdwgVpK9WxNFR8jpJqHFoqcRsBVT1rQ3mCUeVoBLnbasFfw-VcSxWfJpck1JGTfk5ODfjcYXtDyvPaDVf0RL3geWGf6BB4wOjUpNSm9JmTkqZpqI6fQp9lI2E8stXkkSVCi1Jfedq9Z8INOcEAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiACwAmADQgaiFQHY+AOj5G+ARgCsADgDMfAGwWdOpQF9nGtFlyFiZdJVr0TPoSEORgzACiAHIAggBCnBEA+lTsALIAqpwxACrsAPJR-EJIIGKS0rKliggqAJxK+rZ8ShbNKm06thpaCAC0SnX6FmYmJjomtiqqJnxmtmau7hg4+ESkFNR0DIzBoeHR8YlJAGKc7MgAEjnFcuVSMthyNX0mdQYOZjojduZtFkoeogzFZDLMrDoVHx3roVCorEsQB5Vt4Nn4toFdpJGJhyABDSrYJJgbB4gBGYWYMQIeQAarlkqlMtk8oVbqV7oTnogpkDaiZpvozMYzCpbE4lFZbLZEcivOtfP5tkFsbiCY8kniAMbSABu4SoORiACUcil0llcgUioI7uIHlVQDVrKCrFCpcKVKLBoDNIg3hYTPodHVbHUHHopnCLLKVvKfJsAjt9Kr8YTNTqJPrmBkAAoAEQZSRinDyOQy+Yi7NE9q51UQ1h0+lDsz48IsAKMdT5Jg7ZmGkoc1mhIL4CLcSLjawT6KTKokOLTGu1evCecLOWSm7SuYixtyGWNVdtHNrj25CEDQzMdSsFjm8Oaqh0Pe+Qws7y6H4FjcWE7l05okqmIpguarpiuWZrgWRYxOwxopLuET5tWZRno6CgNlYjRivMdTmIOEwWD2YagreXQ3qMtgmEorSxp4gGKhiyapuqxAZquOYwZuxbwUkuZHlQVCHseJQ1hU571pebxCnoVhmEo4rhuKPY3k24ZKGYwpjA0orjssDGokxc5YmBS7sZB2brkWcS5JuxoAJpJLS+SljEyCiXaEkYc6Y76L2OiWG64zCgsqltoYVgmHe5jfG0bb0SiCqJsqpmLmxRKWdBG7JMguZUEkBD5Pkxr5uwsSblQqGcpJToNqYA53lYMUNKGPZKHYhjfLCvYqJMjiJfGQHMfO6UQZmVncVuXBmjEUTIIk1XoU8UnDsGOjybMqjtroPZRQYApUboIxKIFJiDYxKUgax42cdZPGGgyS3eStdWXsKzbNHUIYQuY0LqH6CACjR-mQnMzUdt1Mr-lORlXSxZkZRxUFcTl-HUqwERmkVGRRDcJ7iQ6r2YdJjQLLYbqKR1dThj2YwWPofUdl6eiqPhF1w7OqWgWNy4TdlRZpPklbPUTF4jEGb5jHCILmB0PZtiojMLDe95vCGDQc8lXPXYjt0o-dyS5gQSSVrmnD5A5yGi3Wb0WH1-mtFpLR1F82HEYDdRivoUXTB2Uz7WGWszsBCO8xZ-Oo0WlwFWbFtWyhBNoS94tQsMLT3tRoyDKYfJrfJ5Fe2KSg0S4MOGdroejeBfN3VNSRpOwQnWkkeRpJ5p4p6tafSiX1Guy68x8htjQdVMYb299fV1MHw0mTzNcR3XaN5QVbcd4Ttsk42wyT1Mpj1FFJh8hTDOaVFT7NW2t6z8Z3M3bXKNUFjrcRDEaRJOwidicnYurV8TRxi6BaGOceANegKSVsKIwoxQHNXsLfeG1dzKZX5voPEsAtQkggBIbAUBmA5GNBcDyCFKxUAINEMq80ba1W3nMH2ugaYU1sJpeoHtejTyGF6A+bZFIQjLgZJKIcRppUXqg1c+gIBwCwbgXB+DCHEL3EkbIUQqHIBoT5f04wGYF0Ul6L0pdwHaDeFw7SUJpgUycIgnWYcxHI31HsSkCjkAkOLOQyh5V1FJxqpohAmkgy+xLl0RSCxxh8k4YzMxvDLECMnBXYR88ABm5AJBQAABYkGJKSCk4RqR0iLGcC41wNHExqKKcJvtgzQO+BMFh0prFVxYOkXMJVsZUFpCUi8fRxQ4VvKYCW5g3jH0BtLMijZWigPvNMVwE5sDoCkfAUoAFOaNK8n-N6fRs6Mz6b2UYgz8J8leFYLh9svglzHNGBSDSRGOLAGsreNRHD+XmF0Cm2EWjnz5G6H20VWqkUzr2a588GCoEYLggkkB7m0JeGMAwIY2yBSiqobSZg+S0SVkYaKxyQxg17kC++esNQknJGEKFvixRDERfUai4oBQbW6CMkGrRZhihdgKaisTlmVxuQ-JeUEyWlO0IGH50xbzNEGR+VFgMoQsKqf06ix01L4t1uHcRUF0GYOwXIgVF5xT9gcK0Lod5FItCMfyGmcqBTRP4cq2xKD7FgEkdIrVeCdVSXBEMAKlgxy3k6AyjhJjLXmL4VY8uQi54EtVQ6-Q+JcCQs7uskm0VhUaVoiMR8ilwmBsCjwixNqw1DTviquxWVblurem6IYgSxWmFGJKrNFqc1WrzaGwRhakG7GSakjJWSSV3ITQ8xAAxpTbJsLssYowDmA02ZLU5jhwxaVhDoW1QQu3pMyVlctJNRX6HPmMGwgUNpSnCR0Sl1T7YdQojM5wQA */
     id: 'Ground Control System',
 
     initial: 'idle',
@@ -31,6 +32,14 @@ const gcsMachine = createMachine(
       events: {} as MachineEvent,
     },
     context: {
+      steps: {
+        calibrateTelemetry: 'notStarted',
+        importCSV: 'notStarted',
+        currentTimeSetFromGPS: 'notStarted',
+        simulationActivate: 'notStarted',
+        simulationEnable: 'notStarted',
+        telemetryStarted: 'notStarted',
+      },
       state: 'idle',
       mode: 'idle',
       output: '',
@@ -66,7 +75,7 @@ const gcsMachine = createMachine(
       terminated: {},
 
       simulation_enable: {
-        entry: 'notifySimulationEnable',
+        entry: ['notifySimulationEnable', 'enableSimulation'],
 
         on: {
           ACTIVATE_SIMULATION: 'simulation_active',
@@ -74,10 +83,20 @@ const gcsMachine = createMachine(
       },
 
       simulation_active: {
-        entry: 'notifySimulationActivated',
+        entry: ['notifySimulationActivated', 'activateSimulation'],
         on: {
           START_SIMULATION: {
             actions: ['startCSVProcessing'],
+          },
+          CSV_PROCESSING_COMPLETE: {
+            actions: assign(({ context }) => {
+              return {
+                steps: {
+                  ...context.steps,
+                  simulationActivate: 'done',
+                },
+              };
+            }),
           },
           UPDATE_ALTITUDE: {
             actions: 'updateAltitude',
@@ -166,20 +185,52 @@ const gcsMachine = createMachine(
 
     on: {
       KILL: '.terminated',
+      IMPORT_CSV: {
+        target: '#Ground Control System',
+        actions: ['importCSV'],
+      },
     },
   },
   {
     actions: {
+      importCSV: assign(({ context, event }) => {
+        const { status } = event as ImportCsv;
+
+        return {
+          steps: {
+            ...context.steps,
+            importCSV: status,
+          },
+        };
+      }),
       notifySimulationEnable: assign(() => {
         return {
           output: 'Simulation Enabled',
         };
       }),
+
+      enableSimulation: assign(({ context }) => {
+        return {
+          steps: {
+            ...context.steps,
+            simulationEnable: 'done',
+          },
+        };
+      }),
+
       notifySimulationActivated: assign(({ self }) => {
         self.send({ type: 'START_SIMULATION' });
 
         return {
           output: 'Simulation Activated',
+        };
+      }),
+      activateSimulation: assign(({ context }) => {
+        return {
+          steps: {
+            ...context.steps,
+            simulationActivate: 'inProgress',
+          },
         };
       }),
       startCSVProcessing: () => {

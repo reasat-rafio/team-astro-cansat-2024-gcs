@@ -1,4 +1,4 @@
-import type { MissionData } from '@/lib/@types/app.types';
+import type { GCSActorContext, MissionData } from '@/lib/@types/app.types';
 import { calculatedAltitude } from '@/lib/helper';
 import gcsStore from '@/stores/gcs.store';
 import { get } from 'svelte/store';
@@ -70,10 +70,15 @@ const csvProcessingMachine = createMachine(
     actions: {
       saveCSVData: assign(({ event }) => {
         const { data } = event as ImportCSV;
+        const { send } = get(gcsStore);
+        send({ type: 'IMPORT_CSV', status: 'done' });
+
         return { csvData: data };
       }),
 
       startProcessing: ({ context, self }) => {
+        const $gcsService = get(gcsStore);
+
         context.intervalId = setInterval(() => {
           if (context.currentIndex < context.csvData.length) {
             const currentLine = context.csvData[context.currentIndex];
@@ -85,7 +90,7 @@ const csvProcessingMachine = createMachine(
             });
 
             self.send({ type: 'UPDATE_STREAM', data: currentLine.join(',') });
-            updateSeonsorData(lineObject as MissionData);
+            updateSeonsorData(lineObject as MissionData, $gcsService);
 
             console.log('Processing line:', lineObject);
 
@@ -93,6 +98,8 @@ const csvProcessingMachine = createMachine(
           } else {
             clearInterval(context.intervalId as NodeJS.Timeout);
             context.intervalId = null;
+
+            $gcsService.send({ type: 'CSV_PROCESSING_COMPLETE' });
             console.log('Processing complete');
           }
         }, 1000);
@@ -115,9 +122,7 @@ const csvProcessingMachine = createMachine(
 
 export default csvProcessingMachine;
 
-function updateSeonsorData(data: MissionData) {
-  const $gcsService = get(gcsStore);
-
+function updateSeonsorData(data: MissionData, $gcsService: GCSActorContext) {
   const {
     ATMOSPHERIC_PRESSURE,
     ALTITUDE,

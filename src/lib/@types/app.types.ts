@@ -33,11 +33,20 @@ export interface XYStringData {
   time: string;
 }
 
+export type Status = 'notStarted' | 'inProgress' | 'done' | 'error';
 export interface MachineContext {
   state: string;
   mode: string;
   output: string;
   teamId: string;
+  steps: {
+    importCSV: Status;
+    telemetryStarted: Status;
+    calibrateTelemetry: Status;
+    currentTimeSetFromGPS: Status;
+    simulationEnable: Status;
+    simulationActivate: Status;
+  };
   sensorData: {
     acceleration: XYZStringArrayData;
     airPressure: StringArrayData;
@@ -127,8 +136,14 @@ export type SetTeamId = {
   data: string;
 };
 
+export type ImportCsv = {
+  type: 'IMPORT_CSV';
+  status: Status;
+};
+
 export type MachineEvent =
   | { type: 'ENABLE_SIMULATION' }
+  | ImportCsv
   | { type: 'ENABLE_FLIGHT' }
   | { type: 'ACTIVATE_SIMULATION' }
   | UpdateAltitude

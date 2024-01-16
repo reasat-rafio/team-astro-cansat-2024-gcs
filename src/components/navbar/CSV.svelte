@@ -6,8 +6,6 @@
   import csvStore from '@/stores/csv.store';
 
   let importCSVEl: HTMLInputElement;
-  let csvData: string[][][] = [];
-  let currentIndex = 1;
   let intervalId: NodeJS.Timeout | null = null;
   const { send } = $csvStore;
 
@@ -37,10 +35,7 @@
     Papa.parse(importCSVEl.files[0], {
       skipEmptyLines: true,
       complete: function (results) {
-        send({ type: 'IMPORT_CSV', data: results.data });
-
-        // csvData = results.data as string[][][];
-        // intervalId = setInterval(processLine, 1000);
+        send({ type: 'IMPORT_CSV', data: results.data as string[][] });
       },
     });
   }
