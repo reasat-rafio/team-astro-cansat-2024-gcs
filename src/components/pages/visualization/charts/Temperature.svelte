@@ -25,31 +25,33 @@
     CategoryScale,
   );
 
+  const { snapshot } = $gcsStore;
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
-
   let labels: string[] = [];
   let data: string[] = [];
 
   $: {
-    chart?.data.datasets[0].data.push(+data[data.length - 1]);
-    chart?.data.labels?.push(labels[labels.length - 1]);
+    if ($snapshot.context.sensorData) {
+      const sensorData = $snapshot.context.sensorData.temperature;
+      labels = sensorData.time ?? [];
+      data = sensorData.values ?? [];
 
-    chart?.update();
-    delay(10).then(() => autoScrollAction());
+      if (chart) {
+        chart.data.datasets[0].data.push(+data[data.length - 1]);
+        chart.data.labels?.push(labels[labels.length - 1]);
+        chart.update();
+        delay(10).then(autoScrollAction);
+      }
+    }
   }
 
   onMount(() => {
-    if (chart) {
-      const subscriber = $gcsStore.actorRef.subscribe((state) => {
-        if (state.context.sensorData.temperature) {
-          labels = state.context.sensorData.temperature.time;
-          data = state.context.sensorData.temperature.values;
-        }
-      });
-
-      return () => subscriber.unsubscribe();
+    if (!!chart) {
+      labels.forEach((value) => chart?.data.labels?.push(value));
+      data.forEach((value) => chart?.data.datasets[0].data?.push(+value));
+      chart.update();
     }
   });
 

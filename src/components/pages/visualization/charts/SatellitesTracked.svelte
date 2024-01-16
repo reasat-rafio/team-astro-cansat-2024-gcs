@@ -12,8 +12,8 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import gcsMachine from '@/machines/gcs-machine';
   import { delay } from '$lib/helper';
+  import gcsStore from '@/stores/gcs.store';
 
   ChartJS.register(
     Title,
@@ -25,46 +25,41 @@
     CategoryScale,
   );
 
+  const { snapshot } = $gcsStore;
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
+  let labels: string[] = [];
+  let data: string[] = [];
 
-  onMount(() => {
-    if (chart) {
-      $gcsService?.context?.satellitesTracked?.values?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d),
-      );
-      $gcsService?.context?.satellitesTracked?.time?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d),
-      );
-    }
-  });
+  $: {
+    if ($snapshot.context.sensorData) {
+      const sensorData = $snapshot.context.sensorData.satellitesTracked;
+      labels = sensorData.time ?? [];
+      data = sensorData.values ?? [];
 
-  async function updateGraph() {
-    if (chart) {
-      chart.data.datasets[0].data.push(
-        +$gcsService?.context?.satellitesTracked?.values[
-          $gcsService?.context?.satellitesTracked?.values.length - 1
-        ],
-      );
-      chart.data.labels?.push(
-        +$gcsService?.context?.satellitesTracked?.time[
-          $gcsService?.context?.satellitesTracked?.time.length - 1
-        ],
-      );
-
-      await delay(10);
-      autoScrollAction();
-      chart.update();
+      if (chart) {
+        chart.data.datasets[0].data.push(+data[data.length - 1]);
+        chart.data.labels?.push(labels[labels.length - 1]);
+        chart.update();
+        delay(10).then(autoScrollAction);
+      }
     }
   }
+
+  onMount(() => {
+    if (!!chart) {
+      labels.forEach((value) => chart?.data.labels?.push(value));
+      data.forEach((value) => chart?.data.datasets[0].data?.push(+value));
+      chart.update();
+    }
+  });
 
   function autoScrollAction() {
     if (containerEl && lockToTheEnd) {
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-  $: $gcsService?.context?.satellitesTracked, updateGraph();
 </script>
 
 <section>
@@ -79,10 +74,7 @@
     </label>
   </div>
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
-    <div
-      class="h-[300px]"
-      style="width: {500 +
-        $gcsService?.context?.satellitesTracked?.values?.length * 50}px; ">
+    <div class="h-[300px]" style="width: {500 + data?.length * 50}px; ">
       <Line
         bind:chart
         data={{

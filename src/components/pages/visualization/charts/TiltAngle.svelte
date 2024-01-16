@@ -25,33 +25,37 @@
     CategoryScale,
   );
 
+  const { snapshot } = $gcsStore;
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
-
   let labels: string[] = [];
   let data: { x: string; y: string; z: string }[] = [];
 
   $: {
-    chart?.data.datasets[0].data.push(+data[data.length - 1]?.x);
-    chart?.data.datasets[1].data.push(+data[data.length - 1]?.y);
-    chart?.data.datasets[2].data.push(+data[data.length - 1]?.z);
-    chart?.data.labels?.push(labels[labels.length - 1]);
+    if ($snapshot.context.sensorData) {
+      const sensorData = $snapshot.context.sensorData.tiltAngle;
+      labels = sensorData.time ?? [];
+      data = sensorData.values ?? [];
 
-    chart?.update();
-    delay(10).then(() => autoScrollAction());
+      if (chart) {
+        chart.data.datasets[0].data.push(+data[data.length - 1]?.x);
+        chart.data.datasets[1].data.push(+data[data.length - 1]?.y);
+        chart.data.datasets[2].data.push(+data[data.length - 1]?.z);
+        chart.data.labels?.push(labels[labels.length - 1]);
+        chart.update();
+        delay(10).then(autoScrollAction);
+      }
+    }
   }
 
   onMount(() => {
-    if (chart) {
-      const subscriber = $gcsStore.actorRef.subscribe((state) => {
-        if (state.context.sensorData.tiltAngle) {
-          labels = state.context.sensorData.tiltAngle.time;
-          data = state.context.sensorData.tiltAngle.values;
-        }
-      });
-
-      return () => subscriber.unsubscribe();
+    if (!!chart) {
+      labels.forEach((value) => chart?.data.labels?.push(value));
+      data.forEach((value) => chart?.data.datasets[0].data?.push(+value?.x));
+      data.forEach((value) => chart?.data.datasets[1].data?.push(+value?.y));
+      data.forEach((value) => chart?.data.datasets[2].data?.push(+value?.z));
+      chart.update();
     }
   });
 

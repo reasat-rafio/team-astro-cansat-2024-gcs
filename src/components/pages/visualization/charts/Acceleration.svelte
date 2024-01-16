@@ -13,7 +13,7 @@
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
   import { delay } from '$lib/helper';
-  import gcsMachine from '@/machines/gcs-machine';
+  import type gcsStore from '@/stores/gcs.store';
 
   ChartJS.register(
     Title,
@@ -25,52 +25,45 @@
     CategoryScale,
   );
 
+  const { snapshot } = $gcsStore;
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
+  let labels: string[] = [];
+  let data: { x: string; y: string; z: string }[] = [];
+
+  $: {
+    if ($snapshot.context.sensorData) {
+      const sensorData = $snapshot.context.sensorData.acceleration;
+      labels = sensorData.time ?? [];
+      data = sensorData.values ?? [];
+
+      if (chart) {
+        chart.data.datasets[0].data.push(+data[data.length - 1]?.x);
+        chart.data.datasets[1].data.push(+data[data.length - 1]?.y);
+        chart.data.datasets[2].data.push(+data[data.length - 1]?.z);
+        chart.data.labels?.push(labels[labels.length - 1]);
+        chart.update();
+        delay(10).then(autoScrollAction);
+      }
+    }
+  }
 
   onMount(() => {
-    if (chart) {
-      $gcsService?.context?.acceleration?.values?.forEach(({ x, y, z }) => {
-        chart?.data.datasets[0].data.push(x);
-        chart?.data.datasets[1].data.push(y);
-        chart?.data.datasets[2].data.push(z);
-      });
-      $gcsService?.context?.acceleration?.time?.forEach((d) =>
-        chart?.data.datasets[0].data.push(+d),
-      );
-
+    if (!!chart) {
+      labels.forEach((value) => chart?.data.labels?.push(value));
+      data.forEach((value) => chart?.data.datasets[0].data?.push(+value?.x));
+      data.forEach((value) => chart?.data.datasets[1].data?.push(+value?.y));
+      data.forEach((value) => chart?.data.datasets[2].data?.push(+value?.z));
       chart.update();
     }
   });
-
-  async function updateGraph() {
-    if (chart) {
-      const index = $gcsService?.context?.acceleration?.values.length - 1;
-      const data = $gcsService?.context?.acceleration?.values[index];
-
-      chart.data.datasets[0].data.push(data.x);
-      chart.data.datasets[0].data.push(data.y);
-      chart.data.datasets[0].data.push(data.z);
-
-      chart.data.labels?.push(
-        +$gcsService?.context?.acceleration?.time[
-          $gcsService?.context?.acceleration?.time.length - 1
-        ],
-      );
-
-      await delay(10);
-      autoScrollAction();
-      chart.update();
-    }
-  }
 
   function autoScrollAction() {
     if (containerEl && lockToTheEnd) {
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-  $: $gcsService?.context?.acceleration, updateGraph();
 </script>
 
 <section>
@@ -85,10 +78,7 @@
     </label>
   </div>
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
-    <div
-      class="h-[300px]"
-      style="width: {500 +
-        $gcsService?.context?.acceleration?.values?.length * 50}px; ">
+    <div class="h-[300px]" style="width: {500 + data?.length * 50}px; ">
       <Line
         bind:chart
         data={{

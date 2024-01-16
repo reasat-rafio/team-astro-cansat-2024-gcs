@@ -25,31 +25,33 @@
     CategoryScale,
   );
 
+  const { snapshot } = $gcsStore;
   let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
   let containerEl: HTMLDivElement;
   let lockToTheEnd = true;
-
   let labels: string[] = [];
   let data: string[] = [];
 
   $: {
-    chart?.data.datasets[0].data.push(+data[data.length - 1]);
-    chart?.data.labels?.push(labels[labels.length - 1]);
+    if ($snapshot.context.sensorData) {
+      const sensorData = $snapshot.context.sensorData.altitude;
+      labels = sensorData.time ?? [];
+      data = sensorData.values ?? [];
 
-    chart?.update();
-    delay(10).then(() => autoScrollAction());
+      if (chart) {
+        chart.data.datasets[0].data.push(+data[data.length - 1]);
+        chart.data.labels?.push(labels[labels.length - 1]);
+        chart.update();
+        delay(10).then(autoScrollAction);
+      }
+    }
   }
 
   onMount(() => {
-    if (chart) {
-      const subscriber = $gcsStore.actorRef.subscribe((state) => {
-        if (state.context.sensorData.altitude) {
-          labels = state.context.sensorData.altitude.time;
-          data = state.context.sensorData.altitude.values;
-        }
-      });
-
-      return () => subscriber.unsubscribe();
+    if (!!chart) {
+      labels.forEach((value) => chart?.data.labels?.push(value));
+      data.forEach((value) => chart?.data.datasets[0].data?.push(+value));
+      chart.update();
     }
   });
 
@@ -58,23 +60,6 @@
       containerEl.scrollLeft = containerEl.scrollWidth;
     }
   }
-
-  // onMount(() => {
-  //   if (data?.length && labels?.length && chart) {
-  //     $gcsStore.actorRef
-  //       .getSnapshot()
-  //       .context.sensorData.altitude.values.forEach((value) => {
-  //         chart?.data.datasets[0].data.push(+value);
-  //       });
-  //     $gcsStore.actorRef
-  //       .getSnapshot()
-  //       .context.sensorData.altitude.time.forEach((value) => {
-  //         chart?.data.datasets[0].data.push(+value);
-  //       });
-
-  //     chart?.update();
-  //   }
-  // });
 </script>
 
 <section class={$$props.class}>
@@ -89,7 +74,10 @@
     </label>
   </div>
   <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
-    <div class="min-h-[300px]" style="width: {500 + data?.length * 50}px; ">
+    <div
+      class="min-h-[300px]"
+      style="width: {500 +
+        $snapshot.context.sensorData.altitude.time.length * 50}px; ">
       <Line
         bind:chart
         data={{
