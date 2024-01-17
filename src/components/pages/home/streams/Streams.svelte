@@ -1,22 +1,12 @@
 <script lang="ts">
   import RocketIcon from '@/components/icons/RocketIcon.svelte';
   import Header from '../Header.svelte';
-  import { afterUpdate, onMount, tick } from 'svelte';
+  import { afterUpdate } from 'svelte';
   import csvStore from '@/stores/csv.store';
   import { slide } from 'svelte/transition';
 
-  let data: string[] = [];
   let sectionEl: HTMLElement;
-
-  onMount(() => {
-    const subscriber = $csvStore.actorRef.subscribe((state) => {
-      if (state.context.streams) {
-        data = state.context.streams;
-      }
-    });
-
-    return () => subscriber.unsubscribe();
-  });
+  const { snapshot } = $csvStore;
 
   afterUpdate(() => {
     scrollToBottom();
@@ -35,10 +25,10 @@
   <Header icon={RocketIcon} title="Streams" />
 
   <div class="flex flex-col gap-y-4">
-    {#each data as d, index}
+    {#each $snapshot.context.streams as stream, index}
       <p transition:slide>
         <span class="text-secondary-500">{index + 1}.</span>
-        <span>{d}</span>
+        <span>{stream}</span>
       </p>
     {/each}
   </div>

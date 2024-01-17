@@ -9,26 +9,6 @@
   let intervalId: NodeJS.Timeout | null = null;
   const { send } = $csvStore;
 
-  // const processLine = () => {
-  //   if (currentIndex < csvData.length) {
-  //     const currentLine = csvData[currentIndex];
-  //     const headerRow = csvData[0];
-
-  //     const lineObject = {};
-  //     headerRow.forEach((columnName, index) => {
-  //       // TODO: Add type checking
-  //       lineObject[columnName] = currentLine[index];
-  //     });
-
-  //     console.log('Processing line:', lineObject);
-  //     currentIndex++;
-  //   } else {
-  //     clearInterval(intervalId!);
-  //     intervalId = null;
-  //     console.log('Processing complete');
-  //   }
-  // };
-
   function handleCSVUpload() {
     if (!importCSVEl?.files?.length) return;
 

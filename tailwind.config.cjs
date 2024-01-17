@@ -1,6 +1,5 @@
 import { join } from 'path';
 import { skeleton } from '@skeletonlabs/tw-plugin';
-import { myCustomTheme } from './custom-theme';
 
 /** @type {import('tailwindcss').Config} */
 export default {
@@ -10,15 +9,15 @@ export default {
 
     join(
       require.resolve('@skeletonlabs/skeleton'),
-      '../**/*.{html,js,svelte,ts}'
-    )
+      '../**/*.{html,js,svelte,ts}',
+    ),
   ],
   theme: {
-    extend: {}
+    extend: {},
   },
   plugins: [
     skeleton({
-      themes: { preset: ['crimson'] }
-    })
-  ]
+      themes: { preset: ['crimson'] },
+    }),
+  ],
 };

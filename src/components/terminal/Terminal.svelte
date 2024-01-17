@@ -13,7 +13,7 @@
   let inputEl: HTMLSpanElement;
   let activeSuggestedCommand: string | null = null;
 
-  const { actorRef, send, snapshot } = $terminalStore;
+  const { send, snapshot } = $terminalStore;
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
