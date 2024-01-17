@@ -4,9 +4,11 @@
   import { afterUpdate } from 'svelte';
   import csvStore from '@/stores/csv.store';
   import { slide } from 'svelte/transition';
+  import gcsStore from '@/stores/gcs.store';
 
   let sectionEl: HTMLElement;
-  const { snapshot } = $csvStore;
+  const { snapshot: csvSnapshot } = $csvStore;
+  const { snapshot: gcsSnapshot } = $gcsStore;
 
   afterUpdate(() => {
     scrollToBottom();
@@ -25,11 +27,13 @@
   <Header icon={RocketIcon} title="Streams" />
 
   <div class="flex flex-col gap-y-4">
-    {#each $snapshot.context.streams as stream, index}
-      <p transition:slide>
-        <span class="text-secondary-500">{index + 1}.</span>
-        <span>{stream}</span>
-      </p>
-    {/each}
+    {#if !$gcsSnapshot.matches('flight_enable')}
+      {#each $csvSnapshot.context.streams as stream, index}
+        <p transition:slide>
+          <span class="text-secondary-500">{index + 1}.</span>
+          <span>{stream}</span>
+        </p>
+      {/each}
+    {/if}
   </div>
 </section>

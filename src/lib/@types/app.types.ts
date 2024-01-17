@@ -46,6 +46,7 @@ export interface MachineContext {
     currentTimeSetFromGPS: Status;
     simulationEnable: Status;
     simulationActivate: Status;
+    flightEnable: Status;
   };
   sensorData: {
     acceleration: XYZStringArrayData;
@@ -146,6 +147,8 @@ export type MachineEvent =
   | ImportCsv
   | { type: 'ENABLE_FLIGHT' }
   | { type: 'ACTIVATE_SIMULATION' }
+  | { type: 'CSV_PROCESSING_COMPLETE' }
+  | { type: 'DISABLE_SIMULATION' }
   | UpdateAltitude
   | UpdateTemperature
   | UpdateAirPressure

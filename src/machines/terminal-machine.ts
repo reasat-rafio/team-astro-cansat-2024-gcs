@@ -78,6 +78,7 @@ const terminalMachine = createMachine(
             break;
 
           case 'CMD,2043,SIM,DISABLE':
+            $gcsStore.send({ type: 'DISABLE_SIMULATION' });
             output = 'SIM DISABLED';
             break;
 

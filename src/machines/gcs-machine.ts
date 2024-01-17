@@ -23,7 +23,7 @@ import csvStore from '@/stores/csv.store';
 
 const gcsMachine = createMachine(
   {
-    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiAKwB2ADQgaiAEwAOAMwA6Pib7a+q7UoBs+gIz6Avo41osuQsTLpKtek2Z2AFkABQB5ACUAFQB9AioANX4hJBAxSWlZVMUEFW07Yz4VPJUTABYVMqKNLQRtMuttQ3N7AE47OyLtFX1rZ1cMHHwiUgpqOgZGQwkIcjBmAFEAOQBBACFOBZiqYIBVThWo9jCl5Ll0qRlsORy7FV1DVqen61abMtb6pRqdbSNTMz6P58CpKXS6fogNxDTyjHzjfxTGZzRarDZbABinHYyAAElEzqkLplrtlEHcHs8Xm9rB8vj8EJ0yoYlKZ9HxXpzunZIdCPCNvL4JkxDJJGJhyABDEkxMDYSUAIxRKwIRwShy2OyC+0Ox1OgnO4kuWVAOWs6k0v1UhmsdlaBn04N0KlaZV5g35XjGfkmook4qlMslAGNpAA3eZUKIraLbPYHI4nQmiI0km6IXRlB5Avh2cFKT7WCytBn5DnNVl8XSNEEuv7u9zDL3wn0isUS6VXGIh8PzeIJGIhCJhAgLKg7JbIOJhUKbKILZNpVNXdMIXSdG02EHAx2qMql3N8ZqtV66DlVMpKHkuKEeptwoWIv0BzvEbuhiQR5i7EIAEQ1MQrJwRxRLsv4LgaRLLiaCgZkoTQnlWZ6ZtYqh3Aydp2My+hlL0p76ARKh2NoDYwgK3rClM7aBl2PafvMP7-vOMTzqECwRIcuwRBBKQphkK5kmuOEsq0vQ2Lola5hh67Zq0Fi0torx8OyJE3ny96CgivrUa+2Dvr235-gBKzsBE2whAsCy-ouxICaaGYfM0qFZkoBG2EoZR2BheRNLheSuQ0dqsm6al3rCmmtlR-odkGH5foxxmmYO3HjlxPGGvxME5AYzKqGYRTVkRFgYY01iGFmnkVLorQqEWomkZ6D5aW20U0W+dHxUZzFrIc84RAAmjECRhMBKzIOlUGZaS9lrnmhh5pU9RFmYTzaBhrlHq5TJ-ARikGA1GkUU+OmxQZCXMcgIRUNOkS-uwqzzlQNnQdNsGzWVma9B8RSiT0XmWoyuG5cUonmtY1XdKpAyNuFR3aa1un6fRhlMVsRzAYBk6bM9U2rpmSiGMUBH2GUWYOBhBEPI0Wb2OYl7Vte0Nkc2j7wy+p3I+dmrRvOOPGq92WoY8RZnnaBisiWAPEWUTTmncVi0mYl4HbDLaUc+MW0XFDFdVsIQqqwCyxAQYS7EsBKQXx-N49orSbra4tvOC-21B0DSE3mNZFAWIIq+RavHQjHOdajMRBGE4F82mgnVmV9zVe8OFYbSGEWEetVKFel4dDY3R+yzzVRezWtnbrg4EDE4EhJwYT9VZUd2W9BhlVhBh2noHy9JLtRvMy671FWro+Xc+dNZFGttXpHU66HuLXVXNd19ZltLrjMf6ATZ703JVbsrYDISQ8EmfCYtV2FeHSjxF6snSXnNl0E7DjnqLHBBNVvRzN4s2rYroKXYtoswMlqghDkfA3h2iIqURmt4Yb+1Zi1Yu7VtYowApda6Rwgjv1XtbGO8FDDgj2m5Wm1YGTWHIY8eC9oTxAl0LbK+cNEGa2QQZKgRsWILBWEEGI7Bl68RwZ-JueQbR3CrBYeCzcLS1Dyo8J44IqjgyzBCUKcCC7j1viw+ihhJSwGDHKCAEhsBQGYFECIOJxpmXAlQUcSw7qTgbllDMG5aHgPXFVS8+4AZ-EcqUEmXxLxmAYQHNmzCp7a0MBAOAejcCGOMaY8x7EYgHFsfdZADiBbkjzEYDenxM5FFJhyUsOE7a+Kwv41kUNYHMzHjfIOd8IzTFmPMeJyALGAWscsOxaSV62UcQgS8ZVaagiIs6Tougik+OUmUjxFSgkIKmAAM3IBIKAAALEgsp5RKnmCqNUAEsQ4nxOk1cxQGRKPKs8eCOZ4KZyUM4G82B0CRPgKkdSqt5kZVwTNbuiAAC0fQVHVOvk+ZEYBPmCJyKoUsdxjAOjyhyF0DQQpM0asC30DBUCMEMdKSA4LG63CvE5XOf12iNEzqWAwLJTDmEsDYewThAWosYUXUJmzFRzDxX0qoBR8jOlKPcW24NvhS2dIUEw+hXSdDeJUt58DC4T0RtPTlGS6jVkMEM+4IDeUb2hdVZoUz2i1XaDhOZ8qNFhN7No3R+jYnKtXODI8zpWR5meHkXoRTWT6r8TMwJjLDrBKYZPJGDTnnRIMUYu1gkmTMgWp5doMtMLWA9UeFo0yPKzL9e8s1dTNENKlLgXFk0vlvQcGq+0MtwZ-CwioKFXiN4pqmTLH1MqwpyvUTmi1WjQWRpmgRbC0tNWNG1cK2ofxPWpqbem31KL-XzMMEslZ6y2XbJ7W9XoBQck4XXLaYiJ4D4FEknaIErIiyvFNePBdayNlKqLRCnQlRypbTBGfSo+YzlC0kq8bQVgCJXjufcoAA */
+    /** @xstate-layout N4IgpgJg5mDOIC5QHEBOB7ArgOwgAgGF1sAXDAGzwGUBPWEsAWwGIBpASQBlOBtABgC6iUAAd0sAJYkJxYSAAeiAKwB2ADQgaiAEwAOAMwA6Pib7a+q7UoBs+gIz6Avo41osuQsTLpKtek2Z2AFkABQB5ACUAFQB9AioANX4hJBAxSWlZVMUEFW07Yz4VPJUTABYVMqKNLQRtMuttQ3N7AE47OyLtFX1rZ1cMHHwiUgpqOgZGQwkIcjBmAFEAOQBBACFOBZiqYIBVThWo9jCl5Ll0qRlsORy7FV1DVqen61abMtb6pRqdbSNTMz6P58CpKXS6fogNxDTyjHzjfxTGZzRarDZbABinHYyAAElEzqkLplrtlEHcHs8Xm9rB8vj8EJ0yoYlKZ9HxXpzunZIdCPCNvL4JkxDJJGJhyABDEkxMDYSUAIxRKwIRwShy2OyC+0Ox1OgnO4kuWVAOWs6k0v1UhmsdlaBn04N0KlaZV5g35XjGfkmook4qlMslAGNpAA3eZUKIraLbPYHI4nQmiI0km6IXRlB5Avh2cFKT7WCytBn5DnNVl8XSNEEuv7u9zDL3wn0isUS6VXGIh8PzeIJGIhCJhAgLKg7JbIOJhUKbKILZNpVNXdMIXSdG02EHAx2qMql3N8ZqtV66DlVMpKHkuKEeptwoWIv0BzvEbuhiQR5i7EIAEQ1MQrJwRxRLsv4LgaRLLiaCgZkoTQnlWZ6ZtYqh3Aydp2My+hlL0p76ARKh2NoDYwgK3rClM7aBl2PafvMP7-vOMTzqECwRIcuwRBBKQphkK5kmuOEsq0vQ2Lola5hh67Zq0Fi0torx8OyJE3ny96CgivrUa+2Dvr235-gBKzsBE2whAsCy-ouxICaaGYfM0qFZkoBG2EoZR2BheRNLheSuQ0dqsm6al3rCmmtlR-odkGH5foxxmmYO3HjlxPGGvxME5AYzKqGYRTVkRFgYY01iGFmnkVLorQqEWomkZ6D5aW20U0W+dHxUZzFrIc84RAAmjECRhMBKzIOlUGZaS9lrnmhh5pU9RFmYTzaBhrlHq5TJ-ARikGA1GkUU+OmxQZCXMcgIRUNOkS-uwqzzlQNnQdNsGzWVma9B8RSiT0XmWoyuG5cUonmtY1XdKpAyNuFR3aa1un6fRhlMVsRzAYBk6bM9U2rpmSiGMUBH2GUWYOBhBEPI0Wb2OYl7Vte0Nkc2j7wy+p3I+dmrRvOOPGq92WoY8RZnnaBisiWAPEWUTTmncVi0mYl4HbDLaUc+MW0XFDFdVsIQqqwCyxAQYS7EsBKQXx-N49orSbra4tvOC-21B0DSE3mNZFAWIIq+RavHQjHOdajMRBGE4F82mgnVmV9zVe8OFYbSGEWEetVKFel4dDY3R+yzzVRezWtnbrg4EDE4EhJwYT9VZUd2W9BhlVhBh2noHy9JLtRvMy671FWro+Xc+dNZFGttXpHU66HuLXVXNd19ZltLrjMf6ATZ703JVbsrYDISQ8EmfCYtV2FeHSjxF6snSXnNl0E7DjnqLHBBNVvRzN4s2rYroKXYtoswMlqghDkfA3h2iIqURmt4Yb+1Zi1Yu7VtYowApda6Rwgjv1XtbGO8FDDgj2m5Wm1YGTWHIY8eC9oTxAl0LbK+cNEGa2QQZKgRsWILBWEEGI7Bl68RwZ-JueQbR3CrBYeCzcLS1Dyo8J44IqjgyzBCUKcCC7j1viw+ihhJSwGDHKCAEhsBQGYFECIOJxpmXAlQUcSw7qTgbllck2h8gVnuL0eodpPhSJ0BUZo55wb3E6M4+0DCA5s2YVPbWhgIBwD0bgQxxjTHmPYjEA4tj7rIAcQLckBZmR6GqqJABEktqll8eYWkAT1xmFtsopmjVr6ByQZE3s0xZjzCScgCxgFrHLDsZkletlHFrnNM0GW+RHTEQki6UpKg-EVOdFU4JtTYHMzHurAAZuQCQUAAAWJBZTyiVPMFUaoAJYhxPiLJq5igMiUeVZ48EczwUzkoUJCCi4RKRl+O6VB1ibDjNqBMeormCVULM+oziik2DEt8AGLjJJ2iBKyIsrxnA3mwOgGJ8BUjqVVu8jKuCZrd0QAAWiFlSCSHQcIKKcCo1ZDTfTIjAASwRORVCljuMYB0eUOQugaCFOph0wkigYKgRghjpSQBZY3W4V4nK5z+u0RomdSwGBZKYcwlhoUODeYXCeiM5SKjmNKoZFQChFmKDnRS5CkUMlpiyMESkGglD+H0Ol9TGEfMnl85lk1CVvVeOCsZULbCoVhbUashMOSuRPNQxo+hWi6vUUHO+EZtG6P0Qkk12TGTgIKFvFQeVRLOg5DMqN8zAnVJCe6oV7z9XBzANE2JmajHZtXFhTO807jnzyL0Sm3i6i+NKBWxZNSk03xTZotNUpcBSr9ay8kLpZntCqByJFjRuhluHQ0BZQSx01rxXqjRzStFMrbYJSoBMIX5HBtCsNW7-G7qrcs3F8C9WbO2Xsg5RrfUfxlYgXoBQN6iTJraYiJ4D4FARaJKwYDUUHrfePD9uz9nT3PTNbozJLz2DBGfSo+ZblC0kq8ZxrkN7nzRY4IAA */
     id: 'Ground Control System',
 
     initial: 'idle',
@@ -39,6 +39,7 @@ const gcsMachine = createMachine(
         simulationActivate: 'notStarted',
         simulationEnable: 'notStarted',
         telemetryStarted: 'notStarted',
+        flightEnable: 'notStarted',
       },
       state: 'idle',
       mode: 'idle',
@@ -88,6 +89,7 @@ const gcsMachine = createMachine(
           START_SIMULATION: {
             actions: ['startCSVProcessing'],
           },
+
           CSV_PROCESSING_COMPLETE: {
             actions: assign(({ context }) => {
               return {
@@ -98,52 +100,82 @@ const gcsMachine = createMachine(
               };
             }),
           },
+
           UPDATE_ALTITUDE: {
             actions: 'updateAltitude',
           },
+
           UPDATE_TEMPERATURE: {
             actions: 'updateTemperature',
           },
+
           UPDATE_AIR_SPEED: {
             actions: 'updateAirSpeed',
           },
+
           UPDATE_AIR_PRESSURE: {
             actions: 'updateAirPressure',
           },
+
           UPDATE_BATTERY_VOLTAGE: {
             actions: 'updateBatteryVoltage',
           },
+
           UPDATE_GPS_COORDINATES: {
             actions: 'updateGPSCoordinates',
           },
+
           UPDATE_TILT_ANGLE: {
             actions: 'updateTiltAngle',
           },
+
           UPDATE_STATE: {
             actions: 'updateState',
           },
+
           UPDATE_PACKET_COUNT: {
             actions: 'updatePacketCount',
           },
+
           UPDATE_MODE: {
             actions: 'updateMode',
           },
+
           UPDATE_PC_DEPLOYED: {
             actions: 'updatePCDeployed',
           },
+
           UPDATE_HS_DEPLOYED: {
             actions: 'updateHSDeployed',
           },
+
           UPDATE_MISSION_TIME: {
             actions: 'updateMissionTime',
           },
+
           UPDATE_GPS_TIME: {
             actions: 'updateGpsTime',
           },
+
           SET_TEAM_ID: {
             actions: assign(({ event }) => {
               const { data } = event as SetTeamId;
               return { teamId: data };
+            }),
+          },
+
+          DISABLE_SIMULATION: {
+            target: 'flight_enable',
+            actions: assign(({ context }) => {
+              return {
+                steps: {
+                  ...context.steps,
+                  simulationActivate: 'notStarted',
+                  importCSV: 'notStarted',
+                  simulationEnable: 'notStarted',
+                  flightEnable: 'done',
+                },
+              };
             }),
           },
         },

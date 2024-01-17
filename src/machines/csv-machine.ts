@@ -78,9 +78,15 @@ const csvProcessingMachine = createMachine(
 
       startProcessing: ({ context, self }) => {
         const $gcsService = get(gcsStore);
+        const $snapshot = get($gcsService.snapshot);
 
         context.intervalId = setInterval(() => {
-          if (context.currentIndex < context.csvData.length) {
+          if ($snapshot.matches('flight_enable')) {
+            clearInterval(context.intervalId as NodeJS.Timeout);
+            context.intervalId = null;
+
+            console.log('Processing aborted');
+          } else if (context.currentIndex < context.csvData.length) {
             const currentLine = context.csvData[context.currentIndex];
             const headerRow = context.csvData[0];
 

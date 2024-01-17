@@ -43,6 +43,12 @@
         state: $snapshot.context.steps.simulationActivate,
       },
     },
+    {
+      label: {
+        text: 'Flight Mode Enable',
+        state: $snapshot.context.steps.flightEnable,
+      },
+    },
   ] as Tree[];
 
   $: {
