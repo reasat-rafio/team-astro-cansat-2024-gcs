@@ -1,16 +1,13 @@
 <script lang="ts">
   import { validCommands } from '@/lib/helper';
   import Prompt from './Prompt.svelte';
-  import type { TerminalActorContext } from '@/lib/@types/app.types';
-  import { getContext } from 'svelte';
-  import terminalStore from '@/stores/terminal.store';
+  import terminalStore from '@/stores/terminal.temp.store';
 
   export let inputEl: HTMLSpanElement;
   export let activeSuggestedCommand: string | null = null;
 
   let suggestedCommands: string[] | null = null;
   let activeSuggestedCommandIndex = 0;
-  const { send } = $terminalStore;
 
   type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;
@@ -68,12 +65,16 @@
   function submitCommand(e: KEvent) {
     if (e.currentTarget && e.key === 'Enter') {
       e.preventDefault();
-      send({
-        type: 'SUBMIT_COMMAND',
-        command: e.currentTarget.innerText.trim(),
+      terminalStore.setCurrentCommand({
+        value: e.currentTarget.innerText.trim(),
+        time: new Date(),
       });
       e.currentTarget.innerText = '';
     }
+  }
+
+  $: {
+    console.log($terminalStore);
   }
 </script>
 
