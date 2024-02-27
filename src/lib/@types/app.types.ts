@@ -205,7 +205,7 @@ export type TerminalEvent =
 export interface Command {
   text: string;
   timestamp: Date;
-  output: string;
+  output?: string;
 }
 
 export interface TerminalContext {
@@ -246,4 +246,27 @@ export interface MissionData {
   TILT_Y: string;
   ROT_Z: string;
   CMD_ECHO: string;
+}
+
+export type CommandStatus = 'success' | 'error' | 'pending';
+export interface TerminalCommand {
+  time: Date;
+  value: string;
+}
+export interface UpdateCommandHistory {
+  currentState: TerminalType;
+  command: TerminalCommand;
+  output: string;
+  status: CommandStatus;
+}
+export interface CommandHistory extends TerminalCommand {
+  output: string;
+  status: CommandStatus;
+}
+
+export interface TerminalType {
+  uiState: 'minimize' | 'maximize';
+  currentCommand?: TerminalCommand;
+  previousCommand?: TerminalCommand;
+  currentCommandIdx: null | number;
 }

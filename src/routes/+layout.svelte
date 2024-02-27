@@ -7,6 +7,7 @@
   import csvStore from '@/stores/csv.store';
   import gcsStore from '@/stores/gcs.store';
   import terminalStore from '@/stores/terminal.store';
+  import terminalTempStore, { cmdAction } from '@/stores/terminal.temp.store';
   import { AppShell } from '@skeletonlabs/skeleton';
   import { useActor } from '@xstate/svelte';
   import { onMount } from 'svelte';
@@ -78,6 +79,10 @@
       // gcsStoreRef.unsubscribe();
     };
   });
+
+  $: if ($terminalTempStore) {
+    cmdAction($terminalTempStore.currentCommand?.value as string);
+  }
 </script>
 
 <svelte:head>

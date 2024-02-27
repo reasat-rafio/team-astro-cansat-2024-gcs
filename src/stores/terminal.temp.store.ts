@@ -1,22 +1,11 @@
-import { writable } from 'svelte/store';
+import { get, writable } from 'svelte/store';
 import { validCommands } from '@/lib/helper';
-
-interface Command {
-  time: Date;
-  value: string;
-}
-
-interface CommandHistory extends Command {
-  output: string;
-}
-
-interface TerminalType {
-  uiState: 'minimize' | 'maximize';
-  currentCommand?: Command;
-  previousCommand?: Command;
-  commandHistory: CommandHistory[];
-  currentValidCommandIdx: null | number;
-}
+import type {
+  TerminalCommand,
+  TerminalType,
+  UpdateCommandHistory,
+} from '@/lib/@types/app.types';
+import commandHistoryStore, { lastCommand } from './command.history.store';
 
 function getTheIndexOfTheCommand(command: string) {
   return Object.keys(validCommands).findIndex((key) => command.includes(key));
@@ -26,29 +15,143 @@ function createErrorTemplate(value: string, precedingCommands: string) {
   return `<p>Error: Unable to execute <span class="text-red-600">${value}</span> before completing the prerequisite command(s): <span class="text-red-600">${precedingCommands}</span> </p>`;
 }
 
-const createTerminalStore = () => {
+function getCurrentSuccessOutput() {
+  return (
+    validCommands[
+      get(terminalStore).currentCommand?.value as keyof typeof validCommands
+    ]?.successMessage ?? ''
+  );
+}
+
+function CMD_2043_CX_ON() {
+  if (get(lastCommand).status === 'pending') {
+    setTimeout(() => {
+      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+      commandHistoryStore.updateLastCommandStatus('success');
+    }, 500);
+  }
+  return {
+    error: null,
+  };
+}
+function CMD_2043_SIM_ENABLE() {
+  if (get(lastCommand).status === 'pending') {
+    setTimeout(() => {
+      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+      commandHistoryStore.updateLastCommandStatus('success');
+    }, 500);
+  }
+  return {
+    error: null,
+  };
+}
+
+function CMD_2043_SIM_ACTIVATE() {
+  if (get(lastCommand).status === 'pending') {
+    setTimeout(() => {
+      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+      commandHistoryStore.updateLastCommandStatus('success');
+    }, 500);
+  }
+  return {
+    error: null,
+  };
+}
+
+function CMD_2043_SIM_DISABLE() {
+  if (get(lastCommand).status === 'pending') {
+    setTimeout(() => {
+      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+      commandHistoryStore.updateLastCommandStatus('success');
+    }, 500);
+  }
+  return {
+    error: null,
+  };
+}
+
+function CMD_2043_ST_GPS() {
+  if (get(lastCommand).status === 'pending') {
+    setTimeout(() => {
+      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+      commandHistoryStore.updateLastCommandStatus('success');
+    }, 500);
+  }
+  return {
+    error: null,
+  };
+}
+
+function CAL() {
+  if (get(lastCommand).status === 'pending') {
+    setTimeout(() => {
+      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+      commandHistoryStore.updateLastCommandStatus('success');
+    }, 500);
+  }
+  return {
+    error: null,
+  };
+}
+
+export function cmdAction(command: string) {
+  switch (command as (keyof typeof validCommands)[number]) {
+    case 'CMD,2043,CX,ON':
+      return CMD_2043_CX_ON();
+
+    case 'CMD,2043,SIM,ENABLE':
+      return CMD_2043_SIM_ENABLE();
+
+    case 'CMD,2043,SIM,ACTIVATE':
+      return CMD_2043_SIM_ACTIVATE();
+
+    case 'CMD,2043,SIM,DISABLE':
+      return CMD_2043_SIM_DISABLE();
+
+    case 'CMD,2043,ST,GPS':
+      return CMD_2043_ST_GPS();
+
+    case 'CAL':
+      return CAL();
+
+    case 'CMD,2043,SIM,<PRESSURE>':
+      return {
+        success: true,
+        error: null,
+      };
+
+    default:
+      return {
+        error: "Command doesn't exist",
+      };
+  }
+}
+
+function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
     uiState: 'maximize',
     currentCommand: undefined,
-    currentValidCommandIdx: null,
-    commandHistory: [],
+    currentCommandIdx: null,
   });
 
-  const updateCommandHistory = (
-    currentState: TerminalType,
-    command: Command,
-    output: string,
-  ) => ({
-    ...currentState,
-    commandHistory: [...currentState.commandHistory, { ...command, output }],
-    currentCommand: command,
-  });
+  function updateCommandHistory({
+    currentState,
+    command,
+    output,
+    status,
+  }: UpdateCommandHistory) {
+    commandHistoryStore.setCommandHistory({ ...command, output, status });
+    return {
+      ...currentState,
+      currentCommand: command,
+    };
+  }
 
   function setUiState(uiState: 'minimize' | 'maximize') {
     update((currentState) => ({ ...currentState, uiState }));
   }
 
-  function setCurrentCommand(command: Command) {
+  function setCurrentCommand(command: TerminalCommand) {
     update((currentState) => {
       const { value } = command;
       const isValidCommand = Object.keys(validCommands).some((key) =>
@@ -56,52 +159,82 @@ const createTerminalStore = () => {
       );
 
       if (!isValidCommand) {
-        return updateCommandHistory(currentState, command, 'Invalid Command');
+        return updateCommandHistory({
+          command,
+          currentState,
+          status: 'error',
+          output: 'Invalid Command',
+        });
+      }
+
+      if (command.value === 'clear') {
+        return {
+          ...currentState,
+          commandHistory: [],
+          currentCommand: command,
+        };
+      } else if (command.value === 'help') {
+        const helpText = Object.entries(validCommands).map(
+          ([command, { description }]) => `${command}: ${description}`,
+        );
+
+        return updateCommandHistory({
+          command,
+          currentState,
+          status: 'success',
+          output: helpText.join('\n'),
+        });
       }
 
       const currentCommandSequenceIndex = getTheIndexOfTheCommand(value);
-      const successMessage =
-        validCommands[value as keyof typeof validCommands]?.successMessage ??
-        '';
 
-      if (currentState.currentValidCommandIdx === null) {
+      if (currentState.currentCommandIdx === null) {
         if (currentCommandSequenceIndex === 0) {
-          return updateCommandHistory(
-            currentState,
+          // if the command is the first command in the sequence
+          return updateCommandHistory({
             command,
-            `<p>${successMessage}</p>`,
-          );
+            currentState,
+            status: 'pending',
+            output: `<p>${command.value} running...</p>`,
+          });
         } else {
+          // if the command is not the first command in the sequence
           const precedingCommands = Object.keys(validCommands)
             .slice(0, currentCommandSequenceIndex)
             .join(', ');
-          return updateCommandHistory(
-            currentState,
+
+          return updateCommandHistory({
             command,
-            createErrorTemplate(value, precedingCommands),
-          );
+            currentState,
+            status: 'error',
+            output: createErrorTemplate(value, precedingCommands),
+          });
         }
       } else if (
-        currentState.currentValidCommandIdx + 1 !==
+        // if the command is not the next command in the sequence
+        currentState.currentCommandIdx + 1 !==
         currentCommandSequenceIndex
       ) {
         const precedingCommands = Object.keys(validCommands)
           .slice(
-            currentState.currentValidCommandIdx + 1,
+            currentState.currentCommandIdx + 1,
             currentCommandSequenceIndex,
           )
           .join(', ');
-        return updateCommandHistory(
-          currentState,
+        return updateCommandHistory({
           command,
-          createErrorTemplate(value, precedingCommands),
-        );
+          currentState,
+          status: 'error',
+          output: createErrorTemplate(value, precedingCommands),
+        });
       } else {
-        return updateCommandHistory(
-          currentState,
+        // if the command is the next command in the sequence
+        return updateCommandHistory({
           command,
-          `<p>${successMessage}</p>`,
-        );
+          currentState,
+          status: 'pending',
+          output: `<p>${command.value} running...</p>`,
+        });
       }
     });
   }
@@ -111,55 +244,7 @@ const createTerminalStore = () => {
     setUiState,
     setCurrentCommand,
   };
-};
+}
 
 const terminalStore = createTerminalStore();
 export default terminalStore;
-
-// switch (command.value as (keyof typeof validCommands)[number]) {
-//   case 'CMD,2043,CX,ON':
-//     //  output = 'CX ON';
-//     break;
-
-//   case 'CMD,2043,SIM,ENABLE':
-//     //  $gcsStore.send({ type: 'ENABLE_SIMULATION' });
-//     break;
-
-//   case 'CMD,2043,SIM,ACTIVATE':
-//     //  $gcsStore.send({ type: 'ACTIVATE_SIMULATION' });
-//     break;
-
-//   case 'CMD,2043,SIM,DISABLE':
-//     //  $gcsStore.send({ type: 'DISABLE_SIMULATION' });
-//     //  output = 'SIM DISABLED';
-//     break;
-
-//   case 'CMD,2043,ST,GPS':
-//     //  output = 'GPS STATUS';
-//     break;
-
-//   case 'CAL':
-//     //  output = 'CALIBRATING';
-//     break;
-
-//   case 'CMD,2043,SIM,<PRESSURE>':
-//     //  output = 'SIM PRESSURE';
-//     break;
-
-//   case 'help':
-//     //  for (const [command, description] of Object.entries(validCommands)) {
-//     //    helpText += `\n- ${command}: ${description}`;
-//     //  }
-//     //  output = helpText;
-//     break;
-
-//   case 'clear':
-//     //  output = '';
-//     break;
-
-//   default:
-//     //  output = 'Invalid command';
-//     break;
-// }
-
-// return { ...$store, currentCommand: command };

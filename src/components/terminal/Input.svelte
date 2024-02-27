@@ -2,6 +2,7 @@
   import { validCommands } from '@/lib/helper';
   import Prompt from './Prompt.svelte';
   import terminalStore from '@/stores/terminal.temp.store';
+  import commandHistoryStore from '@/stores/command.history.store';
 
   export let inputEl: HTMLSpanElement;
   export let activeSuggestedCommand: string | null = null;
@@ -73,13 +74,14 @@
     }
   }
 
-  $: {
-    console.log($terminalStore);
-  }
+  $: lastCommand = $commandHistoryStore.commandHistory?.slice(-1)[0];
+  $: lastCommandIsPending = lastCommand?.status === 'pending' ?? false;
 </script>
 
 <div class="flex gap-x-2">
-  <Prompt />
+  {#if !lastCommandIsPending}
+    <Prompt />
+  {/if}
 
   <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div class="relative flex-1">
@@ -94,6 +96,6 @@
       data-placeholder="Type help to get started."
       class="block h-fit resize-y overflow-hidden border-none bg-transparent outline-none"
       role="textbox"
-      contenteditable />
+      contenteditable={!lastCommandIsPending} />
   </div>
 </div>

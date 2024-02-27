@@ -1,7 +1,5 @@
 <script lang="ts">
-  import type { TerminalActorContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
-  import { getContext } from 'svelte';
   import { slide } from 'svelte/transition';
   import ExpendIcon from '../icons/ExpendIcon.svelte';
   import MinimizeIcon from '../icons/MinimizeIcon.svelte';

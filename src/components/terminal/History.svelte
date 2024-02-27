@@ -3,14 +3,12 @@
   import Prompt from './Prompt.svelte';
   import ChevronRight from '../icons/ChevronRight.svelte';
   import { slide } from 'svelte/transition';
-  import terminalStore from '@/stores/terminal.temp.store';
-
-  // const { snapshot } = $terminalStore;
+  import commandHistoryStore from '@/stores/command.history.store';
 </script>
 
-{#if !!$terminalStore.commandHistory?.length}
+{#if !!$commandHistoryStore.commandHistory?.length}
   <div class="flex flex-col gap-y-2">
-    {#each $terminalStore.commandHistory as { output, time, value }}
+    {#each $commandHistoryStore.commandHistory as { output, time, value }}
       <div transition:slide={{ duration: 300 }} class="flex flex-col">
         <div class="flex justify-between gap-x-2">
           <Prompt />
