@@ -3,11 +3,11 @@
   import Header from '../Header.svelte';
   import TreeView from './ThreeView.svelte';
   import gcsStore from '@/stores/gcs.store';
-  import type { Status } from '@/lib/@types/app.types';
+  import type { SystemStatus } from '@/lib/@types/app.types';
   const { snapshot } = $gcsStore;
 
   type Tree = {
-    label: { text: string; state: Status };
+    label: { text: string; state: SystemStatus };
     children?: Tree[];
   };
 

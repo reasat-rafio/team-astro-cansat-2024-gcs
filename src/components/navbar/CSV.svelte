@@ -1,13 +1,41 @@
 <script lang="ts">
-  import DownloadIcon from '../icons/DownloadIcon.svelte';
+  import csvStore from '@/stores/csv.temp.store';
+  import systemStepsStore from '@/stores/system.steps.store';
   import Papa from 'papaparse';
-  import ImportIcon from '../icons/ImportIcon.svelte';
   import { onDestroy } from 'svelte';
-  import csvStore from '@/stores/csv.store';
+  import DownloadIcon from '../icons/DownloadIcon.svelte';
+  import ImportIcon from '../icons/ImportIcon.svelte';
 
   let importCSVEl: HTMLInputElement;
   let intervalId: NodeJS.Timeout | null = null;
-  const { send } = $csvStore;
+  let currentIndex = 1;
+
+  $: ({ rawData } = $csvStore);
+
+  const processLine = () => {
+    if (currentIndex < rawData.length) {
+      const currentLine = rawData[currentIndex];
+      const headerRow = rawData[0];
+
+      headerRow.forEach((columnName, index) => {
+        csvStore.setActiveStream({
+          key: columnName,
+          value: currentLine[index],
+        });
+      });
+
+      csvStore.updateCsvStreams(currentLine.join(','));
+
+      console.log('Processing line:', $csvStore.activeStreamObj);
+      currentIndex++;
+    } else {
+      clearInterval(intervalId!);
+      intervalId = null;
+      systemStepsStore.setCsvStatus('done');
+      csvStore.setState('completed');
+      console.log('Processing complete');
+    }
+  };
 
   function handleCSVUpload() {
     if (!importCSVEl?.files?.length) return;
@@ -15,7 +43,14 @@
     Papa.parse(importCSVEl.files[0], {
       skipEmptyLines: true,
       complete: function (results) {
-        send({ type: 'IMPORT_CSV', data: results.data as string[][] });
+        systemStepsStore.setCsvStatus('inProgress');
+        csvStore.setState('running');
+        csvStore.setCsvFileRawData(results.data as string[][]);
+        intervalId = setInterval(processLine, 1000);
+      },
+      error(error, file) {
+        systemStepsStore.setCsvStatus('error');
+        console.error('Error parsing CSV:', error, file);
       },
     });
   }

@@ -33,39 +33,43 @@ export interface XYStringData {
   time: string;
 }
 
-export type Status = 'notStarted' | 'inProgress' | 'done' | 'error';
+export type SystemStatus = 'notStarted' | 'inProgress' | 'done' | 'error';
 export interface MachineContext {
   state: string;
   mode: string;
   output: string;
   teamId: string;
-  steps: {
-    importCSV: Status;
-    telemetryStarted: Status;
-    calibrateTelemetry: Status;
-    currentTimeSetFromGPS: Status;
-    simulationEnable: Status;
-    simulationActivate: Status;
-    flightEnable: Status;
-  };
-  sensorData: {
-    acceleration: XYZStringArrayData;
-    airPressure: StringArrayData;
-    airSpeed: StringArrayData;
-    altitude: StringArrayData;
-    temperature: StringArrayData;
-    batteryVoltage: StringArrayData;
-    gpsCoordinates: XYZStringArrayData;
-    gpsTime: string[];
-    missionTime: string[];
-    gyroscope: XYZStringArrayData;
-    longitude: StringArrayData;
-    satellitesTracked: StringArrayData;
-    tiltAngle: XYZStringArrayData;
-    packetCount: string;
-    pcDeployed: boolean;
-    hSDeployed: boolean;
-  };
+  steps: SystemSteps;
+  sensorData: SensorData;
+}
+
+export interface SystemSteps {
+  importCSV: SystemStatus;
+  telemetryStarted: SystemStatus;
+  calibrateTelemetry: SystemStatus;
+  currentTimeSetFromGPS: SystemStatus;
+  simulationEnable: SystemStatus;
+  simulationActivate: SystemStatus;
+  flightEnable: SystemStatus;
+}
+
+export interface SensorData {
+  acceleration: XYZStringArrayData;
+  airPressure: StringArrayData;
+  airSpeed: StringArrayData;
+  altitude: StringArrayData;
+  temperature: StringArrayData;
+  batteryVoltage: StringArrayData;
+  gpsCoordinates: XYZStringArrayData;
+  gpsTime: string[];
+  missionTime: string[];
+  gyroscope: XYZStringArrayData;
+  longitude: StringArrayData;
+  satellitesTracked: StringArrayData;
+  tiltAngle: XYZStringArrayData;
+  packetCount: string;
+  pcDeployed: boolean;
+  hSDeployed: boolean;
 }
 
 export type UpdateAltitude = {
@@ -139,7 +143,7 @@ export type SetTeamId = {
 
 export type ImportCsv = {
   type: 'IMPORT_CSV';
-  status: Status;
+  status: SystemStatus;
 };
 
 export type MachineEvent =

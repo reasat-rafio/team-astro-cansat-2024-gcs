@@ -2,12 +2,12 @@
   import FireIcon from '@/components/icons/FireIcon.svelte';
   import { slide } from 'svelte/transition';
   import { gsap } from 'gsap';
-  import type { Status } from '@/lib/@types/app.types';
+  import type { SystemStatus } from '@/lib/@types/app.types';
   import TickIcon from '@/components/icons/TickIcon.svelte';
   import OnProgress from '@/components/OnProgress.svelte';
 
   type Tree = {
-    label: { text: string; state: Status };
+    label: { text: string; state: SystemStatus };
     children?: Tree[];
   };
 
