@@ -12,13 +12,13 @@ function createSystemSteps() {
     flightEnable: 'notStarted',
   });
 
-  function setCsvStatus(importCSV: SystemStatus) {
+  function setImportCsvStatus(importCSV: SystemStatus) {
     update(($store) => ({ ...$store, importCSV }));
   }
 
   return {
     subscribe,
-    setCsvStatus,
+    setImportCsvStatus,
   };
 }
 

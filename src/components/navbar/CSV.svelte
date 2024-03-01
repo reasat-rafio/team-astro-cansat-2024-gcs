@@ -31,7 +31,6 @@
     } else {
       clearInterval(intervalId!);
       intervalId = null;
-      systemStepsStore.setCsvStatus('done');
       csvStore.setState('completed');
       console.log('Processing complete');
     }
@@ -43,13 +42,13 @@
     Papa.parse(importCSVEl.files[0], {
       skipEmptyLines: true,
       complete: function (results) {
-        systemStepsStore.setCsvStatus('inProgress');
         csvStore.setState('running');
+        systemStepsStore.setImportCsvStatus('done');
         csvStore.setCsvFileRawData(results.data as string[][]);
         intervalId = setInterval(processLine, 1000);
       },
       error(error, file) {
-        systemStepsStore.setCsvStatus('error');
+        systemStepsStore.setImportCsvStatus('error');
         console.error('Error parsing CSV:', error, file);
       },
     });

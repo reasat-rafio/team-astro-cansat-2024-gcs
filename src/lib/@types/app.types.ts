@@ -4,12 +4,12 @@ import type terminalMachine from '@/machines/terminal-machine';
 import type { Readable } from 'svelte/store';
 import type { ActorRefFrom, EventFrom, SnapshotFrom } from 'xstate';
 
-interface StringArrayData {
+export interface StringArrayData {
   values: string[];
   time: string[];
 }
 
-interface XYZStringArrayData {
+export interface XYZStringArrayData {
   values: { x: string; y: string; z: string }[];
   time: string[];
 }
@@ -69,7 +69,7 @@ export interface SensorData {
   tiltAngle: XYZStringArrayData;
   packetCount: string;
   pcDeployed: boolean;
-  hSDeployed: boolean;
+  hsDeployed: boolean;
 }
 
 export type UpdateAltitude = {
