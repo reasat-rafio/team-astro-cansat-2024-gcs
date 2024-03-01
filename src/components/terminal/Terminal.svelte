@@ -19,13 +19,13 @@
   tabindex="0"
   on:click={() => inputEl.focus()}
   class={cn(
-    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md transition-all duration-300',
+    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md bg-secondary transition-all duration-300',
     {
       'max-w-xs': $terminalStore.uiState === 'minimize',
       'max-w-4xl': $terminalStore.uiState === 'maximize',
     },
   )}>
-  <div class="flex justify-between bg-surface-500 p-2">
+  <div class="bg-surface-500 flex justify-between p-2">
     <TerminalIcon />
     <div class="flex gap-4">
       <button on:click={() => terminalStore.setUiState('minimize')}>

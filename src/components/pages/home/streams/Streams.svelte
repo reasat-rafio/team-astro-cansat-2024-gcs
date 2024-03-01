@@ -2,13 +2,17 @@
   import RocketIcon from '@/components/icons/RocketIcon.svelte';
   import Header from '../Header.svelte';
   import { afterUpdate } from 'svelte';
-  import csvStore from '@/stores/csv.store';
+  import csvStore from '@/stores/csv.temp.store';
   import { slide } from 'svelte/transition';
-  import gcsStore from '@/stores/gcs.store';
+  // import gcsStore from '@/stores/gcs.store';
 
   let sectionEl: HTMLElement;
-  const { snapshot: csvSnapshot } = $csvStore;
-  const { snapshot: gcsSnapshot } = $gcsStore;
+  // const { snapshot: csvSnapshot } = $csvStore;
+  // const { snapshot: gcsSnapshot } = $gcsStore;
+
+  $: {
+    console.log($csvStore);
+  }
 
   afterUpdate(() => {
     scrollToBottom();
@@ -23,17 +27,15 @@
 
 <section
   bind:this={sectionEl}
-  class="col-span-6 col-start-7 row-start-2 overflow-auto pb-5">
+  class="scrollbar-thin scrollbar-thumb-slate-900 w-full overflow-auto pb-5">
   <Header icon={RocketIcon} title="Streams" />
 
-  <div class="flex flex-col gap-y-4">
-    {#if !$gcsSnapshot.matches('flight_enable')}
-      {#each $csvSnapshot.context.streams as stream, index}
-        <p transition:slide>
-          <span class="text-secondary-500">{index + 1}.</span>
-          <span>{stream}</span>
-        </p>
-      {/each}
-    {/if}
+  <div class="flex w-full flex-col gap-y-4">
+    {#each $csvStore.streams as stream, index}
+      <p transition:slide>
+        <span class="text-secondary-500">{index + 1}.</span>
+        <span>{stream}</span>
+      </p>
+    {/each}
   </div>
 </section>

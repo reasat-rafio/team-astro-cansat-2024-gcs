@@ -6,8 +6,7 @@
 </script>
 
 <header
-  class="flex space-x-3 text-secondary-500 items-center sticky top-0 bg-surface-900 pb-5 z-10"
->
+  class="sticky top-0 z-10 flex items-center space-x-3 bg-background pb-3">
   <svelte:component this={icon} />
   <H3 class="underline">{title}</H3>
 </header>

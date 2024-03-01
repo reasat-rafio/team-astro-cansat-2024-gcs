@@ -1,11 +1,11 @@
 <script lang="ts">
-  import { AppBar } from '@skeletonlabs/skeleton';
   import { page } from '$app/stores';
   import HomeIcon from '../icons/HomeIcon.svelte';
   import VisualIcon from '../icons/VisualIcon.svelte';
   import { navbarHeight } from '@/stores/ui.store.';
   import { onMount } from 'svelte';
   import Csv from './CSV.svelte';
+  import Button from '@/components/ui/button/button.svelte';
 
   const navItems = [
     { name: 'Home', icon: HomeIcon, url: '/' },
@@ -23,25 +23,19 @@
   });
 </script>
 
-<div bind:clientHeight={$navbarHeight}>
-  <AppBar>
-    <svelte:fragment slot="lead">
-      <ul class="flex space-x-2">
-        {#each navItems as { icon, name, url }}
-          <li>
-            <a
-              class="variant-ghost btn hover:variant-filled-secondary {$page.url
-                .pathname === url && '!variant-filled-secondary'}"
-              href={url}>
-              <span>{name}</span>
-              <svelte:component this={icon} />
-            </a>
-          </li>
-        {/each}
-      </ul>
-    </svelte:fragment>
-    <svelte:fragment slot="trail">
-      <Csv />
-    </svelte:fragment>
-  </AppBar>
+<div class="flex bg-gray-900 px-4 py-2" bind:clientHeight={$navbarHeight}>
+  <ul class="flex flex-1 space-x-2">
+    {#each navItems as { icon, name, url }}
+      <li>
+        <Button
+          class="flex gap-2"
+          variant={$page.url.pathname === url ? 'secondary' : 'outline'}
+          href={url}>
+          <span>{name}</span>
+          <svelte:component this={icon} />
+        </Button>
+      </li>
+    {/each}
+  </ul>
+  <Csv />
 </div>

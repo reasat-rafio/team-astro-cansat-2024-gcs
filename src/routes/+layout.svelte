@@ -86,13 +86,10 @@
 </script>
 
 <svelte:head>
-  <title>CANSAT GCS</title>
   <html lang="en" />
+  <title>CANSAT GCS</title>
 </svelte:head>
-<AppShell>
-  <svelte:fragment slot="header">
-    <Navbar />
-  </svelte:fragment>
-  <slot />
-  <Terminal />
-</AppShell>
+
+<Navbar />
+<slot />
+<Terminal />

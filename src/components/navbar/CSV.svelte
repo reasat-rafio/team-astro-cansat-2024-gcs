@@ -5,6 +5,8 @@
   import { onDestroy } from 'svelte';
   import DownloadIcon from '../icons/DownloadIcon.svelte';
   import ImportIcon from '../icons/ImportIcon.svelte';
+  import Button from '../ui/button/button.svelte';
+  import { page } from '$app/stores';
 
   let importCSVEl: HTMLInputElement;
   let intervalId: NodeJS.Timeout | null = null;
@@ -59,17 +61,24 @@
   });
 </script>
 
-<button
-  on:click={() => importCSVEl.click()}
-  class="variant-outline-secondary btn hover:variant-filled-secondary">
-  <span>Import CSV</span>
-  <ImportIcon />
-</button>
+<div class="flex space-x-2">
+  <Button
+    on:click={() => importCSVEl.click()}
+    class="flex gap-2"
+    variant="destructive">
+    <span>Import CSV</span>
+    <ImportIcon />
+  </Button>
 
-<button class="variant-outline-secondary btn hover:variant-filled-secondary">
-  <span>Export CSV</span>
-  <DownloadIcon />
-</button>
+  <Button class="flex gap-2" variant="outline">
+    <span>Export CSV</span>
+    <DownloadIcon />
+  </Button>
+  <!-- <Button class="flex gap-2" variant="outline">
+    <span>Terminal</span>
+    <DownloadIcon />
+  </Button> -->
+</div>
 
 <input
   class="hidden"

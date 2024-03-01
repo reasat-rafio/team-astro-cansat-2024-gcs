@@ -26,7 +26,7 @@ function createCsvStore() {
   function updateCsvStreams(stream: string) {
     update(($store) => ({
       ...$store,
-      csvStreams: [...($store.streams ?? []), stream],
+      streams: [...($store.streams ?? []), stream],
     }));
   }
 
