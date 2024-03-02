@@ -28,9 +28,7 @@
       <Resizable.PaneGroup direction="vertical">
         <Resizable.Pane defaultSize={60}>
           <div class="flex h-full p-4">
-            Charts
-            <!-- <Charts /> -->
-            <!-- <span class="font-semibold">Two</span> -->
+            <Charts />
           </div>
         </Resizable.Pane>
         <Resizable.Handle />

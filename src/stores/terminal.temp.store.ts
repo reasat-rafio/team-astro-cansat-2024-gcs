@@ -129,7 +129,7 @@ export function cmdAction(command: string) {
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
-    uiState: 'maximize',
+    uiState: 'minimize',
     currentCommand: undefined,
     currentCommandIdx: null,
   });
