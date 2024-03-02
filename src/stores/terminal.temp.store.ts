@@ -168,9 +168,11 @@ function createTerminalStore() {
       }
 
       if (command.value === 'clear') {
+        commandHistoryStore.clearHistory();
+
         return {
           ...currentState,
-          commandHistory: [],
+          // commandHistory: [],
           currentCommand: command,
         };
       } else if (command.value === 'help') {

@@ -18,6 +18,12 @@ function createCommandHistoryStore() {
     });
   }
 
+  function clearHistory() {
+    update((store) => {
+      return { commandHistory: [] };
+    });
+  }
+
   function updateLastCommandStatus(status: 'success' | 'error' | 'pending') {
     update((currentState) => {
       const lastCommand =
@@ -41,6 +47,7 @@ function createCommandHistoryStore() {
   return {
     subscribe,
     setCommandHistory,
+    clearHistory,
     updateLastCommandStatus,
     setLatestCommandOutput,
   };
