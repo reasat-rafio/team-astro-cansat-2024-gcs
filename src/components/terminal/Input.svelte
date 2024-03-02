@@ -86,7 +86,7 @@
   <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div class="relative flex-1">
     {#if !!activeSuggestedCommand}
-      <div class="absolute left-0 top-0 opacity-50">
+      <div class="absolute left-0 top-0 opacity-20">
         {activeSuggestedCommand}
       </div>
     {/if}

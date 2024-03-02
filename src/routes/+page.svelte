@@ -10,28 +10,27 @@
 
 <section style="height: calc(100vh - {$navbarHeight}px);" class="">
   <Resizable.PaneGroup direction="horizontal" class="w-full rounded-lg border">
-    <Resizable.Pane defaultSize={35}>
-      <Resizable.PaneGroup direction="vertical">
-        <Resizable.Pane defaultSize={50}>
-          <div class="flex h-full p-4">
-            <SystemSteps />
-          </div>
-        </Resizable.Pane>
-        <Resizable.Handle />
-        <Resizable.Pane defaultSize={40}>
-          <div class="flex h-full p-4">
-            <!-- <Streams /> -->
-          </div>
-        </Resizable.Pane>
-      </Resizable.PaneGroup>
+    <Resizable.Pane defaultSize={25}>
+      <div class="flex h-full p-4">
+        <SystemSteps />
+      </div>
+    </Resizable.Pane>
+    <Resizable.Handle />
+
+    <Resizable.Pane defaultSize={15}>
+      <div class="flex h-full p-4">
+        <Outputs />
+      </div>
     </Resizable.Pane>
 
     <Resizable.Handle />
-    <Resizable.Pane defaultSize={65}>
+    <Resizable.Pane defaultSize={60}>
       <Resizable.PaneGroup direction="vertical">
         <Resizable.Pane defaultSize={60}>
-          <div class="flex h-full items-center justify-center p-4">
-            <span class="font-semibold">Two</span>
+          <div class="flex h-full p-4">
+            Charts
+            <!-- <Charts /> -->
+            <!-- <span class="font-semibold">Two</span> -->
           </div>
         </Resizable.Pane>
         <Resizable.Handle />
@@ -44,8 +43,6 @@
     </Resizable.Pane>
   </Resizable.PaneGroup>
   <!-- <DataGroups />
-  <Outputs />
-  <SystemSteps />
   <Streams />
   <Charts /> -->
 </section>

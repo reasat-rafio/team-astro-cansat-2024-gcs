@@ -34,7 +34,7 @@
         const temp = sensorData.temperature.values;
 
         _teamId = teamId;
-        hsDeployed = sensorData.hSDeployed;
+        hsDeployed = sensorData.hsDeployed;
         pcDeployed = sensorData.pcDeployed;
         missionTime = mtime[mtime?.length - 1];
         latestAltitude = altitude[altitude?.length - 1];
@@ -59,7 +59,7 @@
   });
 </script>
 
-<section class="col-span-3 col-start-1 row-start-2 overflow-auto">
+<section class="w-full overflow-auto scrollbar-thin">
   <Header icon={ZapIcon} title="Outputs" />
 
   <div class="flex flex-col gap-y-4">

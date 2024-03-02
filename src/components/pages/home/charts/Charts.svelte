@@ -10,7 +10,7 @@
   import TiltAngle from '../../visualization/charts/TiltAngle.svelte';
 </script>
 
-<section class="col-span-6 col-start-7 row-span-1 row-start-1 overflow-auto">
+<section class="overflow-auto">
   <Header icon={VisualIcon} title="Charts" />
 
   <div class="flex gap-x-4 overflow-auto [&>*]:!w-[500px]">
