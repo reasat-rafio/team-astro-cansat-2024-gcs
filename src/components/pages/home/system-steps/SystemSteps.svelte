@@ -2,61 +2,89 @@
   import LabIcon from '@/components/icons/LabIcon.svelte';
   import Header from '../Header.svelte';
   import TreeView from './ThreeView.svelte';
-  import gcsStore from '@/stores/gcs.store';
   import type { SystemStatus } from '@/lib/@types/app.types';
-  const { snapshot } = $gcsStore;
+  import systemStepsStore from '@/stores/system.steps.store';
 
   type Tree = {
     label: { text: string; state: SystemStatus };
     children?: Tree[];
   };
 
-  $: tree = [
-    { label: { text: 'Import CSV', state: $snapshot.context.steps.importCSV } },
-    // {
-    //   label: {
-    //     text: 'Telemetry Transmission',
-    //     state: $snapshot.context.steps.telemetryStarted,
-    //   },
-    // },
-    // {
-    //   label: {
-    //     text: 'Calibrate Telemetry',
-    //     state: $snapshot.context.steps.calibrateTelemetry,
-    //   },
-    // },
-    // {
-    //   label: {
-    //     text: 'Set Current Time From GPS Module',
-    //     state: $snapshot.context.steps.currentTimeSetFromGPS,
-    //   },
-    // },
-    {
-      label: {
-        text: 'Simulation Enable',
-        state: $snapshot.context.steps.simulationEnable,
-      },
-    },
-    {
-      label: {
-        text: 'Simulation Activate',
-        state: $snapshot.context.steps.simulationActivate,
-      },
-    },
-    {
-      label: {
-        text: 'Flight Mode Enable',
-        state: $snapshot.context.steps.flightEnable,
-      },
-    },
-  ] as Tree[];
+  $: ({
+    importCSV,
+    calibrateTelemetry,
+    currentTimeSetFromGPS,
+    flightEnable,
+    simulationActivate,
+    simulationEnable,
+    telemetryStarted,
+  } = $systemStepsStore);
 
-  $: {
-    console.log(tree);
-  }
+  let tree: Tree[] = [
+    {
+      label: { text: 'Ground Mode', state: importCSV },
+      children: [
+        { label: { text: 'Power On, Idle', state: importCSV } },
+        { label: { text: 'Debugging System Started', state: importCSV } },
+        { label: { text: 'Communication Module On', state: importCSV } },
+      ],
+    },
+    {
+      label: { text: 'Flight Ready Mode', state: importCSV },
+      children: [
+        {
+          label: {
+            text: 'Activate Sensors and system Calibration start',
+            state: importCSV,
+          },
+        },
+      ],
+    },
+    {
+      label: { text: 'Data Transmission', state: importCSV },
+      children: [{ label: { text: 'Telemetry', state: importCSV } }],
+    },
+    {
+      label: { text: 'Data Transmission', state: importCSV },
+      children: [{ label: { text: 'Telemetry', state: importCSV } }],
+    },
+    {
+      label: { text: 'Simulation Mode', state: importCSV },
+      children: [
+        { label: { text: 'Getting Pressure Data From CSV', state: importCSV } },
+        { label: { text: 'Calculating Altitude And Speed', state: importCSV } },
+      ],
+    },
+    {
+      label: { text: 'On Air Mode', state: importCSV },
+      children: [
+        { label: { text: 'Checking Altitude', state: importCSV } },
+        { label: { text: 'Taking Sensor Data', state: importCSV } },
+        { label: { text: 'Taking Camera 1 Stream', state: importCSV } },
+        { label: { text: 'Save To SD Card', state: importCSV } },
+        { label: { text: 'Transmit To GCS', state: importCSV } },
+      ],
+    },
+    {
+      label: { text: 'Deployment', state: importCSV },
+      children: [
+        { label: { text: 'Payload Deployment', state: importCSV } },
+        { label: { text: 'Bonus Camera Started', state: importCSV } },
+        { label: { text: 'Heat Shield Mechanism Running', state: importCSV } },
+      ],
+    },
+    {
+      label: { text: 'Recovery Mode', state: importCSV },
+      children: [
+        { label: { text: 'Recovery Mechanism Running', state: importCSV } },
+        { label: { text: 'GPS Location Pinning', state: importCSV } },
+        { label: { text: 'Device Found', state: importCSV } },
+      ],
+    },
+  ];
 </script>
 
-<section class="col-span-3 col-start-4 row-span-2 overflow-auto">
+<section class="w-full overflow-auto scrollbar-thin">
   <Header icon={LabIcon} title="System Steps" />
 
   <ul class="m-0 mx-2 select-none">
@@ -65,53 +93,3 @@
     {/each}
   </ul>
 </section>
-
-<!-- {
-    //   label: 'Ground Mode',
-    //   children: [
-    //     { label: 'Power On, Idle' },
-    //     { label: 'Debugging System Started' },
-    //     { label: 'Communication Module On' }
-    //   ]
-    // },
-    // {
-    //   label: 'Flight Ready Mode',
-    //   children: [{ label: 'Activate Sensors and system Calibration start' }]
-    // },
-    // {
-    //   label: 'Data Transmission',
-    //   children: [{ label: 'Telemetry' }]
-    // },
-    // {
-    //   label: 'Simulation Mode',
-    //   children: [
-    //     { label: 'Getting Pressure Data From CSV' },
-    //     { label: 'Calculating Altitude And Speed' }
-    //   ]
-    // },
-    // {
-    //   label: 'On Air Mode',
-    //   children: [
-    //     { label: 'Checking Altitude' },
-    //     { label: 'Taking Sensor Data' },
-    //     { label: 'Taking Camera 1 Stream' },
-    //     { label: 'Save To SD Card' },
-    //     { label: 'Transmit To GCS' }
-    //   ]
-    // },
-    // {
-    //   label: 'Deployment',
-    //   children: [
-    //     { label: 'Payload Deployment' },
-    //     { label: 'Bonus Camera Started' },
-    //     { label: 'Heat Shield Mechanism Running' }
-    //   ]
-    // },
-    // {
-    //   label: 'Recovery Mode',
-    //   children: [
-    //     { label: 'Recovery Mechanism Running' },
-    //     { label: 'GPS Location Pinning' },
-    //     { label: 'Device Found' }
-    //   ]
-    // } -->

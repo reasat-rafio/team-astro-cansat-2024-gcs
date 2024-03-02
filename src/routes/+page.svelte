@@ -10,16 +10,27 @@
 
 <section style="height: calc(100vh - {$navbarHeight}px);" class="">
   <Resizable.PaneGroup direction="horizontal" class="w-full rounded-lg border">
-    <Resizable.Pane defaultSize={40}>
-      <div class="flex h-[200px] items-center justify-center p-6">
-        <span class="font-semibold">One</span>
-      </div>
+    <Resizable.Pane defaultSize={35}>
+      <Resizable.PaneGroup direction="vertical">
+        <Resizable.Pane defaultSize={50}>
+          <div class="flex h-full p-4">
+            <SystemSteps />
+          </div>
+        </Resizable.Pane>
+        <Resizable.Handle />
+        <Resizable.Pane defaultSize={40}>
+          <div class="flex h-full p-4">
+            <!-- <Streams /> -->
+          </div>
+        </Resizable.Pane>
+      </Resizable.PaneGroup>
     </Resizable.Pane>
+
     <Resizable.Handle />
-    <Resizable.Pane defaultSize={60}>
+    <Resizable.Pane defaultSize={65}>
       <Resizable.PaneGroup direction="vertical">
         <Resizable.Pane defaultSize={60}>
-          <div class="flex h-full items-center justify-center p-6">
+          <div class="flex h-full items-center justify-center p-4">
             <span class="font-semibold">Two</span>
           </div>
         </Resizable.Pane>

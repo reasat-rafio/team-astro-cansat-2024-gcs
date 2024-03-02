@@ -19,7 +19,7 @@ function createCommandHistoryStore() {
   }
 
   function clearHistory() {
-    update((store) => {
+    update(() => {
       return { commandHistory: [] };
     });
   }

@@ -144,6 +144,7 @@ function createTerminalStore() {
     return {
       ...currentState,
       currentCommand: command,
+      currentCommandIdx: getTheIndexOfTheCommand(command.value),
     };
   }
 
