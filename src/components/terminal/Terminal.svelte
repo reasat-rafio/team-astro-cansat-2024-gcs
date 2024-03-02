@@ -7,6 +7,7 @@
   import History from './History.svelte';
   import Input from './Input.svelte';
   import terminalStore from '@/stores/terminal.temp.store';
+  import CommandDropDown from './CommandDropDown.svelte';
 
   let inputEl: HTMLSpanElement;
   let activeSuggestedCommand: string | null = null;
@@ -21,12 +22,16 @@
   class={cn(
     'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md bg-secondary transition-all duration-300',
     {
-      'max-w-xs': $terminalStore.uiState === 'minimize',
+      'max-w-lg': $terminalStore.uiState === 'minimize',
       'max-w-4xl': $terminalStore.uiState === 'maximize',
     },
   )}>
-  <div class="bg-surface-500 flex justify-between p-2">
-    <TerminalIcon />
+  <div class="bg-surface-500 flex justify-between p-1">
+    <div class="flex items-center gap-2">
+      <TerminalIcon />
+      <CommandDropDown />
+    </div>
+
     <div class="flex gap-4">
       <button on:click={() => terminalStore.setUiState('minimize')}>
         <MinimizeIcon />
