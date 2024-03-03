@@ -25,9 +25,7 @@
   }
 </script>
 
-<section
-  bind:this={sectionEl}
-  class="scrollbar-thin scrollbar-thumb-slate-900 w-full overflow-auto pb-5">
+<section bind:this={sectionEl} class="w-full overflow-auto pb-5 scrollbar-thin">
   <Header icon={RocketIcon} title="Streams" />
 
   <div class="flex w-full flex-col gap-y-4">

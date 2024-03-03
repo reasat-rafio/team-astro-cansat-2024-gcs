@@ -5,7 +5,7 @@
   import AirPressure from './AirPressure.svelte';
   import BatteryVoltage from './BatteryVoltage.svelte';
   import Temperature from './Temperature.svelte';
-  import SectionHeader from '../SectionHeader.svelte';
+  import SectionHeader from '../pages/visualization/SectionHeader.svelte';
   import TiltAngle from './TiltAngle.svelte';
   import AirSpeed from './AirSpeed.svelte';
   // import CommandEcho from './charts/CommandEcho.svelte';

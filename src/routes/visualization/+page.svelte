@@ -1,7 +1,7 @@
 <script lang="ts">
   // import mqttClient from '$lib/mqtt/mqtt';
   import { onMount } from 'svelte';
-  import Charts from '@/components/pages/visualization/charts/Charts.svelte';
+  import Charts from '@/components/charts/Charts.svelte';
   import gcsMachine from '@/machines/gcs-machine';
 
   let interval: number;
@@ -23,8 +23,8 @@
   // });
 </script>
 
-<section class="w-full [&>*]:border-surface-600 [&>*]:p-5">
-  <div class="divide-y divide-surface-500">
+<section class="[&>*]:border-surface-600 w-full [&>*]:p-5">
+  <div class="divide-surface-500 divide-y">
     <Charts />
   </div>
 </section>

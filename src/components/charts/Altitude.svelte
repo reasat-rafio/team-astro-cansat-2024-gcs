@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { Line } from 'svelte-chartjs';
   import {
     Chart as ChartJS,
@@ -64,10 +64,10 @@
 
 <section class={$$props.class}>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Altitude</h4>
+    <h4 class="flex-1 ml-5 h6 text-tertiary-500">Altitude</h4>
     <label class="flex items-center space-x-2">
       <input
-        class="checkbox h-3 w-3"
+        class="w-3 h-3 checkbox"
         type="checkbox"
         bind:checked={lockToTheEnd} />
       <p class="text-xs">Lock</p>
@@ -119,4 +119,44 @@
         }} />
     </div>
   </div>
-</section>
+</section> -->
+
+<script lang="ts">
+  import {
+    VisXYContainer,
+    VisLine,
+    VisAxis,
+    VisCrosshair,
+    VisTooltip,
+  } from '@unovis/svelte';
+  // import Button from '@/components/ui/button/button.svelte';
+
+  type Data = { x: number; y: number };
+
+  let x = (d: Data) => d.x;
+  let y = (d: Data) => d.y;
+
+  const template = (d: Data) => [d.x, d.y].join(', ');
+
+  let data: Data[] = [];
+  let xValue = 1;
+
+  function generateDataPoint() {
+    const y = Math.floor(Math.random() * 100) + 1;
+    data.push({ x: xValue, y: y });
+    data = data;
+
+    xValue++;
+  }
+</script>
+
+<div class="h-full">
+  <!-- <Button on:click={generateDataPoint}>aAdd</Button> -->
+  <VisXYContainer width={600} class="h-full" {data}>
+    <VisAxis gridLine={false} type="x" label="X" />
+    <VisLine {x} {y} />
+    <VisAxis gridLine={false} type="y" label="Y" />
+    <VisCrosshair {template} />
+    <VisTooltip />
+  </VisXYContainer>
+</div>
