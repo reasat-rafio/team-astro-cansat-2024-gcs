@@ -54,4 +54,7 @@
   body {
     @apply bg-background text-foreground;
   }
+  html {
+    @apply scrollbar-thin scrollbar-track-black scrollbar-thumb-[#6a48f2];
+  }
 }
