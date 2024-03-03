@@ -144,7 +144,10 @@ function createTerminalStore() {
     return {
       ...currentState,
       currentCommand: command,
-      currentCommandIdx: getTheIndexOfTheCommand(command.value),
+      currentCommandIdx:
+        status === 'error'
+          ? currentState.currentCommandIdx
+          : getTheIndexOfTheCommand(command.value),
     };
   }
 
@@ -173,7 +176,6 @@ function createTerminalStore() {
 
         return {
           ...currentState,
-          // commandHistory: [],
           currentCommand: command,
         };
       } else if (command.value === 'help') {
@@ -224,6 +226,7 @@ function createTerminalStore() {
             currentCommandSequenceIndex,
           )
           .join(', ');
+
         return updateCommandHistory({
           command,
           currentState,

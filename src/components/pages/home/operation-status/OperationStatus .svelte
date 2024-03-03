@@ -40,10 +40,7 @@
         },
       ],
     },
-    {
-      label: { text: 'Data Transmission', state: importCSV },
-      children: [{ label: { text: 'Telemetry', state: importCSV } }],
-    },
+
     {
       label: { text: 'Data Transmission', state: importCSV },
       children: [{ label: { text: 'Telemetry', state: importCSV } }],

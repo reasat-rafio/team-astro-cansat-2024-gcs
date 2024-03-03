@@ -25,10 +25,10 @@
   $: if (path1 && path2) {
     if (expanded) {
       gsap.to(path1, {
-        attr: { d: 'M 12 3 L 3 11', stroke: 'rgb(70 133 175)' },
+        attr: { d: 'M 12 3 L 3 11', stroke: '#6a48f2' },
       });
       gsap.to(path2, {
-        attr: { d: 'M 3 3 L 12 11', stroke: 'rgb(70 133 175)' },
+        attr: { d: 'M 3 3 L 12 11', stroke: '#6a48f2' },
       });
     } else {
       gsap.to(path1, {

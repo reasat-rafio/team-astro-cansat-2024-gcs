@@ -1,9 +1,8 @@
 <script lang="ts">
   import Charts from '@/components/pages/home/charts/Charts.svelte';
-  import DataGroups from '@/components/pages/home/data-groups/DataGroups.svelte';
   import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
   import Streams from '@/components/pages/home/streams/Streams.svelte';
-  import SystemSteps from '@/components/pages/home/system-steps/SystemSteps.svelte';
+  import SystemSteps from '@/components/pages/home/operation-status/OperationStatus .svelte';
   import { navbarHeight } from '@/stores/ui.store.';
   import * as Resizable from '@/components/ui/resizable';
 </script>
