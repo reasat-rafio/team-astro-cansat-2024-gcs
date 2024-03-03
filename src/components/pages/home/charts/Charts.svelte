@@ -22,16 +22,18 @@
 </script>
 
 <svelte:window bind:innerWidth bind:innerHeight />
-<section class="w-full overflow-auto">
-  <div bind:this={headerEl}>
-    <Header icon={VisualIcon} title="Charts" />
-  </div>
-  <div
-    style="height: calc(100% - {headerHeight}px);"
-    class="flex w-full overflow-auto scrollbar-thin">
-    <Altitude />
-    <Altitude />
-    <Altitude />
-    <Altitude />
+<section class="flex h-full p-4">
+  <div class="w-full overflow-auto">
+    <div bind:this={headerEl}>
+      <Header icon={VisualIcon} title="Charts" />
+    </div>
+    <div
+      style="height: calc(100% - {headerHeight}px);"
+      class="flex w-full overflow-auto scrollbar-thin">
+      <Altitude />
+      <Altitude />
+      <Altitude />
+      <Altitude />
+    </div>
   </div>
 </section>

@@ -6,7 +6,6 @@
   import DownloadIcon from '../icons/DownloadIcon.svelte';
   import ImportIcon from '../icons/ImportIcon.svelte';
   import Button from '../ui/button/button.svelte';
-  import { page } from '$app/stores';
 
   let importCSVEl: HTMLInputElement;
   let intervalId: NodeJS.Timeout | null = null;
@@ -47,7 +46,6 @@
         csvStore.setState('running');
         systemStepsStore.setImportCsvStatus('done');
         csvStore.setCsvFileRawData(results.data as string[][]);
-        intervalId = setInterval(processLine, 1000);
       },
       error(error, file) {
         systemStepsStore.setImportCsvStatus('error');
@@ -74,10 +72,6 @@
     <span>Export CSV</span>
     <DownloadIcon />
   </Button>
-  <!-- <Button class="flex gap-2" variant="outline">
-    <span>Terminal</span>
-    <DownloadIcon />
-  </Button> -->
 </div>
 
 <input

@@ -59,27 +59,29 @@
   });
 </script>
 
-<section class="w-full overflow-auto scrollbar-thin">
-  <Header icon={ZapIcon} title="Outputs" />
+<section class="flex h-full p-4">
+  <div class="w-full overflow-auto scrollbar-thin">
+    <Header icon={ZapIcon} title="Outputs" />
 
-  <div class="flex flex-col gap-y-4">
-    <Item formatKey="Team Id" value={_teamId} />
-    <Item formatKey="Mission Time" value={missionTime} />
-    <Item formatKey="Packet Count" value={packetCount} />
-    <Item formatKey="Mode" value={activeMode} />
-    <Item formatKey="State" value={activeState} />
-    <Item formatKey="Altitude" value={latestAltitude} />
-    <Item formatKey="Hs Deployed" value={String(hsDeployed)} />
-    <Item formatKey="Pc Deployed" value={String(pcDeployed)} />
-    <Item formatKey="Mast Raised" value="True" />
-    <Item formatKey="Temperature" value={temperature} />
-    <Item formatKey="Voltage" value="12V" />
-    <Item formatKey="Gps Time" value={latestGps.time} />
-    <Item formatKey="Gps Altitude" value={latestGps.altitude} />
-    <Item formatKey="Gps Latitude" value={latestGps.latitude} />
-    <Item formatKey="Gps Longitude" value={latestGps.longitude} />
-    <Item formatKey="Gps Sats" value="8" />
-    <Item formatKey="Tilt X" value={latestTilt.x} />
-    <Item formatKey="Tilt Y" value={latestTilt.y} />
+    <div class="flex flex-col gap-y-4">
+      <Item formatKey="Team Id" value={_teamId} />
+      <Item formatKey="Mission Time" value={missionTime} />
+      <Item formatKey="Packet Count" value={packetCount} />
+      <Item formatKey="Mode" value={activeMode} />
+      <Item formatKey="State" value={activeState} />
+      <Item formatKey="Altitude" value={latestAltitude} />
+      <Item formatKey="Hs Deployed" value={String(hsDeployed)} />
+      <Item formatKey="Pc Deployed" value={String(pcDeployed)} />
+      <Item formatKey="Mast Raised" value="True" />
+      <Item formatKey="Temperature" value={temperature} />
+      <Item formatKey="Voltage" value="12V" />
+      <Item formatKey="Gps Time" value={latestGps.time} />
+      <Item formatKey="Gps Altitude" value={latestGps.altitude} />
+      <Item formatKey="Gps Latitude" value={latestGps.latitude} />
+      <Item formatKey="Gps Longitude" value={latestGps.longitude} />
+      <Item formatKey="Gps Sats" value="8" />
+      <Item formatKey="Tilt X" value={latestTilt.x} />
+      <Item formatKey="Tilt Y" value={latestTilt.y} />
+    </div>
   </div>
 </section>

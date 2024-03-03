@@ -81,12 +81,14 @@
   ];
 </script>
 
-<section class="w-full overflow-auto scrollbar-thin">
-  <Header icon={LabIcon} title="System Steps" />
+<section class="flex h-full p-4">
+  <div class="w-full overflow-auto scrollbar-thin">
+    <Header icon={LabIcon} title="System Steps" />
 
-  <ul class="m-0 mx-2 select-none">
-    {#each tree as t}
-      <TreeView tree={t} />
-    {/each}
-  </ul>
+    <ul class="m-0 mx-2 select-none">
+      {#each tree as t}
+        <TreeView tree={t} />
+      {/each}
+    </ul>
+  </div>
 </section>

@@ -5,7 +5,15 @@ import type {
   TerminalType,
   UpdateCommandHistory,
 } from '@/lib/@types/app.types';
-import commandHistoryStore, { lastCommand } from './command.history.store';
+import commandHistoryStore from './command.history.store';
+import {
+  CAL,
+  CMD_2043_CX_ON,
+  CMD_2043_SIM_ACTIVATE,
+  CMD_2043_SIM_DISABLE,
+  CMD_2043_SIM_ENABLE,
+  CMD_2043_ST_GPS,
+} from '@/lib/system-functions/';
 
 function getTheIndexOfTheCommand(command: string) {
   return Object.keys(validCommands).findIndex((key) => command.includes(key));
@@ -15,83 +23,12 @@ function createErrorTemplate(value: string, precedingCommands: string) {
   return `<p>Error: Unable to execute <span class="text-red-600">${value}</span> before completing the prerequisite command(s): <span class="text-red-600">${precedingCommands}</span> </p>`;
 }
 
-function getCurrentSuccessOutput() {
+export function getCurrentSuccessOutput() {
   return (
     validCommands[
       get(terminalStore).currentCommand?.value as keyof typeof validCommands
     ]?.successMessage ?? ''
   );
-}
-
-function CMD_2043_CX_ON() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
-  }
-  return {
-    error: null,
-  };
-}
-function CMD_2043_SIM_ENABLE() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
-  }
-  return {
-    error: null,
-  };
-}
-
-function CMD_2043_SIM_ACTIVATE() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
-  }
-  return {
-    error: null,
-  };
-}
-
-function CMD_2043_SIM_DISABLE() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
-  }
-  return {
-    error: null,
-  };
-}
-
-function CMD_2043_ST_GPS() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
-  }
-  return {
-    error: null,
-  };
-}
-
-function CAL() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
-  }
-  return {
-    error: null,
-  };
 }
 
 export function cmdAction(command: string) {

@@ -25,15 +25,17 @@
   }
 </script>
 
-<section bind:this={sectionEl} class="w-full overflow-auto pb-5 scrollbar-thin">
-  <Header icon={RocketIcon} title="Streams" />
+<section class="flex h-full p-4">
+  <div bind:this={sectionEl} class="w-full overflow-auto pb-5 scrollbar-thin">
+    <Header icon={RocketIcon} title="Streams" />
 
-  <div class="flex w-full flex-col gap-y-4">
-    {#each $csvStore.streams as stream, index}
-      <p transition:slide>
-        <span class="text-secondary-500">{index + 1}.</span>
-        <span>{stream}</span>
-      </p>
-    {/each}
+    <div class="flex w-full flex-col gap-y-4">
+      {#each $csvStore.streams as stream, index}
+        <p transition:slide>
+          <span class="text-secondary-500">{index + 1}.</span>
+          <span>{stream}</span>
+        </p>
+      {/each}
+    </div>
   </div>
 </section>
