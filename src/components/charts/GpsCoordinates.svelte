@@ -1,159 +1,59 @@
 <script lang="ts">
-  import { Line } from 'svelte-chartjs';
+  import { formatDate } from '@/lib/helper';
+  import csvStore from '@/stores/csv.temp.store';
   import {
-    Chart as ChartJS,
-    Title,
-    Tooltip,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    CategoryScale,
-  } from 'chart.js';
-  import { onMount } from 'svelte';
-  import type { Point } from 'chart.js/dist/core/core.controller';
-  import { delay } from '$lib/helper';
-  import gcsStore from '@/stores/gcs.store';
+    VisXYContainer,
+    VisLine,
+    VisAxis,
+    VisCrosshair,
+    VisTooltip,
+    VisBulletLegend,
+  } from '@unovis/svelte';
 
-  ChartJS.register(
-    Title,
-    Tooltip,
-    Legend,
-    LineElement,
-    LinearScale,
-    PointElement,
-    CategoryScale,
-  );
+  type Data = {
+    x: string;
+    y: {
+      x: number;
+      y: number;
+      z: number;
+    };
+  };
 
-  let chart: ChartJS<'line', (number | Point)[], unknown> | undefined;
-  let containerEl: HTMLDivElement;
-  let lockToTheEnd = true;
+  const x = (d: Data) => new Date(d.x).getTime();
+  const y = [(d: Data) => d.y.x, (d: Data) => d.y.y, (d: Data) => d.y.z];
 
-  let labels: string[] = [];
-  let data: { x: string; y: string; z: string }[] = [];
+  const template = (d: Data) => [d.x, d.y.x, d.y.y, d.y.z].join(', ');
+  const tickFormat = (value: string) => formatDate(new Date(value));
+  let data: Data[] = [];
 
-  $: {
-    chart?.data.datasets[0].data.push(+data[data.length - 1]?.x);
-    chart?.data.datasets[1].data.push(+data[data.length - 1]?.y);
-    chart?.data.datasets[2].data.push(+data[data.length - 1]?.z);
-    chart?.data.labels?.push(labels[labels.length - 1]);
+  $: if ($csvStore.activeStreamObj) {
+    const y = {
+      x: +$csvStore.activeStreamObj.GPS_ALTITUDE,
+      y: +$csvStore.activeStreamObj.GPS_LATITUDE,
+      z: +$csvStore.activeStreamObj.GPS_LONGITUDE,
+    };
+    const x = $csvStore.activeStreamObj.GPS_TIME;
 
-    chart?.update();
-    delay(10).then(() => autoScrollAction());
+    data.push({ x, y });
+    data = data;
   }
 
-  onMount(() => {
-    if (chart) {
-      const subscriber = $gcsStore.actorRef.subscribe((state) => {
-        if (state.context.sensorData.gpsCoordinates) {
-          labels = state.context.sensorData.gpsCoordinates.time;
-          data = state.context.sensorData.gpsCoordinates.values;
-        }
-      });
-
-      return () => subscriber.unsubscribe();
-    }
-  });
-
-  function autoScrollAction() {
-    if (containerEl && lockToTheEnd) {
-      containerEl.scrollLeft = containerEl.scrollWidth;
-    }
-  }
+  const colors = ['#2563EB', '#EB6C25', '#6a48f2'];
+  const color = (_: Data, i: number) => colors[i];
+  const items = [
+    { name: 'GPS_ALTITUDE', color: colors[0] },
+    { name: 'GPS_LATITUDE', color: colors[1] },
+    { name: 'GPS_LONGITUDE', color: colors[2] },
+  ];
 </script>
 
-<section>
-  <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Gps Coordinates</h4>
-    <label class="flex items-center space-x-2">
-      <input
-        class="checkbox h-3 w-3"
-        type="checkbox"
-        bind:checked={lockToTheEnd} />
-      <p class="text-xs">Lock</p>
-    </label>
-  </div>
-  <div bind:this={containerEl} class="overflow-x-scroll scroll-smooth">
-    <div class="h-[300px]" style="width: {500 + data?.length * 50}px; ">
-      <Line
-        bind:chart
-        data={{
-          labels: [],
-          datasets: [
-            {
-              label: 'LONGITUDE',
-              fill: true,
-              backgroundColor: 'rgba(54, 162, 235, 0.3)',
-              borderColor: 'rgb(100, 192, 192)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(54, 162, 235, 0.3)',
-              pointBackgroundColor: 'rgb(255, 255, 255)',
-              pointBorderWidth: 10,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgb(255, 255, 255)',
-              pointHoverBorderColor: 'rgba(0, 0, 0, 1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              data: [],
-            },
-            {
-              label: 'LATITUDE',
-              fill: true,
-              backgroundColor: 'rgba(54, 162, 235, 0.3)',
-              borderColor: 'rgb(192, 75, 75)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(54, 162, 235, 0.3)',
-              pointBackgroundColor: 'rgb(255, 255, 255)',
-              pointBorderWidth: 10,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgb(255, 255, 255)',
-              pointHoverBorderColor: 'rgba(0, 0, 0, 1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              data: [],
-            },
-            {
-              label: 'ALTITUDE',
-              fill: true,
-              backgroundColor: 'rgba(54, 162, 235, 0.3)',
-              borderColor: 'rgb(75, 75, 192)',
-              borderCapStyle: 'butt',
-              borderDash: [],
-              borderDashOffset: 0.0,
-              borderJoinStyle: 'miter',
-              pointBorderColor: 'rgba(54, 162, 235, 0.3)',
-              pointBackgroundColor: 'rgb(255, 255, 255)',
-              pointBorderWidth: 10,
-              pointHoverRadius: 5,
-              pointHoverBackgroundColor: 'rgb(255, 255, 255)',
-              pointHoverBorderColor: 'rgba(0, 0, 0, 1)',
-              pointHoverBorderWidth: 2,
-              pointRadius: 1,
-              pointHitRadius: 10,
-              data: [],
-            },
-          ],
-        }}
-        options={{
-          maintainAspectRatio: false,
-          scales: { x: { beginAtZero: true } },
-          plugins: {
-            legend: {
-              display: false,
-            },
-            title: {
-              display: false,
-            },
-          },
-        }} />
-    </div>
-  </div>
-</section>
+<div class="h-full">
+  <VisXYContainer preventEmptyDomain width={600} class="h-full" {data}>
+    <VisBulletLegend {items} />
+    <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
+    <VisLine {x} {y} {color} />
+    <VisAxis gridLine={true} type="y" label="Value" />
+    <VisCrosshair {template} />
+    <VisTooltip />
+  </VisXYContainer>
+</div>
