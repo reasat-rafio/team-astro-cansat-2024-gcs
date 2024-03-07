@@ -2,40 +2,11 @@
   import csvStore from '@/stores/csv.temp.store';
   import systemStepsStore from '@/stores/system.steps.store';
   import Papa from 'papaparse';
-  import { onDestroy } from 'svelte';
   import DownloadIcon from '../icons/DownloadIcon.svelte';
   import ImportIcon from '../icons/ImportIcon.svelte';
   import Button from '../ui/button/button.svelte';
 
   let importCSVEl: HTMLInputElement;
-  let intervalId: NodeJS.Timeout | null = null;
-  let currentIndex = 1;
-
-  $: ({ rawData } = $csvStore);
-
-  const processLine = () => {
-    if (currentIndex < rawData.length) {
-      const currentLine = rawData[currentIndex];
-      const headerRow = rawData[0];
-
-      headerRow.forEach((columnName, index) => {
-        csvStore.setActiveStream({
-          key: columnName,
-          value: currentLine[index],
-        });
-      });
-
-      csvStore.updateCsvStreams(currentLine.join(','));
-
-      console.log('Processing line:', $csvStore.activeStreamObj);
-      currentIndex++;
-    } else {
-      clearInterval(intervalId!);
-      intervalId = null;
-      csvStore.setState('completed');
-      console.log('Processing complete');
-    }
-  };
 
   function handleCSVUpload() {
     if (!importCSVEl?.files?.length) return;
@@ -53,10 +24,6 @@
       },
     });
   }
-
-  onDestroy(() => {
-    clearInterval(intervalId!);
-  });
 </script>
 
 <div class="flex space-x-2">

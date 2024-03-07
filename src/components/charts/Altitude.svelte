@@ -122,6 +122,8 @@
 </section> -->
 
 <script lang="ts">
+  import { calculatedAltitude, formatDate } from '@/lib/helper';
+  import csvStore from '@/stores/csv.temp.store';
   import {
     VisXYContainer,
     VisLine,
@@ -131,9 +133,9 @@
   } from '@unovis/svelte';
   // import Button from '@/components/ui/button/button.svelte';
 
-  type Data = { x: number; y: number };
+  type Data = { x: string; y: number };
 
-  let x = (d: Data) => d.x;
+  let x = (d: Data) => new Date(d.x);
   let y = (d: Data) => d.y;
 
   const template = (d: Data) => [d.x, d.y].join(', ');
@@ -141,19 +143,33 @@
   let data: Data[] = [];
   let xValue = 1;
 
-  function generateDataPoint() {
-    const y = Math.floor(Math.random() * 100) + 1;
-    data.push({ x: xValue, y: y });
-    data = data;
+  // function generateDataPoint() {
+  //   const y = Math.floor(Math.random() * 100) + 1;
+  //   data.push({ x: xValue, y: y });
+  //   data = data;
 
-    xValue++;
+  // }
+
+  $: if ($csvStore.activeStreamObj) {
+    const altitude = calculatedAltitude(
+      +$csvStore.activeStreamObj.ATMOSPHERIC_PRESSURE,
+    );
+    const time = $csvStore.activeStreamObj.GPS_TIME;
+
+    data.push({ x: time, y: altitude });
+    data = data;
   }
 </script>
 
 <div class="h-full">
   <!-- <Button on:click={generateDataPoint}>aAdd</Button> -->
   <VisXYContainer width={600} class="h-full" {data}>
-    <VisAxis gridLine={false} type="x" label="X" />
+    <VisAxis
+      gridLine={false}
+      type="x"
+      label="X"
+      numTicks={6}
+      tickFormat={(value) => new Date(value)} />
     <VisLine {x} {y} />
     <VisAxis gridLine={false} type="y" label="Y" />
     <VisCrosshair {template} />

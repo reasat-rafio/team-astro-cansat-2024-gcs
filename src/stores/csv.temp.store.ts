@@ -31,7 +31,10 @@ function createCsvStore() {
   }
 
   function setActiveStream({ key, value }: { key: string; value: string }) {
-    update(($store) => ({ ...$store, activeStreamObj: { [key]: value } }));
+    update(($store) => ({
+      ...$store,
+      activeStreamObj: { ...$store.activeStreamObj, [key]: value },
+    }));
   }
 
   return {
