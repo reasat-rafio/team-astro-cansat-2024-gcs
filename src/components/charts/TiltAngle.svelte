@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore from '@/stores/csv.temp.store';
+  import csvStore, { activeStreamObj } from '@/stores/csv.temp.store';
   import {
     VisXYContainer,
     VisLine,
@@ -9,6 +9,9 @@
     VisTooltip,
     VisBulletLegend,
   } from '@unovis/svelte';
+  import { onMount } from 'svelte';
+
+  export let width: string | number = 600;
 
   type Data = {
     x: string;
@@ -19,25 +22,9 @@
     };
   };
 
+  let loaded = false;
   const x = (d: Data) => new Date(d.x).getTime();
   const y = [(d: Data) => d.y.x, (d: Data) => d.y.y, (d: Data) => d.y.z];
-
-  const template = (d: Data) => [d.x, d.y.x, d.y.y, d.y.z].join(', ');
-  const tickFormat = (value: string) => formatDate(new Date(value));
-  let data: Data[] = [];
-
-  $: if ($csvStore.activeStreamObj) {
-    const y = {
-      x: +$csvStore.activeStreamObj.TILT_X,
-      y: +$csvStore.activeStreamObj.TILT_Y,
-      z: +$csvStore.activeStreamObj.ROT_Z,
-    };
-    const x = $csvStore.activeStreamObj.GPS_TIME;
-
-    data.push({ x, y });
-    data = data;
-  }
-
   const colors = ['#2563EB', '#EB6C25', '#6a48f2'];
   const color = (_: Data, i: number) => colors[i];
   const items = [
@@ -45,10 +32,43 @@
     { name: 'TILT_Y', color: colors[1] },
     { name: 'ROT_Z', color: colors[2] },
   ];
+
+  const template = (d: Data) =>
+    `<span>time :  ${d.x}<br /> tilt x : ${d.y.x}<br /> tilt y : ${d.y.y}<br /> rot z : ${d.y.z}<br /> </ span>`;
+  const tickFormat = (value: string) => formatDate(new Date(value));
+  let data: Data[] = [];
+
+  $: if ($activeStreamObj && loaded) {
+    const y = {
+      x: +$activeStreamObj.TILT_X,
+      y: +$activeStreamObj.TILT_Y,
+      z: +$activeStreamObj.ROT_Z,
+    };
+    const x = $activeStreamObj.GPS_TIME;
+
+    data.push({ x, y });
+    data = data;
+  }
+
+  onMount(() => {
+    const streams = $csvStore.streamsObj;
+    if (streams)
+      streams.forEach((stream) => {
+        const x = stream.GPS_TIME;
+        const y = {
+          x: +stream.TILT_X,
+          y: +stream.TILT_Y,
+          z: +stream.ROT_Z,
+        };
+        data.push({ x, y });
+        data = data;
+      });
+    loaded = true;
+  });
 </script>
 
 <div class="h-full">
-  <VisXYContainer preventEmptyDomain width={600} class="h-full" {data}>
+  <VisXYContainer preventEmptyDomain {width} class="h-full" {data}>
     <VisBulletLegend {items} />
     <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
     <VisLine {x} {y} {color} />

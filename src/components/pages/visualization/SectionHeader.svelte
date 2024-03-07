@@ -3,6 +3,7 @@
   import H3 from '@/components/ui/H3.svelte';
   import H5 from '@/components/ui/H5.svelte';
   import H6 from '@/components/ui/H6.svelte';
+  import Button from '@/components/ui/button/button.svelte';
   import gcsStore from '@/stores/gcs.store';
   import { onMount } from 'svelte';
 
@@ -32,34 +33,32 @@
     <header class="flex flex-1 items-end space-x-4">
       <H3
         class="{color === 'primary'
-          ? 'text-primary-500'
-          : 'text-secondary-500'} underline">
+          ? 'text-primary'
+          : 'text-[#6a48f2]'} underline">
         {title}
       </H3>
       <span class="flex items-end space-x-1">
         <H5>STATE :</H5>
-        <H6 class="capitalize text-warning-500">
+        <H6 class="capitalize text-yellow-500">
           {_state}
         </H6>
       </span>
     </header>
 
-    <button
-      type="button"
-      class="variant-ghost-surface btn btn-sm pointer-events-none">
+    <Button variant="outline" class="pointer-events-none space-x-2">
       <BatteryIcon />
       <span>{batteryLevel}%</span>
-    </button>
+    </Button>
   </div>
 
   <div class="flex space-x-3">
     <p>
-      Healthy Packets : <span class="text-success-600">
+      Healthy Packets : <span class="text-green-600">
         {_healthyPackets}
       </span>
     </p>
     <p>
-      Corrupted Packets : <span class="text-error-600">{CorruptedPackets}</span>
+      Corrupted Packets : <span class="text-red-600">{CorruptedPackets}</span>
     </p>
   </div>
 </div>

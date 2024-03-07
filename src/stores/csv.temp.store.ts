@@ -1,10 +1,10 @@
-import { writable } from 'svelte/store';
+import { derived, writable } from 'svelte/store';
 
 interface CsvStore {
   state: 'idle' | 'running' | 'completed';
   rawData: string[][];
   streams: string[];
-  activeStreamObj?: { [key: string]: string };
+  streamsObj?: { [key: string]: string }[];
 }
 
 function createCsvStore() {
@@ -12,7 +12,7 @@ function createCsvStore() {
     state: 'idle',
     rawData: [],
     streams: [],
-    activeStreamObj: undefined,
+    streamsObj: [],
   });
 
   function setState(state: 'idle' | 'running' | 'completed') {
@@ -30,21 +30,41 @@ function createCsvStore() {
     }));
   }
 
-  function setActiveStream({ key, value }: { key: string; value: string }) {
-    update(($store) => ({
-      ...$store,
-      activeStreamObj: { ...$store.activeStreamObj, [key]: value },
-    }));
+  function setSteamObj(currentLine: string[], headerRow: string[]) {
+    update(($store) => {
+      const obj = headerRow.reduce(
+        (acc: { [key: string]: string }, columnName, index) => {
+          acc[columnName] = currentLine[index];
+          return acc;
+        },
+        {},
+      );
+
+      return {
+        ...$store,
+        streamsObj: [...($store?.streamsObj ?? []), obj],
+      };
+    });
   }
 
   return {
     subscribe,
     setState,
+    setSteamObj,
     setCsvFileRawData,
     updateCsvStreams,
-    setActiveStream,
   };
 }
 
 const csvStore = createCsvStore();
 export default csvStore;
+
+export const activeStreamObj = derived(csvStore, ($csvStore) => {
+  if ($csvStore?.streamsObj) {
+    return $csvStore.streamsObj[$csvStore.streamsObj.length - 1] as {
+      [key: string]: string;
+    };
+  } else {
+    return {};
+  }
+});

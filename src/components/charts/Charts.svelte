@@ -1,6 +1,4 @@
 <script lang="ts">
-  import Gyroscope from './Gyroscope.svelte';
-  import Acceleration from './Acceleration.svelte';
   import Altitude from './Altitude.svelte';
   import AirPressure from './AirPressure.svelte';
   import BatteryVoltage from './BatteryVoltage.svelte';
@@ -8,28 +6,28 @@
   import SectionHeader from '../pages/visualization/SectionHeader.svelte';
   import TiltAngle from './TiltAngle.svelte';
   import AirSpeed from './AirSpeed.svelte';
-  // import CommandEcho from './charts/CommandEcho.svelte';
   import GpsCoordinates from './GpsCoordinates.svelte';
-  import Longitude from './Longitude.svelte';
-  import SatellitesTracked from './SatellitesTracked.svelte';
+  // import Gyroscope from './Gyroscope.svelte';
+  // import Acceleration from './Acceleration.svelte';
+  // import CommandEcho from './charts/CommandEcho.svelte';
+  // import Longitude from './Longitude.svelte';
+  // import SatellitesTracked from './SatellitesTracked.svelte';
 </script>
 
-<section
-  class="{$$props.class} flex h-full w-full flex-col space-y-6 overflow-x-scroll pt-5">
-  <SectionHeader title="Payload" color="secondary" />
+<section class="flex h-full w-full flex-col space-y-6 pt-5">
+  <SectionHeader title="Payload" color="primary" />
 
-  <div class="grid h-full grid-cols-3 gap-[50px] overflow-x-scroll">
-    <Altitude />
-    <AirPressure />
-    <Temperature />
-    <BatteryVoltage />
-    <TiltAngle />
-    <AirSpeed />
-    <GpsCoordinates />
+  <div class="grid grid-cols-2 gap-[50px] [&>*]:h-[450px]">
+    <Altitude width="auto" />
+    <AirPressure width="auto" />
+    <AirSpeed width="auto" />
+    <Temperature width="auto" />
+    <BatteryVoltage width="auto" />
+    <TiltAngle width="auto" />
+    <GpsCoordinates width="auto" />
     <!-- <CommandEcho />
     <Longitude />
     <SatellitesTracked />
-
     <Acceleration />
     <Gyroscope />  -->
   </div>

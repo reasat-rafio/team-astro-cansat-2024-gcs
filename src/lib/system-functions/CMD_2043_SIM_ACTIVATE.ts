@@ -1,7 +1,7 @@
 import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
-import csvStore from '@/stores/csv.temp.store';
+import csvStore, { activeStreamObj } from '@/stores/csv.temp.store';
 import { getCurrentSuccessOutput } from '@/stores/terminal.temp.store';
 import { onDestroy } from 'svelte';
 import { get } from 'svelte/store';
@@ -9,21 +9,15 @@ import { get } from 'svelte/store';
 let currentIndex = 1;
 let intervalId: NodeJS.Timeout;
 
-const processLine = (csvData: string[][]) => {
+const processLine = (csvData: string[][], headerRow: string[]) => {
   if (currentIndex < csvData.length) {
     const currentLine = csvData[currentIndex];
-    const headerRow = csvData[0];
 
-    headerRow.forEach((columnName, index) => {
-      csvStore.setActiveStream({
-        key: columnName,
-        value: currentLine[index],
-      });
-    });
+    csvStore.setSteamObj(currentLine, headerRow);
 
     csvStore.updateCsvStreams(currentLine.join(','));
 
-    console.log('Processing line:', get(csvStore).activeStreamObj);
+    console.log('Processing line:', get(activeStreamObj));
     currentIndex++;
   } else {
     csvStore.setState('completed');
@@ -39,8 +33,9 @@ export default function CMD_2043_SIM_ACTIVATE() {
 
   if (get(lastCommand).status === 'pending') {
     const csvData = get(csvStore).rawData;
+    const headerRow = csvData[0];
 
-    intervalId = setInterval(() => processLine(csvData), 1000);
+    intervalId = setInterval(() => processLine(csvData, headerRow), 1000);
   }
 
   onDestroy(() => {

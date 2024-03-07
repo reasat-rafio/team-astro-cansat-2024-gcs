@@ -4,7 +4,7 @@
   import Altitude from '@/components/charts/Altitude.svelte';
   import AirPressure from '@/components/charts/AirPressure.svelte';
   import Temperature from '@/components/charts/Temperature.svelte';
-  import AirSpeed from '@/components/charts/Temperature.svelte';
+  import AirSpeed from '@/components/charts/AirSpeed.svelte';
   import BatteryVoltage from '@/components/charts/BatteryVoltage.svelte';
   import GpsCoordinates from '@/components/charts/GpsCoordinates.svelte';
   import TiltAngle from '@/components/charts/TiltAngle.svelte';

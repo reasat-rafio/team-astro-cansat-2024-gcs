@@ -23,7 +23,9 @@
   });
 </script>
 
-<div class="flex bg-gray-900 px-4 py-2" bind:clientHeight={$navbarHeight}>
+<nav
+  class="sticky left-0 top-0 z-50 flex bg-gray-900 px-4 py-2"
+  bind:clientHeight={$navbarHeight}>
   <ul class="flex flex-1 space-x-2">
     {#each navItems as { icon, name, url }}
       <li>
@@ -38,4 +40,4 @@
     {/each}
   </ul>
   <Csv />
-</div>
+</nav>
