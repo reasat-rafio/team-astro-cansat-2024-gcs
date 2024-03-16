@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.temp.store';
+  import csvStore, { activeStreamObj } from '@/stores/csv.store';
   import {
     VisXYContainer,
     VisLine,

@@ -1,17 +1,13 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select';
   import { validCommands } from '@/lib/helper';
-  import terminalStore from '@/stores/terminal.temp.store';
+  import terminalStore from '@/stores/terminal.store';
 
   let selectedCmd: string | null = null;
 
   $: if (selectedCmd) {
     terminalStore.setCurrentCommand({ value: selectedCmd, time: new Date() });
   }
-
-  //   $: {
-  //     console.log(selectedCmd);
-  //   }
 </script>
 
 <Select.Root

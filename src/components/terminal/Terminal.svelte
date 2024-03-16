@@ -6,7 +6,7 @@
   import TerminalIcon from '../icons/TerminalIcon.svelte';
   import History from './History.svelte';
   import Input from './Input.svelte';
-  import terminalStore from '@/stores/terminal.temp.store';
+  import terminalStore from '@/stores/terminal.store';
   import CommandDropDown from './CommandDropDown.svelte';
 
   let inputEl: HTMLSpanElement;

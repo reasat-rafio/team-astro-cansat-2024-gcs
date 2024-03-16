@@ -1,5 +1,5 @@
 <script lang="ts">
-  import csvStore from '@/stores/csv.temp.store';
+  import csvStore from '@/stores/csv.store';
   import systemStepsStore from '@/stores/system.steps.store';
   import Papa from 'papaparse';
   import DownloadIcon from '../icons/DownloadIcon.svelte';

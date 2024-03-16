@@ -1,7 +1,7 @@
 <script lang="ts">
   import { validCommands } from '@/lib/helper';
   import Prompt from './Prompt.svelte';
-  import terminalStore from '@/stores/terminal.temp.store';
+  import terminalStore from '@/stores/terminal.store';
   import commandHistoryStore from '@/stores/command.history.store';
 
   export let inputEl: HTMLSpanElement;

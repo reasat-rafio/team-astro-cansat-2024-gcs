@@ -2,7 +2,7 @@
   import RocketIcon from '@/components/icons/RocketIcon.svelte';
   import Header from '../Header.svelte';
   import { afterUpdate } from 'svelte';
-  import csvStore from '@/stores/csv.temp.store';
+  import csvStore from '@/stores/csv.store';
   import { slide } from 'svelte/transition';
   // import gcsStore from '@/stores/gcs.store';
 

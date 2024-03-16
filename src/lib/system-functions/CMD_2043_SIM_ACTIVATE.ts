@@ -1,8 +1,8 @@
 import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
-import csvStore, { activeStreamObj } from '@/stores/csv.temp.store';
-import { getCurrentSuccessOutput } from '@/stores/terminal.temp.store';
+import csvStore, { activeStreamObj } from '@/stores/csv.store';
+import { getCurrentSuccessOutput } from '@/stores/terminal.store';
 import { onDestroy } from 'svelte';
 import { get } from 'svelte/store';
 

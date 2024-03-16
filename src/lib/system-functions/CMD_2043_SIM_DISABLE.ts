@@ -1,7 +1,7 @@
 import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
-import { getCurrentSuccessOutput } from '@/stores/terminal.temp.store';
+import { getCurrentSuccessOutput } from '@/stores/terminal.store';
 import { get } from 'svelte/store';
 
 export default function CMD_2043_SIM_DISABLE() {

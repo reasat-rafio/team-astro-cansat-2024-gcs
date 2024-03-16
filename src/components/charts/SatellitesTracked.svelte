@@ -64,7 +64,7 @@
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Satellites Tracked</h4>
+    <h4 class="h6 text-tertiary-500 ml-5 flex-1">Satellites Tracked</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"
