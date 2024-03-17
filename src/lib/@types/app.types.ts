@@ -269,7 +269,7 @@ export interface CommandHistory extends TerminalCommand {
 }
 
 export interface TerminalType {
-  uiState: 'minimize' | 'maximize';
+  terminalUiState: 'minimize' | 'maximize';
   currentCommand?: TerminalCommand;
   previousCommand?: TerminalCommand;
   currentCommandIdx: null | number;

@@ -66,7 +66,7 @@ export function cmdAction(command: string) {
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
-    uiState: 'minimize',
+    terminalUiState: 'minimize',
     currentCommand: undefined,
     currentCommandIdx: null,
   });
@@ -88,8 +88,8 @@ function createTerminalStore() {
     };
   }
 
-  function setUiState(uiState: 'minimize' | 'maximize') {
-    update((currentState) => ({ ...currentState, uiState }));
+  function setUiState(terminalUiState: 'minimize' | 'maximize') {
+    update((currentState) => ({ ...currentState, terminalUiState }));
   }
 
   function setCurrentCommand(command: TerminalCommand) {

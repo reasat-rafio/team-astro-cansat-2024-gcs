@@ -22,8 +22,8 @@
   class={cn(
     'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md border border-gray-900 bg-secondary transition-all  duration-300',
     {
-      'max-w-lg': $terminalStore.uiState === 'minimize',
-      'max-w-4xl': $terminalStore.uiState === 'maximize',
+      'max-w-lg': $terminalStore.terminalUiState === 'minimize',
+      'max-w-4xl': $terminalStore.terminalUiState === 'maximize',
     },
   )}>
   <button
@@ -45,7 +45,7 @@
       </button>
     </div>
   </button>
-  {#if $terminalStore.uiState === 'maximize'}
+  {#if $terminalStore.terminalUiState === 'maximize'}
     <div
       transition:slide
       class="h-[450px] space-y-2 overflow-y-auto bg-background p-2 scrollbar-thin">
