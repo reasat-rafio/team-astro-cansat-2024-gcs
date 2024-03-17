@@ -1,6 +1,6 @@
 import { sveltekit } from '@sveltejs/kit/vite';
 import { type ViteDevServer, defineConfig } from 'vite';
-
+import { SerialPort } from 'serialport';
 import { Server } from 'socket.io';
 
 const webSocketServer = {
@@ -8,9 +8,35 @@ const webSocketServer = {
   configureServer(server: ViteDevServer) {
     if (!server.httpServer) return;
 
-    const io = new Server(server.httpServer);
+    // Define serial port settings
+    const portName = '/dev/ttyUSB0'; // Change this to your serial port
+    const baudRate = 9600; // Change this to match your device settings
 
-    io.on('connection', (socket) => {
+    // Create a socket io server
+    const socket = new Server(server.httpServer);
+
+    // Create a new serial port instance
+    const serialPort = new SerialPort({
+      path: portName,
+      baudRate: baudRate,
+      autoOpen: true,
+    });
+
+    // Open the serial port
+    serialPort.on('open', () => {
+      console.log('Serial port opened');
+    });
+
+    // Handle incoming serial data
+    serialPort.on('data', (data) => {
+      const serialData = data.toString(); // Assuming data is UTF-8 encoded string
+      console.log('Received serial data:', serialData);
+
+      // Emit the data to all connected clients
+      socket.emit('serialData', serialData);
+    });
+
+    socket.on('connection', () => {
       socket.emit('eventFromServer', 'Hello, World 👋');
     });
   },
