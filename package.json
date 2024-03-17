@@ -52,10 +52,12 @@
     "chartjs-plugin-zoom": "^2.0.1",
     "drizzle-orm": "^0.29.3",
     "lucide-svelte": "^0.344.0",
+    "mode-watcher": "^0.3.0",
     "mqtt": "^4.0.1",
     "paneforge": "^0.0.2",
     "prettier-plugin-tailwindcss": "^0.5.7",
     "svelte-chartjs": "^3.1.2",
+    "svelte-sonner": "^0.3.19",
     "tailwind-variants": "^0.2.0",
     "vaul-svelte": "^0.2.4",
     "xstate": "^5.0.0"

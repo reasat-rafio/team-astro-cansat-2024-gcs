@@ -14,7 +14,7 @@
     Papa.parse(importCSVEl.files[0], {
       skipEmptyLines: true,
       complete: function (results) {
-        csvStore.setState('running');
+        csvStore.setState('ready');
         systemStepsStore.setImportCsvStatus('done');
         csvStore.setCsvFileRawData(results.data as string[][]);
       },

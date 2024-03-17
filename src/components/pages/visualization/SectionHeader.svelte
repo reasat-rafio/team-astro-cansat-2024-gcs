@@ -4,7 +4,7 @@
   import H5 from '@/components/ui/H5.svelte';
   import H6 from '@/components/ui/H6.svelte';
   import Button from '@/components/ui/button/button.svelte';
-  import gcsStore from '@/stores/gcs.store';
+  // import gcsStore from '@/stores/gcs.store';
   import { onMount } from 'svelte';
 
   export let title: string;
@@ -12,20 +12,23 @@
   export let CorruptedPackets = 0;
   export let color: 'primary' | 'secondary' = 'primary';
 
-  let _state = $gcsStore.actorRef.getSnapshot().context.state;
-  let _healthyPackets =
-    $gcsStore.actorRef.getSnapshot().context.sensorData.packetCount;
+  let _state = 'idle';
+  let _healthyPackets = '82';
 
-  onMount(() => {
-    const subscriber = $gcsStore.actorRef.subscribe((state) => {
-      if (state.context) {
-        _state = state.context.state;
-        _healthyPackets = state.context.sensorData.packetCount;
-      }
-    });
+  // let _state = $gcsStore.actorRef.getSnapshot().context.state;
+  // let _healthyPackets =
+  //   $gcsStore.actorRef.getSnapshot().context.sensorData.packetCount;
 
-    return () => subscriber.unsubscribe();
-  });
+  // onMount(() => {
+  //   const subscriber = $gcsStore.actorRef.subscribe((state) => {
+  //     if (state.context) {
+  //       _state = state.context.state;
+  //       _healthyPackets = state.context.sensorData.packetCount;
+  //     }
+  //   });
+
+  //   return () => subscriber.unsubscribe();
+  // });
 </script>
 
 <div class="space-y-3">

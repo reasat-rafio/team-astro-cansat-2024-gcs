@@ -1,6 +1,9 @@
 <script lang="ts">
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
+  import { toast } from 'svelte-sonner';
+  import terminalStore, { cmdAction } from '@/stores/terminal.store';
+  import { Toaster } from '@/components/ui/sonner';
   import { onMount } from 'svelte';
   import '../app.css';
 
@@ -14,6 +17,10 @@
     window.addEventListener('beforeunload', handleBeforeUnload);
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   });
+
+  $: if ($terminalStore) {
+    cmdAction($terminalStore.currentCommand?.value as string);
+  }
 </script>
 
 <svelte:head>
@@ -21,6 +28,7 @@
   <title>CANSAT GCS</title>
 </svelte:head>
 
+<Toaster richColors />
 <Navbar />
 <slot />
 <Terminal />

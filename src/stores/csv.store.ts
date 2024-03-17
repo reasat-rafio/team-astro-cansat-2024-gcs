@@ -1,7 +1,9 @@
 import { derived, writable } from 'svelte/store';
 
+type State = 'idle' | 'ready' | 'processing' | 'completed';
+
 interface CsvStore {
-  state: 'idle' | 'running' | 'completed';
+  state: State;
   rawData: string[][];
   streams: string[];
   streamsObj?: { [key: string]: string }[];
@@ -15,7 +17,7 @@ function createCsvStore() {
     streamsObj: [],
   });
 
-  function setState(state: 'idle' | 'running' | 'completed') {
+  function setState(state: State) {
     update(($store) => ({ ...$store, state }));
   }
 

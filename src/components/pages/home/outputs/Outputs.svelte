@@ -24,38 +24,36 @@
   };
 
   onMount(() => {
-    const subscriber = $gcsStore.actorRef.subscribe(
-      ({ context: { sensorData, mode, state, teamId } }) => {
-        const altitude = sensorData.altitude.values;
-        const tilt = sensorData.tiltAngle.values;
-        const gpsCoords = sensorData.gpsCoordinates.values;
-        const gpsTime = sensorData.gpsTime;
-        const mtime = sensorData.missionTime;
-        const temp = sensorData.temperature.values;
-
-        _teamId = teamId;
-        hsDeployed = sensorData.hsDeployed;
-        pcDeployed = sensorData.pcDeployed;
-        missionTime = mtime[mtime?.length - 1];
-        latestAltitude = altitude[altitude?.length - 1];
-        packetCount = sensorData.packetCount;
-        activeMode = mode;
-        activeState = state;
-        temperature = temp[temp.length - 1];
-        latestTilt = {
-          x: tilt[tilt?.length - 1].x,
-          y: tilt[tilt?.length - 1].y,
-        };
-        latestGps = {
-          time: gpsTime[gpsTime?.length - 1],
-          altitude: gpsCoords[gpsCoords?.length - 1].z,
-          latitude: gpsCoords[gpsCoords?.length - 1].y,
-          longitude: gpsCoords[gpsCoords?.length - 1].x,
-        };
-      },
-    );
-
-    return () => subscriber.unsubscribe();
+    // const subscriber = $gcsStore.actorRef.subscribe(
+    //   ({ context: { sensorData, mode, state, teamId } }) => {
+    //     const altitude = sensorData.altitude.values;
+    //     const tilt = sensorData.tiltAngle.values;
+    //     const gpsCoords = sensorData.gpsCoordinates.values;
+    //     const gpsTime = sensorData.gpsTime;
+    //     const mtime = sensorData.missionTime;
+    //     const temp = sensorData.temperature.values;
+    //     _teamId = teamId;
+    //     hsDeployed = sensorData.hsDeployed;
+    //     pcDeployed = sensorData.pcDeployed;
+    //     missionTime = mtime[mtime?.length - 1];
+    //     latestAltitude = altitude[altitude?.length - 1];
+    //     packetCount = sensorData.packetCount;
+    //     activeMode = mode;
+    //     activeState = state;
+    //     temperature = temp[temp.length - 1];
+    //     latestTilt = {
+    //       x: tilt[tilt?.length - 1].x,
+    //       y: tilt[tilt?.length - 1].y,
+    //     };
+    //     latestGps = {
+    //       time: gpsTime[gpsTime?.length - 1],
+    //       altitude: gpsCoords[gpsCoords?.length - 1].z,
+    //       latitude: gpsCoords[gpsCoords?.length - 1].y,
+    //       longitude: gpsCoords[gpsCoords?.length - 1].x,
+    //     };
+    //   },
+    // );
+    // return () => subscriber.unsubscribe();
   });
 </script>
 
