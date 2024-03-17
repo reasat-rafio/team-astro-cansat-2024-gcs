@@ -1,5 +1,5 @@
-import { sensor_data } from './../../db/schema';
-import { db } from '../../db/index';
+// import { sensor_data } from './../../db/schema';
+// import { db } from '../../db/index';
 
 export const load = async () => {
   // const result = await db.insert(sensor_data).values({

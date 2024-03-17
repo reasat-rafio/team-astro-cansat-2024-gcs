@@ -19,7 +19,7 @@ const webSocketServer = {
     const serialPort = new SerialPort({
       path: portName,
       baudRate: baudRate,
-      autoOpen: true,
+      autoOpen: false,
     });
 
     // Open the serial port

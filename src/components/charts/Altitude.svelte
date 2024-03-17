@@ -3,6 +3,7 @@
   import csvStore, { activeStreamObj } from '@/stores/csv.store';
   import {
     VisAxis,
+    VisBrush,
     VisBulletLegend,
     VisCrosshair,
     VisLine,
@@ -21,8 +22,10 @@
   const colors = ['#2563EB'];
   const items = [{ name: 'ALTITUDE', color: colors[0] }];
   const template = (d: Data) =>
-    `<span>time :  ${d.x}<br / > value : ${d.y} </ span>`;
+    `<span>time :  ${d.x}<br / > value : ${d.y.toFixed(2)} </ span>`;
   const tickFormat = (value: string) => formatDate(new Date(value));
+  let selection: number[] = [];
+  $: xDomain = selection as [number, number] | undefined;
 
   $: if ($activeStreamObj && loaded) {
     const y = calculatedAltitude(+$activeStreamObj.ATMOSPHERIC_PRESSURE);
@@ -43,15 +46,29 @@
       });
     loaded = true;
   });
+
+  function updateDomain(
+    selection: [number, number],
+    _: unknown,
+    userDriven: boolean,
+  ) {
+    if (userDriven) xDomain = selection;
+  }
 </script>
 
 <div class="h-full">
-  <VisXYContainer preventEmptyDomain {width} class="h-full" {data}>
+  <VisXYContainer {xDomain} preventEmptyDomain {width} class="h-[450px]" {data}>
     <VisBulletLegend {items} />
     <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
     <VisLine {x} {y} />
     <VisAxis gridLine={true} type="y" label="Value" />
     <VisCrosshair {template} />
     <VisTooltip />
+  </VisXYContainer>
+  <VisXYContainer preventEmptyDomain {width} class="h-[150px]" {data}>
+    <VisAxis gridLine={false} type="x" numTicks={6} {tickFormat} />
+    <VisBrush bind:selection onBrush={updateDomain} draggable={true} />
+    <VisLine {x} {y} />
+    <VisAxis gridLine={true} type="y" />
   </VisXYContainer>
 </div>

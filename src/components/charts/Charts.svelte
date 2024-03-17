@@ -17,7 +17,7 @@
 <section class="flex h-full w-full flex-col space-y-6 pt-5">
   <SectionHeader title="Payload" color="primary" />
 
-  <div class="grid grid-cols-2 gap-[50px] [&>*]:h-[450px]">
+  <div class="grid grid-cols-2 gap-[50px] [&>*]:h-[600px]">
     <Altitude width="auto" />
     <AirPressure width="auto" />
     <AirSpeed width="auto" />
