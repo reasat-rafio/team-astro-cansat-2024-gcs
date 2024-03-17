@@ -11,8 +11,8 @@
 </script>
 
 <Select.Root
-  onSelectedChange={(v) => {
-    if (v) selectedCmd = String(v?.value);
+  onSelectedChange={(currCmd) => {
+    if (currCmd) selectedCmd = String(currCmd?.value);
   }}>
   <Select.Trigger class="w-[300px] ">
     <Select.Value placeholder="Commands" />

@@ -44,7 +44,7 @@
 <li>
   {#if children}
     <button
-      class="flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-primary"
+      class="flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-[#6a48f2]"
       on:click={toggleExpansion}>
       <span class="flex cursor-pointer items-center gap-x-1">
         <svg width="14" height="14" viewBox="0 0 16 16">
@@ -74,7 +74,7 @@
     {/if}
   {:else}
     <button
-      class="flex gap-x-2 rounded-lg px-5 py-2 text-left transition-colors duration-300 hover:bg-primary">
+      class="flex gap-x-2 rounded-lg px-5 py-2 text-left transition-colors duration-300 hover:bg-[#6a48f2]">
       {#if label.state === 'done'}
         <TickIcon />
       {:else if label.state === 'inProgress'}

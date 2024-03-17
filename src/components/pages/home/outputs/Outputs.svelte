@@ -1,6 +1,6 @@
 <script lang="ts">
   import ZapIcon from '@/components/icons/ZapIcon.svelte';
-  import gcsStore from '@/stores/gcs.store';
+  // import gcsStore from '@/stores/gcs.store';
   import { onMount } from 'svelte';
   import Header from '../Header.svelte';
   import Item from './Item.svelte';
