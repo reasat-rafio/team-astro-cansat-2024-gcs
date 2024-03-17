@@ -5,10 +5,18 @@
   import SystemSteps from '@/components/pages/home/operation-status/OperationStatus .svelte';
   import { navbarHeight } from '@/stores/ui.store.';
   import * as Resizable from '@/components/ui/resizable';
+  import { io } from 'socket.io-client'
+
+  const socket = io()
+
+  socket.on('eventFromServer', (message) => {
+    console.log(message)
+  })
+
 </script>
 
 <section style="height: calc(100vh - {$navbarHeight}px);" class="">
-  <Resizable.PaneGroup direction="horizontal" class="w-full rounded-lg border">
+  <Resizable.PaneGroup direction="horizontal" class="w-full border rounded-lg">
     <Resizable.Pane defaultSize={25}>
       <SystemSteps />
     </Resizable.Pane>
