@@ -1,5 +1,5 @@
 import type { CSV_HEAD } from '@/lib/@types/app.types';
-import { derived, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import {
   airPressureStore,
   airSpeedStore,
@@ -109,11 +109,3 @@ function createCsvStore() {
 
 const csvStore = createCsvStore();
 export default csvStore;
-
-export const activeStreamObj = derived(csvStore, ($csvStore) => {
-  if ($csvStore?.streamsObj) {
-    const lastValue = $csvStore.streamsObj[$csvStore.streamsObj.length - 1];
-
-    return lastValue;
-  }
-});

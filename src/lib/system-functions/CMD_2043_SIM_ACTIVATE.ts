@@ -1,7 +1,7 @@
 import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
-import csvStore, { activeStreamObj } from '@/stores/csv.store';
+import csvStore from '@/stores/csv.store';
 import { getCurrentSuccessOutput } from '@/stores/terminal.store';
 import { onDestroy } from 'svelte';
 import { toast } from 'svelte-sonner';
@@ -16,10 +16,8 @@ const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
     const currentLine = csvData[currentIndex];
 
     csvStore.setSteamObj(currentLine, headerRow);
-
     csvStore.updateCsvStreams(currentLine.join(','));
 
-    console.log('Processing line:', get(activeStreamObj));
     currentIndex++;
   } else {
     csvStore.setState('completed');
