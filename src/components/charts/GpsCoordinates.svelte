@@ -8,6 +8,7 @@
     VisCrosshair,
     VisTooltip,
     VisBulletLegend,
+    VisBrush,
   } from '@unovis/svelte';
   import { onMount } from 'svelte';
 
@@ -37,6 +38,8 @@
     `<span>time :  ${d.x}<br /> altitude : ${d.y.x}<br /> latitude : ${d.y.y}<br /> longitude : ${d.y.z}<br /> </ span>`;
   const tickFormat = (value: string) => formatDate(new Date(value));
   let data: Data[] = [];
+  let selection: number[] = [];
+  $: xDomain = selection as [number, number] | undefined;
 
   $: if ($gpsCoordinatesStore?.currentVal && loaded) {
     const { time, value } = $gpsCoordinatesStore.currentVal;
@@ -59,15 +62,29 @@
       });
     loaded = true;
   });
+
+  function updateDomain(
+    selection: [number, number],
+    _: unknown,
+    userDriven: boolean,
+  ) {
+    if (userDriven) xDomain = selection;
+  }
 </script>
 
 <div class="h-full">
-  <VisXYContainer preventEmptyDomain {width} class="h-full" {data}>
+  <VisXYContainer {xDomain} preventEmptyDomain {width} class="h-[500px]" {data}>
     <VisBulletLegend {items} />
     <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
-    <VisLine {x} {y} {color} />
+    <VisLine {x} {y} />
     <VisAxis gridLine={true} type="y" label="Value" />
     <VisCrosshair {template} />
     <VisTooltip />
+  </VisXYContainer>
+  <VisXYContainer preventEmptyDomain {width} class="h-[100px]" {data}>
+    <VisAxis gridLine={false} type="x" numTicks={6} {tickFormat} />
+    <VisBrush bind:selection onBrush={updateDomain} draggable={true} />
+    <VisLine {x} {y} />
+    <VisAxis gridLine={true} type="y" />
   </VisXYContainer>
 </div>

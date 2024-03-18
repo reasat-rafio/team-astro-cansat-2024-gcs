@@ -57,7 +57,7 @@
 </script>
 
 <div class="h-full">
-  <VisXYContainer {xDomain} preventEmptyDomain {width} class="h-[450px]" {data}>
+  <VisXYContainer {xDomain} preventEmptyDomain {width} class="h-[500px]" {data}>
     <VisBulletLegend {items} />
     <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
     <VisLine {x} {y} />
@@ -65,7 +65,7 @@
     <VisCrosshair {template} />
     <VisTooltip />
   </VisXYContainer>
-  <VisXYContainer preventEmptyDomain {width} class="h-[150px]" {data}>
+  <VisXYContainer preventEmptyDomain {width} class="h-[100px]" {data}>
     <VisAxis gridLine={false} type="x" numTicks={6} {tickFormat} />
     <VisBrush bind:selection onBrush={updateDomain} draggable={true} />
     <VisLine {x} {y} />

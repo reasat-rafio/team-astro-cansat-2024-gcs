@@ -8,6 +8,7 @@
     VisCrosshair,
     VisTooltip,
     VisBulletLegend,
+    VisBrush,
   } from '@unovis/svelte';
   import { onMount } from 'svelte';
 
@@ -23,6 +24,8 @@
   const template = (d: Data) =>
     `<span>time :  ${d.x}<br / > value : ${d.y} </ span>`;
   const tickFormat = (value: string) => formatDate(new Date(value));
+  let selection: number[] = [];
+  $: xDomain = selection as [number, number] | undefined;
 
   $: if ($batteryVoltageStore?.currentVal && loaded) {
     const y = +$batteryVoltageStore.currentVal?.value;
@@ -43,15 +46,29 @@
       });
     loaded = true;
   });
+
+  function updateDomain(
+    selection: [number, number],
+    _: unknown,
+    userDriven: boolean,
+  ) {
+    if (userDriven) xDomain = selection;
+  }
 </script>
 
 <div class="h-full">
-  <VisXYContainer preventEmptyDomain {width} class="h-full" {data}>
+  <VisXYContainer {xDomain} preventEmptyDomain {width} class="h-[500px]" {data}>
     <VisBulletLegend {items} />
     <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
     <VisLine {x} {y} />
     <VisAxis gridLine={true} type="y" label="Value" />
     <VisCrosshair {template} />
     <VisTooltip />
+  </VisXYContainer>
+  <VisXYContainer preventEmptyDomain {width} class="h-[100px]" {data}>
+    <VisAxis gridLine={false} type="x" numTicks={6} {tickFormat} />
+    <VisBrush bind:selection onBrush={updateDomain} draggable={true} />
+    <VisLine {x} {y} />
+    <VisAxis gridLine={true} type="y" />
   </VisXYContainer>
 </div>
