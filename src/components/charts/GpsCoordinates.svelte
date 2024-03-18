@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.store';
+  import { gpsCoordinatesStore } from '@/stores/sensor.data.store';
   import {
     VisXYContainer,
     VisLine,
@@ -38,28 +38,22 @@
   const tickFormat = (value: string) => formatDate(new Date(value));
   let data: Data[] = [];
 
-  $: if ($activeStreamObj && loaded) {
-    const y = {
-      x: +$activeStreamObj.GPS_ALTITUDE,
-      y: +$activeStreamObj.GPS_LATITUDE,
-      z: +$activeStreamObj.GPS_LONGITUDE,
-    };
-    const x = $activeStreamObj.GPS_TIME;
+  $: if ($gpsCoordinatesStore?.currentVal && loaded) {
+    const { time, value } = $gpsCoordinatesStore.currentVal;
+
+    const y = { x: +value.x, y: +value.y, z: +value.z };
+    const x = time;
 
     data.push({ x, y });
     data = data;
   }
 
   onMount(() => {
-    const streams = $csvStore.streamsObj;
-    if (streams)
-      streams.forEach((stream) => {
-        const y = {
-          x: +stream.GPS_ALTITUDE,
-          y: +stream.GPS_LATITUDE,
-          z: +stream.GPS_LONGITUDE,
-        };
-        const x = stream.GPS_TIME;
+    const history = $gpsCoordinatesStore.history;
+    if (!!history?.length)
+      history.forEach(({ value, time }) => {
+        const x = time;
+        const y = { x: +value.x, y: +value.y, z: +value.z };
         data.push({ x, y });
         data = data;
       });

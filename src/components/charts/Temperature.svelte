@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.store';
+  import { temperatureStore } from '@/stores/sensor.data.store';
   import {
     VisXYContainer,
     VisLine,
@@ -24,20 +24,20 @@
     `<span>time :  ${d.x}<br / > value : ${d.y} </ span>`;
   const tickFormat = (value: string) => formatDate(new Date(value));
 
-  $: if ($activeStreamObj && loaded) {
-    const y = +$activeStreamObj.TEMPERATURE;
-    const x = $activeStreamObj.GPS_TIME;
+  $: if ($temperatureStore?.currentVal && loaded) {
+    const y = +$temperatureStore.currentVal?.value;
+    const x = $temperatureStore.currentVal.time;
 
     data.push({ x, y });
     data = data;
   }
 
   onMount(() => {
-    const streams = $csvStore.streamsObj;
-    if (streams)
-      streams.forEach((stream) => {
-        const y = +stream.TEMPERATURE;
-        const x = stream.GPS_TIME;
+    const history = $temperatureStore.history;
+    if (!!history?.length)
+      history.forEach(({ time, value }) => {
+        const y = +value;
+        const x = time;
         data.push({ x, y });
         data = data;
       });

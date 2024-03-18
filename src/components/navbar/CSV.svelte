@@ -5,6 +5,7 @@
   import DownloadIcon from '../icons/DownloadIcon.svelte';
   import ImportIcon from '../icons/ImportIcon.svelte';
   import Button from '../ui/button/button.svelte';
+  import { toast } from 'svelte-sonner';
 
   let importCSVEl: HTMLInputElement;
 
@@ -14,6 +15,7 @@
     Papa.parse(importCSVEl.files[0], {
       skipEmptyLines: true,
       complete: function (results) {
+        toast.success('CSV file imported successfully');
         csvStore.setState('ready');
         systemStepsStore.setImportCsvStatus('done');
         csvStore.setCsvFileRawData(results.data as string[][]);

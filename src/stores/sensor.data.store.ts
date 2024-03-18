@@ -1,117 +1,200 @@
-import type {
-  SensorData,
-  StringArrayData,
-  XYZStringArrayData,
-} from '@/lib/@types/app.types';
+import type { StringData, XYZStringData } from '@/lib/@types/app.types';
 import { writable } from 'svelte/store';
 
-function createSensorDataStore() {
-  const { subscribe, update } = writable<SensorData>({
-    packetCount: '0',
-    hsDeployed: false,
-    pcDeployed: false,
-    acceleration: { values: [], time: [] },
-    airPressure: { values: [], time: [] },
-    airSpeed: { values: [], time: [] },
-    altitude: { values: [], time: [] },
-    temperature: { values: [], time: [] },
-    batteryVoltage: { values: [], time: [] },
-    gpsCoordinates: { values: [], time: [] },
-    gyroscope: { values: [], time: [] },
-    longitude: { values: [], time: [] },
-    satellitesTracked: { values: [], time: [] },
-    tiltAngle: { values: [], time: [] },
-    gpsTime: [],
-    missionTime: [],
+function createAltitudeStore() {
+  const { subscribe, update } = writable<{
+    currentVal: StringData | null;
+    history: StringData[];
+  }>({
+    currentVal: null,
+    history: [],
   });
 
-  function updatePacketCount(packetCount: string) {
-    update(($store) => ({ ...$store, packetCount }));
-  }
-
-  function updateHs(hsDeployed: boolean) {
-    update(($store) => ({ ...$store, hsDeployed }));
-  }
-
-  function updatePc(pcDeployed: boolean) {
-    update(($store) => ({ ...$store, pcDeployed }));
-  }
-
-  function updateAcceleration({ time, values }: XYZStringArrayData) {
-    update(($store) => ({ ...$store, acceleration: { values, time } }));
-  }
-
-  function updateAirPressure({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, airPressure: { values, time } }));
-  }
-
-  function updateAirSpeed({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, airSpeed: { values, time } }));
-  }
-
-  function updateAltitude({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, altitude: { values, time } }));
-  }
-
-  function updateTemperature({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, temperature: { values, time } }));
-  }
-
-  function updateBatteryVoltage({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, batteryVoltage: { values, time } }));
-  }
-
-  function updateGpsCoordinates({ time, values }: XYZStringArrayData) {
-    update(($store) => ({ ...$store, gpsCoordinates: { values, time } }));
-  }
-
-  function updateGpsTime(time: string) {
-    update(($store) => ({ ...$store, gpsTime: [...$store.gpsTime, time] }));
-  }
-
-  function updateGyroscope({ time, values }: XYZStringArrayData) {
-    update(($store) => ({ ...$store, gyroscope: { values, time } }));
-  }
-
-  function updateLongitude({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, longitude: { values, time } }));
-  }
-
-  function updateSatellitesTracked({ time, values }: StringArrayData) {
-    update(($store) => ({ ...$store, satellitesTracked: { values, time } }));
-  }
-
-  function updateTiltAngle({ time, values }: XYZStringArrayData) {
-    update(($store) => ({ ...$store, tiltAngle: { values, time } }));
-  }
-
-  function updateMissionTime(time: string) {
+  function updateAltitude(val: StringData) {
     update(($store) => ({
       ...$store,
-      missionTime: [...$store.missionTime, time],
+      currentVal: val,
+      history: [...$store.history, val],
     }));
   }
 
   return {
     subscribe,
-    updatePacketCount,
-    updateHs,
-    updatePc,
-    updateAcceleration,
-    updateAirPressure,
-    updateAirSpeed,
     updateAltitude,
+  };
+}
+
+export const altitudeStore = createAltitudeStore();
+
+function createAirPressureStore() {
+  const { subscribe, update } = writable<{
+    currentVal: StringData | null;
+    history: StringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateAirPressure(val: StringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
+    updateAirPressure,
+  };
+}
+export const airPressureStore = createAirPressureStore();
+
+function createTemperatureStore() {
+  const { subscribe, update } = writable<{
+    currentVal: StringData | null;
+    history: StringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateTemperature(val: StringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
     updateTemperature,
+  };
+}
+
+export const temperatureStore = createTemperatureStore();
+
+function createAirSpeedStore() {
+  const { subscribe, update } = writable<{
+    currentVal: StringData | null;
+    history: StringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateAirSpeed(val: StringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
+    updateAirSpeed,
+  };
+}
+
+export const airSpeedStore = createAirSpeedStore();
+
+function createBatteryVoltageStore() {
+  const { subscribe, update } = writable<{
+    currentVal: StringData | null;
+    history: StringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateBatteryVoltage(val: StringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
     updateBatteryVoltage,
+  };
+}
+export const batteryVoltageStore = createBatteryVoltageStore();
+
+function createGpsCoordinatesStore() {
+  const { subscribe, update } = writable<{
+    currentVal: XYZStringData | null;
+    history: XYZStringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateGpsCoordinates(val: XYZStringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
     updateGpsCoordinates,
-    updateGpsTime,
-    updateMissionTime,
+  };
+}
+
+export const gpsCoordinatesStore = createGpsCoordinatesStore();
+
+function createGyroscopeStore() {
+  const { subscribe, update } = writable<{
+    currentVal: XYZStringData | null;
+    history: XYZStringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateGyroscope(val: XYZStringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
     updateGyroscope,
-    updateLongitude,
-    updateSatellitesTracked,
+  };
+}
+
+export const gyroscopeStore = createGyroscopeStore();
+
+function createTiltAngleStore() {
+  const { subscribe, update } = writable<{
+    currentVal: XYZStringData | null;
+    history: XYZStringData[];
+  }>({
+    currentVal: null,
+    history: [],
+  });
+
+  function updateTiltAngle(val: XYZStringData) {
+    update(($store) => ({
+      ...$store,
+      currentVal: val,
+      history: [...$store.history, val],
+    }));
+  }
+
+  return {
+    subscribe,
     updateTiltAngle,
   };
 }
 
-const sensorDataStore = createSensorDataStore();
-export default sensorDataStore;
+export const tiltAngleStore = createTiltAngleStore();

@@ -6,6 +6,8 @@
   import { Toaster } from '@/components/ui/sonner';
   import { onMount } from 'svelte';
   import '../app.css';
+  import { altitudeStore } from '@/stores/sensor.data.store';
+  import type { StringData } from '@/lib/@types/app.types';
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -21,6 +23,16 @@
   $: if ($terminalStore) {
     cmdAction($terminalStore.currentCommand?.value as string);
   }
+
+  // $: if (altitudeStore) {
+  //   console.log({ $altitudeStore });
+  // }
+  // $: if ($altitudeStore?.time && $altitudeStore?.value) {
+  //   altitudeHistoryStore.update(($store) => [
+  //     ...$store,
+  //     $altitudeStore as StringData,
+  //   ]);
+  // }
 </script>
 
 <svelte:head>
@@ -28,7 +40,7 @@
   <title>CANSAT GCS</title>
 </svelte:head>
 
-<Toaster richColors />
+<Toaster richColors closeButton />
 <Navbar />
 <slot />
 <Terminal />

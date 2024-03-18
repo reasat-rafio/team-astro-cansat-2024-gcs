@@ -1,6 +1,6 @@
 <script lang="ts">
   import { calculatedAltitude, formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.store';
+  import { altitudeStore } from '@/stores/sensor.data.store';
   import {
     VisAxis,
     VisBrush,
@@ -27,20 +27,20 @@
   let selection: number[] = [];
   $: xDomain = selection as [number, number] | undefined;
 
-  $: if ($activeStreamObj && loaded) {
-    const y = calculatedAltitude(+$activeStreamObj.ATMOSPHERIC_PRESSURE);
-    const x = $activeStreamObj.GPS_TIME;
+  $: if ($altitudeStore?.currentVal && loaded) {
+    const y = calculatedAltitude(+$altitudeStore.currentVal?.value);
+    const x = $altitudeStore.currentVal?.time;
 
     data.push({ x, y });
     data = data;
   }
 
   onMount(() => {
-    const streams = $csvStore.streamsObj;
-    if (streams)
-      streams.forEach((stream) => {
-        const y = calculatedAltitude(+stream.ATMOSPHERIC_PRESSURE);
-        const x = stream.GPS_TIME;
+    const history = $altitudeStore.history;
+    if (!!history?.length)
+      history.forEach(({ time, value }) => {
+        const y = calculatedAltitude(+value);
+        const x = time;
         data.push({ x, y });
         data = data;
       });

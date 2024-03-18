@@ -6,11 +6,12 @@ import { getCurrentSuccessOutput } from '@/stores/terminal.store';
 import { onDestroy } from 'svelte';
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
+import type { CSV_HEAD } from '../@types/app.types';
 
 let currentIndex = 1;
 let intervalId: NodeJS.Timeout;
 
-const processLine = (csvData: string[][], headerRow: string[]) => {
+const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
   if (currentIndex < csvData.length) {
     const currentLine = csvData[currentIndex];
 
@@ -42,7 +43,7 @@ export default function CMD_2043_SIM_ACTIVATE() {
   if (get(lastCommand).status === 'pending') {
     csvStore.setState('processing');
     const csvData = get(csvStore).rawData;
-    const headerRow = csvData[0];
+    const headerRow = csvData[0] as CSV_HEAD[];
 
     intervalId = setInterval(() => processLine(csvData, headerRow), 1000);
   }

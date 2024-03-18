@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.store';
+  import { tiltAngleStore } from '@/stores/sensor.data.store';
   import {
     VisXYContainer,
     VisLine,
@@ -38,28 +38,22 @@
   const tickFormat = (value: string) => formatDate(new Date(value));
   let data: Data[] = [];
 
-  $: if ($activeStreamObj && loaded) {
-    const y = {
-      x: +$activeStreamObj.TILT_X,
-      y: +$activeStreamObj.TILT_Y,
-      z: +$activeStreamObj.ROT_Z,
-    };
-    const x = $activeStreamObj.GPS_TIME;
+  $: if ($tiltAngleStore?.currentVal && loaded) {
+    const { time, value } = $tiltAngleStore.currentVal;
+
+    const y = { x: +value.x, y: +value.y, z: +value.z };
+    const x = time;
 
     data.push({ x, y });
     data = data;
   }
 
   onMount(() => {
-    const streams = $csvStore.streamsObj;
-    if (streams)
-      streams.forEach((stream) => {
-        const x = stream.GPS_TIME;
-        const y = {
-          x: +stream.TILT_X,
-          y: +stream.TILT_Y,
-          z: +stream.ROT_Z,
-        };
+    const history = $tiltAngleStore.history;
+    if (!!history?.length)
+      history.forEach(({ value, time }) => {
+        const x = time;
+        const y = { x: +value.x, y: +value.y, z: +value.z };
         data.push({ x, y });
         data = data;
       });

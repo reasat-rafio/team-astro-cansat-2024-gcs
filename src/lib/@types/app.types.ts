@@ -1,9 +1,3 @@
-import type csvProcessingMachine from '@/machines/csv-machine';
-import type gcsMachine from '@/machines/gcs-machine';
-import type terminalMachine from '@/machines/terminal-machine';
-import type { Readable } from 'svelte/store';
-import type { ActorRefFrom, EventFrom, SnapshotFrom } from 'xstate';
-
 export interface StringArrayData {
   values: string[];
   time: string[];
@@ -57,7 +51,7 @@ export interface SensorData {
   acceleration: XYZStringArrayData;
   airPressure: StringArrayData;
   airSpeed: StringArrayData;
-  altitude: StringArrayData;
+  altitude: StringData;
   temperature: StringArrayData;
   batteryVoltage: StringArrayData;
   gpsCoordinates: XYZStringArrayData;
@@ -217,16 +211,6 @@ export interface TerminalContext {
   currentCommand: string;
 }
 
-export type ActorContext<T> = {
-  snapshot: Readable<SnapshotFrom<T>>;
-  send: (event: EventFrom<T>) => void;
-  actorRef: ActorRefFrom<T>;
-};
-
-export type TerminalActorContext = ActorContext<typeof terminalMachine>;
-export type GCSActorContext = ActorContext<typeof gcsMachine>;
-export type CSVActorContext = ActorContext<typeof csvProcessingMachine>;
-
 export interface MissionData {
   TEAM_ID: string;
   MISSION_TIME: string;
@@ -274,3 +258,26 @@ export interface TerminalType {
   previousCommand?: TerminalCommand;
   currentCommandIdx: null | number;
 }
+export type CSV_HEAD =
+  | 'TEAM_ID'
+  | 'MISSION_TIME'
+  | 'PACKET_COUNT'
+  | 'MODE'
+  | 'STATE'
+  | 'ALTITUDE'
+  | 'AIR_SPEED'
+  | 'HS_DEPLOYED'
+  | 'PC_DEPLOYED'
+  | 'TEMPERATURE'
+  | 'VOLTAGE'
+  | 'PRESSURE'
+  | 'GPS_TIME'
+  | 'GPS_ALTITUDE'
+  | 'GPS_LATITUDE'
+  | 'GPS_LONGITUDE'
+  | 'GPS_SATS'
+  | 'TILT_X'
+  | 'TILT_Y'
+  | 'ROT_Z'
+  | 'CMD_ECHO'
+  | 'ATMOSPHERIC_PRESSURE';

@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.store';
+  import { airPressureStore } from '@/stores/sensor.data.store';
   import {
     VisXYContainer,
     VisLine,
@@ -24,20 +24,20 @@
     `<span>time :  ${d.x}<br / > value : ${d.y} </ span>`;
   const tickFormat = (value: string) => formatDate(new Date(value));
 
-  $: if ($activeStreamObj && loaded) {
-    const y = +$activeStreamObj.PRESSURE;
-    const x = $activeStreamObj.GPS_TIME;
+  $: if ($airPressureStore?.currentVal && loaded) {
+    const y = +$airPressureStore.currentVal?.value;
+    const x = $airPressureStore.currentVal.time;
 
     data.push({ x, y });
     data = data;
   }
 
   onMount(() => {
-    const streams = $csvStore.streamsObj;
-    if (streams)
-      streams.forEach((stream) => {
-        const y = +stream.PRESSURE;
-        const x = stream.GPS_TIME;
+    const history = $airPressureStore.history;
+    if (!!history?.length)
+      history.forEach(({ time, value }) => {
+        const y = +value;
+        const x = time;
         data.push({ x, y });
         data = data;
       });

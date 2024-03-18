@@ -1,6 +1,6 @@
 <script lang="ts">
   import { formatDate } from '@/lib/helper';
-  import csvStore, { activeStreamObj } from '@/stores/csv.store';
+  import { batteryVoltageStore } from '@/stores/sensor.data.store';
   import {
     VisXYContainer,
     VisLine,
@@ -24,20 +24,20 @@
     `<span>time :  ${d.x}<br / > value : ${d.y} </ span>`;
   const tickFormat = (value: string) => formatDate(new Date(value));
 
-  $: if ($activeStreamObj && loaded) {
-    const y = +$activeStreamObj.VOLTAGE;
-    const x = $activeStreamObj.GPS_TIME;
+  $: if ($batteryVoltageStore?.currentVal && loaded) {
+    const y = +$batteryVoltageStore.currentVal?.value;
+    const x = $batteryVoltageStore.currentVal.time;
 
     data.push({ x, y });
     data = data;
   }
 
   onMount(() => {
-    const streams = $csvStore.streamsObj;
-    if (streams)
-      streams.forEach((stream) => {
-        const y = +stream.VOLTAGE;
-        const x = stream.GPS_TIME;
+    const history = $batteryVoltageStore.history;
+    if (!!history?.length)
+      history.forEach(({ time, value }) => {
+        const y = +value;
+        const x = time;
         data.push({ x, y });
         data = data;
       });
