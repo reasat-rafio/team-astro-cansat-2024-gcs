@@ -7,31 +7,35 @@
   import * as Resizable from '@/components/ui/resizable';
   import { io } from 'socket.io-client';
 
-
-  type Key = "Latitude" | "Longitude" | "Altitude (GPS)" | "Battery Voltage" | "Temperature From BMP280" | "Distance"
-  type Data = [Key, string][]
+  type Key =
+    | 'Latitude'
+    | 'Longitude'
+    | 'Altitude (GPS)'
+    | 'Battery Voltage'
+    | 'Temperature From BMP280'
+    | 'Distance';
+  type Data = [Key, string][];
 
   const socket = io();
 
-  function splitStringIntoKeyValuePairs(input: string): { [key: string]: string } {
+  function splitStringIntoKeyValuePairs(input: string): {
+    [key: string]: string;
+  } {
     const keyValuePairs: { [key: string]: string } = {};
 
-    // Define regular expressions for each type of string
-    const regexType1 = /([a-zA-Z_]+):\s?([0-9.]+|nan)/g;
-    const regexType2 = /([a-zA-Z\s]+):\s?([0-9.]+)\s?([a-zA-Z]+)/g;
+    const regexType1 = /([a-zA-Z_]+):\s?([0-9.]+|nan)\b/g;
+    const regexType2 = /([a-zA-Z\s]+):\s?([0-9.]+)\s?([a-zA-Z]+)\b/g;
 
-    // Try matching both regular expressions
     let match;
     while ((match = regexType1.exec(input)) !== null) {
-        keyValuePairs[match[1]] = match[2];
+      keyValuePairs[match[1]] = match[2];
     }
     while ((match = regexType2.exec(input)) !== null) {
-        keyValuePairs[match[1]] = match[2] + ' ' + match[3];
+      keyValuePairs[match[1]] = match[2] + ' ' + match[3];
     }
 
     return keyValuePairs;
-}
-
+  }
 
   socket.on('eventFromServer', (message) => {
     console.log('eventFromServer', message);
