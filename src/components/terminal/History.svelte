@@ -15,13 +15,13 @@
           <div class="w-fit flex-1 flex-wrap break-words">
             {value}
           </div>
-          <span class="text-xs text-green-300">
+          <span class="text-xs text-primary">
             {formatDate(time)}
           </span>
         </div>
 
         <p class="flex text-sm">
-          <ChevronRight class="pt-1 text-green-300" />
+          <ChevronRight class="pt-1 text-primary" />
           <span class="whitespace-pre-line">
             {@html output}
           </span>

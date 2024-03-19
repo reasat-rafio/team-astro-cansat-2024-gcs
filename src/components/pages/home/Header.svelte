@@ -8,9 +8,11 @@
 
 <header
   class={cn(
-    'sticky top-0 z-10 flex items-center space-x-3 bg-background pb-3',
+    'sticky top-0 z-10 flex items-center space-x-3 border-b bg-white pb-3',
     $$props.class,
   )}>
   <svelte:component this={icon} />
   <H3 class="underline">{title}</H3>
 </header>
+
+<!-- pitot -->

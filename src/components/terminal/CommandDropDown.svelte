@@ -14,7 +14,7 @@
   onSelectedChange={(currCmd) => {
     if (currCmd) selectedCmd = String(currCmd?.value);
   }}>
-  <Select.Trigger class="w-[300px] ">
+  <Select.Trigger class="w-[300px] text-white">
     <Select.Value placeholder="Commands" />
   </Select.Trigger>
   <Select.Content>
