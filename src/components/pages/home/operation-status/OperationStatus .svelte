@@ -10,15 +10,7 @@
     children?: Tree[];
   };
 
-  $: ({
-    importCSV,
-    calibrateTelemetry,
-    currentTimeSetFromGPS,
-    flightEnable,
-    simulationActivate,
-    simulationEnable,
-    telemetryStarted,
-  } = $systemStepsStore);
+  $: ({ importCSV } = $systemStepsStore);
 
   let tree: Tree[] = [
     {
