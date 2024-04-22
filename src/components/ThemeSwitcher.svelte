@@ -1,5 +1,7 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select/index.js';
+  import { MoonStar } from 'lucide-svelte';
+  import Button from './ui/button/button.svelte';
 
   const modes = [
     { value: 'dark', label: 'Dark' },
@@ -8,14 +10,16 @@
 </script>
 
 <Select.Root portal={null}>
-  <Select.Trigger class="w-[180px]">
-    <Select.Value placeholder="Select a fruit" />
+  <Select.Trigger hideIcon class="w-auto border-none bg-transparent px-0">
+    <Button variant="outline">
+      <MoonStar size={18} />
+    </Button>
   </Select.Trigger>
+
   <Select.Content>
     <Select.Group>
-      <Select.Label>Fruits</Select.Label>
       {#each modes as mode}
-        <Select.Item value={mode.value} label={mode.label}>
+        <Select.Item class="px-0" value={mode.value} label={mode.label}>
           {mode.label}
         </Select.Item>
       {/each}

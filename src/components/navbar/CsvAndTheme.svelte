@@ -5,6 +5,7 @@
   import Button from '../ui/button/button.svelte';
   import { toast } from 'svelte-sonner';
   import { Download, Upload } from 'lucide-svelte';
+  import ThemeSwitcher from '../ThemeSwitcher.svelte';
 
   let importCSVEl: HTMLInputElement;
 
@@ -28,9 +29,7 @@
 </script>
 
 <div class="flex space-x-2">
-  <Button size="icon">
-    <span>Home</span>
-  </Button>
+  <!-- <ThemeSwitcher /> -->
 
   <Button
     on:click={() => importCSVEl.click()}
