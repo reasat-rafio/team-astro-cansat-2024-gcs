@@ -1,9 +1,9 @@
 <script lang="ts">
-  import LabIcon from '@/components/icons/LabIcon.svelte';
   import Header from '../Header.svelte';
   import TreeView from './ThreeView.svelte';
   import type { SystemStatus } from '@/lib/@types/app.types';
   import systemStepsStore from '@/stores/system.steps.store';
+  import { FlaskConical } from 'lucide-svelte';
 
   type Tree = {
     label: { text: string; state: SystemStatus };
@@ -75,7 +75,7 @@
 
 <section class="flex h-full p-4">
   <div class="w-full overflow-auto scrollbar-thin">
-    <Header icon={LabIcon} title="System Steps" />
+    <Header icon={FlaskConical} title="System Steps" />
 
     <ul class="m-0 mx-2 select-none">
       {#each tree as t}

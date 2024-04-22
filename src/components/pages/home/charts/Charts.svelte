@@ -1,5 +1,4 @@
 <script lang="ts">
-  import VisualIcon from '@/components/icons/VisualIcon.svelte';
   import Header from '../Header.svelte';
   import Altitude from '@/components/charts/Altitude.svelte';
   import AirPressure from '@/components/charts/AirPressure.svelte';
@@ -8,6 +7,7 @@
   import BatteryVoltage from '@/components/charts/BatteryVoltage.svelte';
   import GpsCoordinates from '@/components/charts/GpsCoordinates.svelte';
   import TiltAngle from '@/components/charts/TiltAngle.svelte';
+  import { BarChart4 } from 'lucide-svelte';
 
   let headerEl: HTMLDivElement;
   let innerWidth = 0;
@@ -23,7 +23,7 @@
 <section class="flex h-full p-4">
   <div class="w-full overflow-auto">
     <div bind:this={headerEl}>
-      <Header icon={VisualIcon} title="Charts" />
+      <Header icon={BarChart4} title="Charts" />
     </div>
     <div
       style="height: calc(100% - {headerHeight}px);"

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import TickIcon from '@/components/icons/TickIcon.svelte';
+  import { Check } from 'lucide-svelte';
   import { fade } from 'svelte/transition';
 
   export let formatKey: string;
@@ -7,7 +7,7 @@
 </script>
 
 <li class="flex items-center space-x-3">
-  <TickIcon />
+  <Check color="green" size={18} />
   <span>
     {formatKey}:{' '}
     {#key value}

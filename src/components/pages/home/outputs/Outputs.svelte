@@ -1,9 +1,8 @@
 <script lang="ts">
-  import ZapIcon from '@/components/icons/ZapIcon.svelte';
-  // import gcsStore from '@/stores/gcs.store';
   import { onMount } from 'svelte';
   import Header from '../Header.svelte';
   import Item from './Item.svelte';
+  import { Zap } from 'lucide-svelte';
 
   let _teamId = '';
   let missionTime = '';
@@ -59,7 +58,7 @@
 
 <section class="flex h-full p-4">
   <div class="w-full overflow-auto scrollbar-thin">
-    <Header icon={ZapIcon} title="Outputs" />
+    <Header icon={Zap} title="Outputs" />
 
     <div class="flex flex-col gap-y-4">
       <Item formatKey="Team Id" value={_teamId} />

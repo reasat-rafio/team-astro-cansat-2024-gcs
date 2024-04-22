@@ -1,13 +1,12 @@
 <script lang="ts">
-  import HomeIcon from '../icons/HomeIcon.svelte';
-  import VisualIcon from '../icons/VisualIcon.svelte';
   import { navbarHeight } from '@/stores/ui.store.';
-  import Csv from './CSV.svelte';
+  import CsvAndTheme from './CsvAndTheme.svelte';
   import Button from '@/components/ui/button/button.svelte';
+  import { Home, Activity } from 'lucide-svelte';
 
   const navItems = [
-    { name: 'Home', icon: HomeIcon, url: '/' },
-    { name: 'Data Visualization', icon: VisualIcon, url: '/visualization' },
+    { name: 'Home', icon: Home, url: '/' },
+    { name: 'Data Visualization', icon: Activity, url: '/visualization' },
   ];
 </script>
 
@@ -19,10 +18,11 @@
       <li>
         <Button class="flex gap-2 text-white" href={url}>
           <span>{name}</span>
-          <svelte:component this={icon} />
+          <svelte:component this={icon} size={18} />
         </Button>
       </li>
     {/each}
   </ul>
-  <Csv />
+
+  <CsvAndTheme />
 </nav>

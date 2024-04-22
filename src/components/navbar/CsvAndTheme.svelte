@@ -2,10 +2,9 @@
   import csvStore from '@/stores/csv.store';
   import systemStepsStore from '@/stores/system.steps.store';
   import Papa from 'papaparse';
-  import DownloadIcon from '../icons/DownloadIcon.svelte';
-  import ImportIcon from '../icons/ImportIcon.svelte';
   import Button from '../ui/button/button.svelte';
   import { toast } from 'svelte-sonner';
+  import { Download, Upload } from 'lucide-svelte';
 
   let importCSVEl: HTMLInputElement;
 
@@ -29,17 +28,21 @@
 </script>
 
 <div class="flex space-x-2">
+  <Button size="icon">
+    <span>Home</span>
+  </Button>
+
   <Button
     on:click={() => importCSVEl.click()}
     class="flex gap-2"
     variant="destructive">
     <span>Import CSV</span>
-    <ImportIcon />
+    <Upload size={18} />
   </Button>
 
   <Button class="flex gap-2" variant="outline">
     <span>Export CSV</span>
-    <DownloadIcon />
+    <Download size={18} />
   </Button>
 </div>
 
