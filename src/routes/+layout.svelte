@@ -1,13 +1,11 @@
 <script lang="ts">
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
-  import { toast } from 'svelte-sonner';
   import terminalStore, { cmdAction } from '@/stores/terminal.store';
   import { Toaster } from '@/components/ui/sonner';
   import { onMount } from 'svelte';
   import '../app.css';
-  import { altitudeStore } from '@/stores/sensor.data.store';
-  import type { StringData } from '@/lib/@types/app.types';
+  import mqttHandler from '@/lib/mqtt';
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -24,15 +22,9 @@
     cmdAction($terminalStore.currentCommand?.value as string);
   }
 
-  // $: if (altitudeStore) {
-  //   console.log({ $altitudeStore });
-  // }
-  // $: if ($altitudeStore?.time && $altitudeStore?.value) {
-  //   altitudeHistoryStore.update(($store) => [
-  //     ...$store,
-  //     $altitudeStore as StringData,
-  //   ]);
-  // }
+  onMount(() => {
+    mqttHandler.client.subscribe('test');
+  });
 </script>
 
 <svelte:head>

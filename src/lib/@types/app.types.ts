@@ -281,3 +281,19 @@ export type CSV_HEAD =
   | 'ROT_Z'
   | 'CMD_ECHO'
   | 'ATMOSPHERIC_PRESSURE';
+
+export type MqttPayloadTopic =
+  | 'altitude'
+  | 'air_pressure'
+  | 'temperature'
+  | 'battery_voltage'
+  | 'tilt_angle'
+  | 'air_speed'
+  | 'command_echo'
+  | 'gps_coordinates'
+  | 'longitude'
+  | 'satellites_tracked'
+  //
+  | 'acceleration'
+  | 'gyroscope'
+  | 'pressure';
