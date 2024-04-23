@@ -1,9 +1,6 @@
 import mqtt from 'mqtt';
 import type { MqttPayloadTopic } from './@types/app.types';
-// import type { Topics } from './types';
-// import payload from './payload';
 // import gcsMachine  from '../../machines/gcs-machine';
-// import type { StringData, XYZNumberData } from '$lib/@types/app.types';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -24,15 +21,7 @@ const createMqttHandler = () => {
       const decoder = new TextDecoder('utf8');
       const decodedMessage = JSON.parse(decoder.decode(message));
 
-      console.log('====================================');
-      console.log(decodedMessage);
-      console.log('====================================');
-
       switch (topic) {
-        case 'test':
-          console.log(decodedMessage);
-
-          break;
         case 'altitude':
           //   gcsService.send({
           //     type: 'UPDATE_ALTITUDE',

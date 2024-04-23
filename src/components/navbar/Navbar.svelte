@@ -11,7 +11,7 @@
 </script>
 
 <nav
-  class="sticky left-0 top-0 z-50 flex bg-white px-4 py-2"
+  class="sticky left-0 top-0 z-50 flex px-4 py-2"
   bind:clientHeight={$navbarHeight}>
   <ul class="flex flex-1 space-x-2">
     {#each navItems as { icon, name, url }}

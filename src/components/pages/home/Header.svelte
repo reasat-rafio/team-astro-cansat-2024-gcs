@@ -9,7 +9,7 @@
 
 <header
   class={cn(
-    'sticky top-0 z-10 flex items-center space-x-3 border-b bg-white pb-3',
+    'sticky top-0 z-10 flex items-center space-x-3 border-b  pb-3',
     $$props.class,
   )}>
   <svelte:component this={icon} size={20} />

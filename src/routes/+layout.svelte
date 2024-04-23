@@ -6,6 +6,7 @@
   import { onMount } from 'svelte';
   import '../app.css';
   import mqttHandler from '@/lib/mqtt';
+  import { theme } from '@/stores/ui.store.';
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -25,6 +26,12 @@
   onMount(() => {
     mqttHandler.client.subscribe('test');
   });
+
+  $: if ($theme === 'dark') {
+    document.body.classList.add('dark');
+  } else if ($theme === 'light') {
+    document.body.classList.remove('dark');
+  }
 </script>
 
 <svelte:head>

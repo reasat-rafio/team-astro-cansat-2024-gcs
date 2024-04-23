@@ -4,6 +4,7 @@
   import type { SystemStatus } from '@/lib/@types/app.types';
   import systemStepsStore from '@/stores/system.steps.store';
   import { FlaskConical } from 'lucide-svelte';
+  import { ScrollArea } from '@/components/ui/scroll-area/index.js';
 
   type Tree = {
     label: { text: string; state: SystemStatus };
@@ -73,14 +74,12 @@
   ];
 </script>
 
-<section class="flex h-full p-4">
-  <div class="w-full overflow-auto scrollbar-thin">
-    <Header icon={FlaskConical} title="System Steps" />
+<ScrollArea class="h-full w-full p-4">
+  <Header icon={FlaskConical} title="System Steps" />
 
-    <ul class="m-0 mx-2 select-none">
-      {#each tree as t}
-        <TreeView tree={t} />
-      {/each}
-    </ul>
-  </div>
-</section>
+  <ul class="mt-5 select-none">
+    {#each tree as t}
+      <TreeView tree={t} />
+    {/each}
+  </ul>
+</ScrollArea>

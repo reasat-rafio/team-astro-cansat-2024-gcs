@@ -29,7 +29,7 @@
 </script>
 
 <div class="flex space-x-2">
-  <!-- <ThemeSwitcher /> -->
+  <ThemeSwitcher />
 
   <Button
     on:click={() => importCSVEl.click()}

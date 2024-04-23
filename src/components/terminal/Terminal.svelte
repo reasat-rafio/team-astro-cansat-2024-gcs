@@ -48,7 +48,7 @@
   {#if $terminalStore.terminalUiState === 'maximize'}
     <div
       transition:slide
-      class="h-[450px] space-y-2 overflow-y-auto bg-white/90 p-2 backdrop-blur-md scrollbar-thin">
+      class="h-[450px] space-y-2 overflow-y-auto p-2 backdrop-blur-md scrollbar-thin">
       <History />
 
       <Input bind:inputEl bind:activeSuggestedCommand />

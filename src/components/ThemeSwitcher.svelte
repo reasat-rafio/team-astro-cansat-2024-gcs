@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select/index.js';
+  import { theme } from '@/stores/ui.store.';
   import { MoonStar } from 'lucide-svelte';
-  import Button from './ui/button/button.svelte';
 
   const modes = [
     { value: 'dark', label: 'Dark' },
@@ -9,17 +9,27 @@
   ];
 </script>
 
-<Select.Root portal={null}>
-  <Select.Trigger hideIcon class="w-auto border-none bg-transparent px-0">
-    <Button variant="outline">
+<Select.Root
+  selected={{ label: $theme.toLocaleLowerCase(), value: $theme }}
+  onSelectedChange={(v) => {
+    if (v) theme.set(v.value);
+  }}>
+  <Select.Trigger
+    hideIcon
+    class="flex w-16 items-center justify-center  bg-transparent ">
+    <button>
       <MoonStar size={18} />
-    </Button>
+    </button>
   </Select.Trigger>
 
   <Select.Content>
     <Select.Group>
       {#each modes as mode}
-        <Select.Item class="px-0" value={mode.value} label={mode.label}>
+        <Select.Item
+          hideIcon
+          class="m-0 px-0"
+          value={mode.value}
+          label={mode.label}>
           {mode.label}
         </Select.Item>
       {/each}

@@ -4,12 +4,17 @@ import { fontFamily } from 'tailwindcss/defaultTheme';
 const config = {
   darkMode: ['class'],
   content: ['./src/**/*.{html,js,svelte,ts}'],
-
   safelist: ['dark'],
   theme: {
     container: {
       center: true,
-      padding: '2rem',
+      padding: {
+        DEFAULT: '1rem',
+        sm: '2rem',
+        lg: '4rem',
+        xl: '5rem',
+        '2xl': '6rem',
+      },
       screens: {
         '2xl': '1400px',
       },
@@ -57,6 +62,7 @@ const config = {
       },
       fontFamily: {
         sans: [...fontFamily.sans],
+        inter: ['Inter', 'sans-serif'],
       },
     },
   },
