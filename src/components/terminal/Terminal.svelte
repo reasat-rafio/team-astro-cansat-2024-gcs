@@ -1,11 +1,11 @@
 <script lang="ts">
   import { cn } from '@/lib/cn';
+  import terminalStore from '@/stores/terminal.store';
+  import { Maximize, Minus, Terminal } from 'lucide-svelte';
   import { slide } from 'svelte/transition';
+  import CommandDropDown from './CommandDropDown.svelte';
   import History from './History.svelte';
   import Input from './Input.svelte';
-  import terminalStore from '@/stores/terminal.store';
-  import CommandDropDown from './CommandDropDown.svelte';
-  import { Maximize, Minus, Terminal } from 'lucide-svelte';
 
   let inputEl: HTMLSpanElement;
   let activeSuggestedCommand: string | null = null;
