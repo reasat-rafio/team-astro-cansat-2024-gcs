@@ -20,7 +20,7 @@
   tabindex="0"
   on:click={() => inputEl.focus()}
   class={cn(
-    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md border border-gray-900 bg-secondary transition-all duration-300',
+    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md border border-primary bg-popover transition-all duration-300',
     {
       'max-w-lg': $terminalStore.terminalUiState === 'minimize',
       'max-w-4xl': $terminalStore.terminalUiState === 'maximize',
@@ -28,13 +28,13 @@
   )}>
   <button
     on:click={() => terminalStore.setUiState('maximize')}
-    class="flex w-full items-center justify-between bg-gray-900 p-1">
+    class="flex w-full items-center justify-between bg-secondary p-1">
     <div class="flex items-center gap-2">
       <TerminalIcon />
       <CommandDropDown />
     </div>
 
-    <div class="flex gap-4 text-white">
+    <div class="flex gap-4 text-popover-foreground">
       <button
         on:click|stopPropagation={() => terminalStore.setUiState('minimize')}>
         <MinimizeIcon />

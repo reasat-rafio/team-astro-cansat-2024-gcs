@@ -4,7 +4,7 @@
   import { Select as SelectPrimitive } from 'bits-ui';
 
   type $$Props = SelectPrimitive.ItemProps & {
-    hideIcon: boolean;
+    hideIcon?: boolean;
   };
   type $$Events = SelectPrimitive.ItemEvents;
 

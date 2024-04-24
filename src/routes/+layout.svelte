@@ -24,16 +24,12 @@
   }
 
   onMount(() => {
-    mqttHandler.client.subscribe('test');
+    mqttHandler.client.subscribe('altitude');
   });
 
   $: if ($uiStore.theme === 'dark') {
-    console.log('add dark');
-
     document.documentElement.classList.add('dark');
   } else if ($uiStore.theme === 'light') {
-    console.log('remove dark');
-
     document.documentElement.classList.remove('dark');
   }
 </script>
@@ -43,7 +39,7 @@
   <title>CANSAT GCS</title>
 </svelte:head>
 
-<Toaster richColors closeButton />
+<Toaster richColors closeButton position="bottom-left" />
 <Navbar />
 <slot />
 <Terminal />

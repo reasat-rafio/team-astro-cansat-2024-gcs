@@ -1,67 +1,84 @@
 import mqtt from 'mqtt';
 import type { MqttPayloadTopic } from './@types/app.types';
-// import gcsMachine  from '../../machines/gcs-machine';
+import {
+  airPressureStore,
+  airSpeedStore,
+  altitudeStore,
+  batteryVoltageStore,
+  temperatureStore,
+  tiltAngleStore,
+  gpsCoordinatesStore,
+  gyroscopeStore,
+} from '@/stores/sensor.data.store';
+import { toast } from 'svelte-sonner';
 
 // MQTT handler
 const createMqttHandler = () => {
   const mqttClient = mqtt.connect('ws://127.0.0.1:8080');
 
   mqttClient.on('error', (err) => {
-    console.log(`ERROR: ${err}`);
+    toast.error(`Error: ${err}`);
     mqttClient.end();
   });
 
   mqttClient.on('connect', () => {
-    console.log(`mqtt client connected`);
+    toast.success(`MQTT client connected`);
   });
 
   mqttClient.on(
     'message',
     async (topic: MqttPayloadTopic, message: BufferSource) => {
       const decoder = new TextDecoder('utf8');
-      const decodedMessage = JSON.parse(decoder.decode(message));
+      const decodedMessage = JSON.parse(decoder.decode(message)) as {
+        value: number;
+      };
 
       switch (topic) {
         case 'altitude':
-          //   gcsService.send({
-          //     type: 'UPDATE_ALTITUDE',
-          //     altitude: decodedMessage as StringData,
-          //   });
+          altitudeStore.updateAltitude({
+            time: new Date(),
+            value: String(decodedMessage.value),
+          });
+
           break;
 
         case 'air_pressure':
-          //   gcsService.send({
-          //     type: 'UPDATE_AIR_PRESSURE',
-          //     airPressure: decodedMessage as StringData,
-          //   });
+          airPressureStore.updateAirPressure({
+            time: '2021-09-01T00:00:00Z',
+            value: String(decodedMessage.value),
+          });
+
           break;
 
         case 'temperature':
-          //   gcsService.send({
-          //     type: 'UPDATE_TEMPERATURE',
-          //     temperature: decodedMessage as StringData,
-          //   });
+          temperatureStore.updateTemperature({
+            time: '',
+            value: String(decodedMessage.value),
+          });
+
           break;
 
         case 'battery_voltage':
-          //   gcsService.send({
-          //     type: 'UPDATE_BATTERY_VOLTAGE',
-          //     batteryVoltage: decodedMessage as StringData,
-          //   });
+          batteryVoltageStore.updateBatteryVoltage({
+            time: '',
+            value: String(decodedMessage.value),
+          });
           break;
 
         case 'tilt_angle':
-          //   gcsService.send({
-          //     type: 'UPDATE_TILT_ANGLE',
-          //     tiltAngle: decodedMessage as StringData,
-          //   });
+          tiltAngleStore.updateTiltAngle({
+            time: '',
+            value: { x: '0', y: '0', z: '0' },
+          });
+
           break;
 
         case 'air_speed':
-          //   gcsService.send({
-          //     type: 'UPDATE_AIR_SPEED',
-          //     airSpeed: decodedMessage as StringData,
-          //   });
+          airSpeedStore.updateAirSpeed({
+            time: '',
+            value: String(decodedMessage.value),
+          });
+
           break;
 
         case 'command_echo':
@@ -72,10 +89,11 @@ const createMqttHandler = () => {
           break;
 
         case 'gps_coordinates':
-          //   gcsService.send({
-          //     type: 'UPDATE_GPS_COORDINATES',
-          //     gpsCoordinates: decodedMessage as StringData,
-          //   });
+          gpsCoordinatesStore.updateGpsCoordinates({
+            time: '',
+            value: { x: '0', y: '0', z: '0' },
+          });
+
           break;
 
         case 'longitude':
@@ -93,10 +111,11 @@ const createMqttHandler = () => {
           break;
 
         case 'gyroscope':
-          //   gcsService.send({
-          //     type: 'UPDATE_GYROSCOPE',
-          //     gyroscope: decodedMessage as XYZNumberData,
-          //   });
+          gyroscopeStore.updateGyroscope({
+            time: '',
+            value: { x: '0', y: '0', z: '0' },
+          });
+
           break;
 
         default:
@@ -106,7 +125,7 @@ const createMqttHandler = () => {
   );
 
   mqttClient.on('close', () => {
-    console.log(`mqtt client disconnected`);
+    toast.info(`MQTT client disconnected`);
   });
 
   return {
