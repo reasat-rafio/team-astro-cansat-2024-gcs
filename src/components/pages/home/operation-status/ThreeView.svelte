@@ -3,6 +3,7 @@
   import { gsap } from 'gsap';
   import type { SystemStatus } from '@/lib/@types/app.types';
   import { Check, CircleDashed, CircleSlash, Flame } from 'lucide-svelte';
+  import { cn } from '@/utils';
 
   type Tree = {
     label: { text: string; state: SystemStatus };
@@ -30,10 +31,10 @@
       });
     } else {
       gsap.to(path1, {
-        attr: { d: 'M 8 2 L 8 14', stroke: 'hsl(0, 0%, 100%)' },
+        attr: { d: 'M 8 2 L 8 14', stroke: '#6a48f2' },
       });
       gsap.to(path2, {
-        attr: { d: 'M 2 8 L 14 8', stroke: 'hsl(0, 0%, 100%)' },
+        attr: { d: 'M 2 8 L 14 8', stroke: '#6a48f2' },
       });
     }
   }
@@ -42,7 +43,10 @@
 <li>
   {#if children}
     <button
-      class="group flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-[#6a48f2]"
+      class={cn(
+        'group flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-[#6a48f2]',
+        expanded ? '' : '',
+      )}
       on:click={toggleExpansion}>
       <span class="flex cursor-pointer items-center gap-x-1">
         <svg width="14" height="14" viewBox="0 0 16 16">
