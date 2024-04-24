@@ -28,8 +28,12 @@
   });
 
   $: if ($uiStore.theme === 'dark') {
+    console.log('add dark');
+
     document.documentElement.classList.add('dark');
   } else if ($uiStore.theme === 'light') {
+    console.log('remove dark');
+
     document.documentElement.classList.remove('dark');
   }
 </script>

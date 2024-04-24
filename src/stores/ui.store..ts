@@ -8,7 +8,7 @@ function createUiStore() {
     ? (localStorage.getItem('theme') as Theme) ?? 'light'
     : 'light';
 
-  const { subscribe, update } = writable<{
+  const { subscribe, update, set } = writable<{
     navbarHeight: number;
     theme: Theme;
   }>({
@@ -17,10 +17,8 @@ function createUiStore() {
   });
 
   function setTheme(theme: Theme) {
+    localStorage.setItem('theme', theme);
     update((state) => ({ ...state, theme }));
-    if (browser) {
-      localStorage.setItem('theme', theme);
-    }
   }
 
   function setNavbarHeight(height: number) {
@@ -28,6 +26,8 @@ function createUiStore() {
   }
 
   return {
+    set,
+    update,
     subscribe,
     setTheme,
     setNavbarHeight,

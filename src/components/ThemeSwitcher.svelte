@@ -1,6 +1,6 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select/index.js';
-  import { theme } from '@/stores/ui.store.';
+  import { uiStore } from '@/stores/ui.store.';
   import { MoonStar } from 'lucide-svelte';
 
   const modes = [
@@ -10,9 +10,12 @@
 </script>
 
 <Select.Root
-  selected={{ label: $theme.toLocaleLowerCase(), value: $theme }}
+  selected={{
+    label: $uiStore.theme.toLocaleLowerCase(),
+    value: $uiStore.theme,
+  }}
   onSelectedChange={(v) => {
-    if (v) theme.set(v.value);
+    if (v) uiStore.setTheme(v.value);
   }}>
   <Select.Trigger
     hideIcon
