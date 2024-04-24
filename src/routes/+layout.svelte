@@ -6,7 +6,7 @@
   import { onMount } from 'svelte';
   import '../app.css';
   import mqttHandler from '@/lib/mqtt';
-  import { theme } from '@/stores/ui.store.';
+  import { uiStore } from '@/stores/ui.store.';
 
   onMount(() => {
     function handleBeforeUnload(e: BeforeUnloadEvent) {
@@ -27,10 +27,10 @@
     mqttHandler.client.subscribe('test');
   });
 
-  $: if ($theme === 'dark') {
-    document.body.classList.add('dark');
-  } else if ($theme === 'light') {
-    document.body.classList.remove('dark');
+  $: if ($uiStore.theme === 'dark') {
+    document.documentElement.classList.add('dark');
+  } else if ($uiStore.theme === 'light') {
+    document.documentElement.classList.remove('dark');
   }
 </script>
 

@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { navbarHeight } from '@/stores/ui.store.';
+  import { uiStore } from '@/stores/ui.store.';
   import CsvAndTheme from './CsvAndTheme.svelte';
   import Button from '@/components/ui/button/button.svelte';
   import { Home, Activity } from 'lucide-svelte';
@@ -12,7 +12,7 @@
 
 <nav
   class="sticky left-0 top-0 z-50 flex px-4 py-2"
-  bind:clientHeight={$navbarHeight}>
+  bind:clientHeight={$uiStore.navbarHeight}>
   <ul class="flex flex-1 space-x-2">
     {#each navItems as { icon, name, url }}
       <li>
