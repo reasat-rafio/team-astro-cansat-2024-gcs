@@ -19,7 +19,14 @@
   </Select.Trigger>
   <Select.Content>
     {#each Object.keys(validCommands) as cmd}
-      <Select.Item class="cursor-pointer" value={cmd}>{cmd}</Select.Item>
+      <Select.Item
+        on:click={(currCmd) => {
+          if (currCmd) selectedCmd = String(currCmd);
+        }}
+        class="cursor-pointer"
+        value={cmd}>
+        {cmd}
+      </Select.Item>
     {/each}
   </Select.Content>
 </Select.Root>

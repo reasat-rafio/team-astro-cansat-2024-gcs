@@ -1,13 +1,11 @@
 <script lang="ts">
   import { cn } from '@/lib/cn';
   import { slide } from 'svelte/transition';
-  import ExpendIcon from '../icons/ExpendIcon.svelte';
-  import MinimizeIcon from '../icons/MinimizeIcon.svelte';
-  import TerminalIcon from '../icons/TerminalIcon.svelte';
   import History from './History.svelte';
   import Input from './Input.svelte';
   import terminalStore from '@/stores/terminal.store';
   import CommandDropDown from './CommandDropDown.svelte';
+  import { Maximize, Minus, Terminal } from 'lucide-svelte';
 
   let inputEl: HTMLSpanElement;
   let activeSuggestedCommand: string | null = null;
@@ -30,18 +28,18 @@
     on:click={() => terminalStore.setUiState('maximize')}
     class="flex w-full items-center justify-between bg-secondary p-1">
     <div class="flex items-center gap-2">
-      <TerminalIcon />
+      <Terminal size={20} />
       <CommandDropDown />
     </div>
 
     <div class="flex gap-4 text-popover-foreground">
       <button
         on:click|stopPropagation={() => terminalStore.setUiState('minimize')}>
-        <MinimizeIcon />
+        <Minus size={18} />
       </button>
       <button
         on:click|stopPropagation={() => terminalStore.setUiState('maximize')}>
-        <ExpendIcon />
+        <Maximize size={18} />
       </button>
     </div>
   </button>
