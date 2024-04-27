@@ -38,6 +38,40 @@ export interface MachineContext {
 }
 
 export interface SystemSteps {
+  groundMode: {
+    powerOnIdle: SystemStatus;
+    debuggingSystemStarted: SystemStatus;
+    communicationModuleOn: SystemStatus;
+  };
+  flightReadyMode: {
+    activateSensorAndSystemCalibrationStart: SystemStatus;
+  };
+  dataTransmission: {
+    telemetry: SystemStatus;
+  };
+  simulationMode: {
+    gettingPressureDataFromCSV: SystemStatus;
+    calculatingAltitudeAndSpeed: SystemStatus;
+  };
+  onAirMode: {
+    checkingAltitude: SystemStatus;
+    takingSensorData: SystemStatus;
+    takingCamera1Steam: SystemStatus;
+    saveToSDCard: SystemStatus;
+    transmitToGCS: SystemStatus;
+  };
+  deployment: {
+    payloadDeployed: SystemStatus;
+    bonusCameraStarted: SystemStatus;
+    heatShieldMechanismRunning: SystemStatus;
+  };
+
+  recoveryMode: {
+    recoveryMechanismRunning: SystemStatus;
+    GPSLocationPinning: SystemStatus;
+    deviceFound: SystemStatus;
+  };
+
   importCSV: SystemStatus;
   telemetryStarted: SystemStatus;
   calibrateTelemetry: SystemStatus;

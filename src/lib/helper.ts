@@ -96,3 +96,21 @@ export const calculatedAltitude = (atmosphericPressure: number) =>
     seaLevelTemperature,
     temperatureLapseRate,
   );
+
+type State = 'notStarted' | 'inProgress' | 'done' | 'error';
+export function determineParentState(childStates: State[]): State {
+  let parentState: State = 'notStarted';
+
+  for (const state of childStates) {
+    if (state === 'error') {
+      parentState = 'error';
+      break;
+    } else if (state === 'inProgress') {
+      parentState = 'inProgress';
+    } else if (state === 'done') {
+      parentState = 'done';
+    }
+  }
+
+  return parentState;
+}

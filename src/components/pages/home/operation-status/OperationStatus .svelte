@@ -5,70 +5,184 @@
   import systemStepsStore from '@/stores/system.steps.store';
   import { FlaskConical } from 'lucide-svelte';
   import { ScrollArea } from '@/components/ui/scroll-area/index.js';
+  import { determineParentState } from '@/lib/helper';
 
   type Tree = {
     label: { text: string; state: SystemStatus };
     children?: Tree[];
   };
 
-  $: ({ importCSV } = $systemStepsStore);
+  $: ({
+    groundMode,
+    flightReadyMode,
+    dataTransmission,
+    simulationMode,
+    onAirMode,
+    deployment,
+    recoveryMode,
+  } = $systemStepsStore);
 
   let tree: Tree[] = [
     {
-      label: { text: 'Ground Mode', state: importCSV },
+      label: {
+        text: 'Ground Mode',
+        state: determineParentState([
+          groundMode?.powerOnIdle,
+          groundMode?.debuggingSystemStarted,
+          groundMode?.communicationModuleOn,
+        ]),
+      },
       children: [
-        { label: { text: 'Power On, Idle', state: importCSV } },
-        { label: { text: 'Debugging System Started', state: importCSV } },
-        { label: { text: 'Communication Module On', state: importCSV } },
+        { label: { text: 'Power On, Idle', state: groundMode?.powerOnIdle } },
+        {
+          label: {
+            text: 'Debugging System Started',
+            state: groundMode?.debuggingSystemStarted,
+          },
+        },
+        {
+          label: {
+            text: 'Communication Module On',
+            state: groundMode?.communicationModuleOn,
+          },
+        },
       ],
     },
     {
-      label: { text: 'Flight Ready Mode', state: importCSV },
+      label: {
+        text: 'Flight Ready Mode',
+        state: determineParentState([
+          flightReadyMode?.activateSensorAndSystemCalibrationStart,
+        ]),
+      },
       children: [
         {
           label: {
             text: 'Activate Sensors and system Calibration start',
-            state: importCSV,
+            state: flightReadyMode?.activateSensorAndSystemCalibrationStart,
           },
         },
       ],
     },
 
     {
-      label: { text: 'Data Transmission', state: importCSV },
-      children: [{ label: { text: 'Telemetry', state: importCSV } }],
-    },
-    {
-      label: { text: 'Simulation Mode', state: importCSV },
+      label: {
+        text: 'Data Transmission',
+        state: determineParentState([dataTransmission?.telemetry]),
+      },
       children: [
-        { label: { text: 'Getting Pressure Data From CSV', state: importCSV } },
-        { label: { text: 'Calculating Altitude And Speed', state: importCSV } },
+        { label: { text: 'Telemetry', state: dataTransmission?.telemetry } },
       ],
     },
     {
-      label: { text: 'On Air Mode', state: importCSV },
+      label: {
+        text: 'Simulation Mode',
+        state: determineParentState([
+          simulationMode?.gettingPressureDataFromCSV,
+          simulationMode?.calculatingAltitudeAndSpeed,
+        ]),
+      },
       children: [
-        { label: { text: 'Checking Altitude', state: importCSV } },
-        { label: { text: 'Taking Sensor Data', state: importCSV } },
-        { label: { text: 'Taking Camera 1 Stream', state: importCSV } },
-        { label: { text: 'Save To SD Card', state: importCSV } },
-        { label: { text: 'Transmit To GCS', state: importCSV } },
+        {
+          label: {
+            text: 'Getting Pressure Data From CSV',
+            state: simulationMode?.gettingPressureDataFromCSV,
+          },
+        },
+        {
+          label: {
+            text: 'Calculating Altitude And Speed',
+            state: simulationMode?.calculatingAltitudeAndSpeed,
+          },
+        },
       ],
     },
     {
-      label: { text: 'Deployment', state: importCSV },
+      label: {
+        text: 'On Air Mode',
+        state: determineParentState([
+          onAirMode?.checkingAltitude,
+          onAirMode?.takingCamera1Steam,
+          onAirMode?.saveToSDCard,
+          onAirMode?.transmitToGCS,
+        ]),
+      },
       children: [
-        { label: { text: 'Payload Deployment', state: importCSV } },
-        { label: { text: 'Bonus Camera Started', state: importCSV } },
-        { label: { text: 'Heat Shield Mechanism Running', state: importCSV } },
+        {
+          label: {
+            text: 'Checking Altitude',
+            state: onAirMode?.checkingAltitude,
+          },
+        },
+        {
+          label: {
+            text: 'Taking Sensor Data',
+            state: onAirMode?.takingCamera1Steam,
+          },
+        },
+        {
+          label: {
+            text: 'Taking Camera 1 Stream',
+            state: onAirMode?.takingCamera1Steam,
+          },
+        },
+        { label: { text: 'Save To SD Card', state: onAirMode?.saveToSDCard } },
+        { label: { text: 'Transmit To GCS', state: onAirMode?.transmitToGCS } },
       ],
     },
     {
-      label: { text: 'Recovery Mode', state: importCSV },
+      label: {
+        text: 'Deployment',
+        state: determineParentState([
+          deployment?.payloadDeployed,
+          deployment?.bonusCameraStarted,
+          deployment?.heatShieldMechanismRunning,
+        ]),
+      },
       children: [
-        { label: { text: 'Recovery Mechanism Running', state: importCSV } },
-        { label: { text: 'GPS Location Pinning', state: importCSV } },
-        { label: { text: 'Device Found', state: importCSV } },
+        {
+          label: {
+            text: 'Payload Deployment',
+            state: deployment?.payloadDeployed,
+          },
+        },
+        {
+          label: {
+            text: 'Bonus Camera Started',
+            state: deployment?.bonusCameraStarted,
+          },
+        },
+        {
+          label: {
+            text: 'Heat Shield Mechanism Running',
+            state: deployment?.heatShieldMechanismRunning,
+          },
+        },
+      ],
+    },
+    {
+      label: {
+        text: 'Recovery Mode',
+        state: determineParentState([
+          recoveryMode?.recoveryMechanismRunning,
+          recoveryMode?.GPSLocationPinning,
+          recoveryMode?.deviceFound,
+        ]),
+      },
+      children: [
+        {
+          label: {
+            text: 'Recovery Mechanism Running',
+            state: recoveryMode?.recoveryMechanismRunning,
+          },
+        },
+        {
+          label: {
+            text: 'GPS Location Pinning',
+            state: recoveryMode?.GPSLocationPinning,
+          },
+        },
+        { label: { text: 'Device Found', state: recoveryMode?.deviceFound } },
       ],
     },
   ];
