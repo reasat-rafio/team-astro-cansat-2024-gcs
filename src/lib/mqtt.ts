@@ -33,6 +33,8 @@ const createMqttHandler = () => {
         value: number;
       };
 
+      console.log({ decodedMessage });
+
       switch (topic) {
         case 'altitude':
           altitudeStore.updateAltitude({

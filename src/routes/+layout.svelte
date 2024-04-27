@@ -24,7 +24,8 @@
   }
 
   onMount(() => {
-    mqttHandler.client.subscribe('altitude');
+    mqttHandler.client.subscribe('test');
+    // mqttHandler.client.subscribe('altitude');
   });
 
   $: if ($uiStore.theme === 'dark') {

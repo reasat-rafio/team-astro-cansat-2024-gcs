@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select/index.js';
   import { uiStore } from '@/stores/ui.store.';
-  import { MoonStar } from 'lucide-svelte';
+  import { MoonStar, Sun } from 'lucide-svelte';
 
   const modes = [
     { value: 'dark', label: 'Dark' },
@@ -21,7 +21,11 @@
     hideIcon
     class="flex w-16 items-center justify-center  bg-transparent ">
     <button>
-      <MoonStar size={18} />
+      {#if $uiStore.theme === 'dark'}
+        <MoonStar size={18} />
+      {:else}
+        <Sun size={18} />
+      {/if}
     </button>
   </Select.Trigger>
 
