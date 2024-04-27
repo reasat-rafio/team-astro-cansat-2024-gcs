@@ -1,46 +1,25 @@
 <script lang="ts">
-  import * as Select from '@/components/ui/select/index.js';
-  import { uiStore } from '@/stores/ui.store.';
   import { MoonStar, Sun } from 'lucide-svelte';
-
-  const modes = [
-    { value: 'dark', label: 'Dark' },
-    { value: 'light', label: 'Light' },
-  ];
+  import * as DropdownMenu from '@/components/ui/dropdown-menu/index.js';
+  import Button from './ui/button/button.svelte';
+  import { resetMode, setMode } from 'mode-watcher';
 </script>
 
-<Select.Root
-  selected={{
-    label: $uiStore.theme.toLocaleLowerCase(),
-    value: $uiStore.theme,
-  }}
-  onSelectedChange={(v) => {
-    if (v) uiStore.setTheme(v.value);
-  }}>
-  <Select.Trigger
-    hideIcon
-    class="flex w-16 items-center justify-center  bg-transparent ">
-    <button>
-      {#if $uiStore.theme === 'dark'}
-        <MoonStar size={18} />
-      {:else}
-        <Sun size={18} />
-      {/if}
-    </button>
-  </Select.Trigger>
-
-  <Select.Content>
-    <Select.Group>
-      {#each modes as mode}
-        <Select.Item
-          hideIcon
-          class="m-0 px-0"
-          value={mode.value}
-          label={mode.label}>
-          {mode.label}
-        </Select.Item>
-      {/each}
-    </Select.Group>
-  </Select.Content>
-  <Select.Input name="favoriteFruit" />
-</Select.Root>
+<DropdownMenu.Root>
+  <DropdownMenu.Trigger asChild let:builder>
+    <Button builders={[builder]} variant="outline" size="icon">
+      <Sun
+        class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0" />
+      <MoonStar
+        class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100" />
+      <span class="sr-only">Toggle theme</span>
+    </Button>
+  </DropdownMenu.Trigger>
+  <DropdownMenu.Content align="end">
+    <DropdownMenu.Item on:click={() => setMode('light')}>
+      Light
+    </DropdownMenu.Item>
+    <DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
+    <DropdownMenu.Item on:click={() => resetMode()}>System</DropdownMenu.Item>
+  </DropdownMenu.Content>
+</DropdownMenu.Root>

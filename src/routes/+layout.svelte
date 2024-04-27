@@ -25,14 +25,7 @@
 
   onMount(() => {
     mqttHandler.client.subscribe('test');
-    // mqttHandler.client.subscribe('altitude');
   });
-
-  $: if ($uiStore.theme === 'dark') {
-    document.documentElement.classList.add('dark');
-  } else if ($uiStore.theme === 'light') {
-    document.documentElement.classList.remove('dark');
-  }
 </script>
 
 <svelte:head>
@@ -40,7 +33,12 @@
   <title>CANSAT GCS</title>
 </svelte:head>
 
-<Toaster richColors closeButton position="bottom-left" />
+<Toaster
+  class={!$uiStore.showNotification ? 'hidden' : ''}
+  richColors
+  closeButton
+  position="bottom-left" />
+
 <Navbar />
 <slot />
 <Terminal />

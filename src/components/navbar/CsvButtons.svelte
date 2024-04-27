@@ -5,7 +5,6 @@
   import Button from '../ui/button/button.svelte';
   import { toast } from 'svelte-sonner';
   import { Download, Upload } from 'lucide-svelte';
-  import ThemeSwitcher from '../ThemeSwitcher.svelte';
 
   let importCSVEl: HTMLInputElement;
 
@@ -28,22 +27,18 @@
   }
 </script>
 
-<div class="flex space-x-2">
-  <ThemeSwitcher />
+<Button
+  on:click={() => importCSVEl.click()}
+  class="flex gap-2"
+  variant="destructive">
+  <span>Import CSV</span>
+  <Upload size={18} />
+</Button>
 
-  <Button
-    on:click={() => importCSVEl.click()}
-    class="flex gap-2"
-    variant="destructive">
-    <span>Import CSV</span>
-    <Upload size={18} />
-  </Button>
-
-  <Button class="flex gap-2" variant="outline">
-    <span>Export CSV</span>
-    <Download size={18} />
-  </Button>
-</div>
+<Button class="flex gap-2" variant="outline">
+  <span>Export CSV</span>
+  <Download size={18} />
+</Button>
 
 <input
   class="hidden"

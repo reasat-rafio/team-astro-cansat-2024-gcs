@@ -3,17 +3,21 @@ import { writable } from 'svelte/store';
 
 type Theme = 'light' | 'dark';
 
-function createUiStore() {
-  const initialTheme = browser
-    ? (localStorage.getItem('theme') as Theme) ?? 'light'
-    : 'light';
+interface UIStore {
+  navbarHeight: number;
+  theme: Theme;
+  showNotification: boolean;
+}
 
-  const { subscribe, update, set } = writable<{
-    navbarHeight: number;
-    theme: Theme;
-  }>({
+const initialTheme = browser
+  ? (localStorage.getItem('theme') as Theme) ?? 'light'
+  : 'light';
+
+function createUiStore() {
+  const { subscribe, update, set } = writable<UIStore>({
     navbarHeight: 0,
     theme: initialTheme,
+    showNotification: true,
   });
 
   function setTheme(theme: Theme) {

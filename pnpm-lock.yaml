@@ -29,9 +29,6 @@ importers:
       drizzle-orm:
         specifier: ^0.30.2
         version: 0.30.2(@types/better-sqlite3@7.6.9)(better-sqlite3@9.4.3)
-      mode-watcher:
-        specifier: ^0.3.0
-        version: 0.3.0(svelte@4.2.12)
       mqtt:
         specifier: ^4.0.1
         version: 4.3.8
@@ -96,6 +93,9 @@ importers:
       lucide-svelte:
         specifier: ^0.358.0
         version: 0.358.0(svelte@4.2.12)
+      mode-watcher:
+        specifier: ^0.3.0
+        version: 0.3.0(svelte@4.2.12)
       papaparse:
         specifier: ^5.4.1
         version: 5.4.1
