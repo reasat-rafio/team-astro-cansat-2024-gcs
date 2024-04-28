@@ -13,7 +13,7 @@
     {#key value}
       <span
         in:fade={{ duration: 150 }}
-        class="font-semibold capitalize text-white">
+        class="font-semibold capitalize text-primary">
         {value}
       </span>
     {/key}

@@ -2,7 +2,7 @@
   import { uiStore } from '@/stores/ui.store.';
   import CsvButtons from './CsvButtons.svelte';
   import Button from '@/components/ui/button/button.svelte';
-  import { Home, Activity, MenuIcon } from 'lucide-svelte';
+  import { Home, Activity } from 'lucide-svelte';
   import ThemeSwitcher from '../ThemeSwitcher.svelte';
   import Sidebar from './Sidebar.svelte';
 

@@ -62,77 +62,84 @@
             state: flightReadyMode?.activateSensorAndSystemCalibrationStart,
           },
         },
+        {
+          label: {
+            text: 'Telemetry Started',
+            state: dataTransmission?.telemetry,
+          },
+        },
+      ],
+    },
+
+    // {
+    //   label: {
+    //     text: 'Simulation Mode',
+    //     state: determineParentState([
+    //       simulationMode?.gettingPressureDataFromCSV,
+    //       simulationMode?.calculatingAltitudeAndSpeed,
+    //     ]),
+    //   },
+    //   children: [
+    //     {
+    //       label: {
+    //         text: 'Getting Pressure Data From CSV',
+    //         state: simulationMode?.gettingPressureDataFromCSV,
+    //       },
+    //     },
+    //     {
+    //       label: {
+    //         text: 'Calculating Altitude And Speed',
+    //         state: simulationMode?.calculatingAltitudeAndSpeed,
+    //       },
+    //     },
+    //   ],
+    // },
+
+    {
+      label: {
+        text: 'Launch Mode',
+        state: 'error',
+      },
+      children: [
+        {
+          label: {
+            text: 'Sensor Calibration',
+            state: 'notStarted',
+          },
+        },
+        {
+          label: {
+            text: 'Set Mission Time',
+            state: 'notStarted',
+          },
+        },
+        {
+          label: {
+            text: 'Launch',
+            state: 'notStarted',
+          },
+        },
       ],
     },
 
     {
       label: {
-        text: 'Data Transmission',
-        state: determineParentState([dataTransmission?.telemetry]),
-      },
-      children: [
-        { label: { text: 'Telemetry', state: dataTransmission?.telemetry } },
-      ],
-    },
-    {
-      label: {
-        text: 'Simulation Mode',
-        state: determineParentState([
-          simulationMode?.gettingPressureDataFromCSV,
-          simulationMode?.calculatingAltitudeAndSpeed,
-        ]),
+        text: 'Ascent Mode',
+        state: 'error',
       },
       children: [
         {
           label: {
-            text: 'Getting Pressure Data From CSV',
-            state: simulationMode?.gettingPressureDataFromCSV,
-          },
-        },
-        {
-          label: {
-            text: 'Calculating Altitude And Speed',
-            state: simulationMode?.calculatingAltitudeAndSpeed,
+            text: 'Ejection delay',
+            state: 'notStarted',
           },
         },
       ],
     },
+
     {
       label: {
-        text: 'On Air Mode',
-        state: determineParentState([
-          onAirMode?.checkingAltitude,
-          onAirMode?.takingCamera1Steam,
-          onAirMode?.saveToSDCard,
-          onAirMode?.transmitToGCS,
-        ]),
-      },
-      children: [
-        {
-          label: {
-            text: 'Checking Altitude',
-            state: onAirMode?.checkingAltitude,
-          },
-        },
-        {
-          label: {
-            text: 'Taking Sensor Data',
-            state: onAirMode?.takingCamera1Steam,
-          },
-        },
-        {
-          label: {
-            text: 'Taking Camera 1 Stream',
-            state: onAirMode?.takingCamera1Steam,
-          },
-        },
-        { label: { text: 'Save To SD Card', state: onAirMode?.saveToSDCard } },
-        { label: { text: 'Transmit To GCS', state: onAirMode?.transmitToGCS } },
-      ],
-    },
-    {
-      label: {
-        text: 'Deployment',
+        text: 'Cansat Deployment Mode',
         state: determineParentState([
           deployment?.payloadDeployed,
           deployment?.bonusCameraStarted,
@@ -142,24 +149,88 @@
       children: [
         {
           label: {
-            text: 'Payload Deployment',
+            text: 'Tilt Currection',
             state: deployment?.payloadDeployed,
           },
         },
         {
           label: {
-            text: 'Bonus Camera Started',
-            state: deployment?.bonusCameraStarted,
-          },
-        },
-        {
-          label: {
-            text: 'Heat Shield Mechanism Running',
-            state: deployment?.heatShieldMechanismRunning,
+            text: 'Heat Shield Deployment',
+            state: deployment?.payloadDeployed,
           },
         },
       ],
     },
+
+    {
+      label: {
+        text: 'Arrow Breaking Decent Mode',
+        state: determineParentState([
+          deployment?.payloadDeployed,
+          deployment?.bonusCameraStarted,
+          deployment?.heatShieldMechanismRunning,
+        ]),
+      },
+      children: [
+        {
+          label: {
+            text: 'Heat Shield Release Preparation',
+            state: deployment?.payloadDeployed,
+          },
+        },
+        {
+          label: {
+            text: 'Heat Shield Release',
+            state: deployment?.payloadDeployed,
+          },
+        },
+      ],
+    },
+    {
+      label: {
+        text: 'Landing Mode',
+        state: determineParentState([
+          deployment?.payloadDeployed,
+          deployment?.bonusCameraStarted,
+          deployment?.heatShieldMechanismRunning,
+        ]),
+      },
+      children: [
+        {
+          label: {
+            text: 'Parachute Deployment',
+            state: deployment?.payloadDeployed,
+          },
+          children: [
+            {
+              label: {
+                text: 'Parachute Deployment',
+                state: deployment?.payloadDeployed,
+              },
+            },
+            {
+              label: {
+                text: 'Bonus Camera Started',
+                state: deployment?.bonusCameraStarted,
+              },
+            },
+            {
+              label: {
+                text: 'Recovery Preparation',
+                state: deployment?.payloadDeployed,
+              },
+            },
+            {
+              label: {
+                text: 'Landed',
+                state: deployment?.payloadDeployed,
+              },
+            },
+          ],
+        },
+      ],
+    },
+
     {
       label: {
         text: 'Recovery Mode',
@@ -172,7 +243,7 @@
       children: [
         {
           label: {
-            text: 'Recovery Mechanism Running',
+            text: 'Recovery Mechanisms Running',
             state: recoveryMode?.recoveryMechanismRunning,
           },
         },
@@ -182,7 +253,14 @@
             state: recoveryMode?.GPSLocationPinning,
           },
         },
+        {
+          label: {
+            text: 'Audio Buzzer Ringing',
+            state: recoveryMode?.GPSLocationPinning,
+          },
+        },
         { label: { text: 'Device Found', state: recoveryMode?.deviceFound } },
+        { label: { text: 'Telemetry Off', state: recoveryMode?.deviceFound } },
       ],
     },
   ];
