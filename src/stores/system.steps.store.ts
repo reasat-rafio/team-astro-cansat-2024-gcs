@@ -3,6 +3,11 @@ import { writable } from 'svelte/store';
 
 function createSystemSteps() {
   const { subscribe, update } = writable<SystemSteps>({
+    simulationMode: {
+      gettingPressureDataFromCSV: 'notStarted',
+      calculatingAltitudeAndSpeed: 'notStarted',
+    },
+
     groundMode: {
       powerOnIdle: 'notStarted',
       debuggingSystemStarted: 'notStarted',
@@ -10,30 +15,38 @@ function createSystemSteps() {
     },
     flightReadyMode: {
       activateSensorAndSystemCalibrationStart: 'notStarted',
+      telemetryStarted: 'notStarted',
     },
-    dataTransmission: {
-      telemetry: 'notStarted',
+    launchMode: {
+      sensorCalibration: 'notStarted',
+      setMissionTime: 'notStarted',
+      launch: 'notStarted',
     },
-    simulationMode: {
-      gettingPressureDataFromCSV: 'notStarted',
-      calculatingAltitudeAndSpeed: 'notStarted',
+    ascentMode: {
+      ejectionDelay: 'notStarted',
     },
-    onAirMode: {
-      checkingAltitude: 'notStarted',
-      takingSensorData: 'notStarted',
-      takingCamera1Steam: 'notStarted',
-      saveToSDCard: 'notStarted',
-      transmitToGCS: 'notStarted',
+    cansatDeploymentMode: {
+      tiltCorrection: 'notStarted',
+      heatShieldDeployed: 'notStarted',
     },
-    deployment: {
-      payloadDeployed: 'notStarted',
+
+    arrowBreakingDecentMode: {
+      heatShieldReleasePreparation: 'notStarted',
+      heatShieldReleased: 'notStarted',
+    },
+    landingMode: {
+      parachuteDeployment: 'notStarted',
       bonusCameraStarted: 'notStarted',
-      heatShieldMechanismRunning: 'notStarted',
+      recoveryPreparation: 'notStarted',
+      landed: 'notStarted',
     },
+
     recoveryMode: {
       recoveryMechanismRunning: 'notStarted',
       GPSLocationPinning: 'notStarted',
+      audioBuzzerPinning: 'notStarted',
       deviceFound: 'notStarted',
+      telemetryOff: 'notStarted',
     },
 
     // New steps

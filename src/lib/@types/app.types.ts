@@ -38,6 +38,11 @@ export interface MachineContext {
 }
 
 export interface SystemSteps {
+  simulationMode: {
+    gettingPressureDataFromCSV: SystemStatus;
+    calculatingAltitudeAndSpeed: SystemStatus;
+  };
+
   groundMode: {
     powerOnIdle: SystemStatus;
     debuggingSystemStarted: SystemStatus;
@@ -45,31 +50,39 @@ export interface SystemSteps {
   };
   flightReadyMode: {
     activateSensorAndSystemCalibrationStart: SystemStatus;
+    telemetryStarted: SystemStatus;
   };
-  dataTransmission: {
-    telemetry: SystemStatus;
+  launchMode: {
+    sensorCalibration: SystemStatus;
+    setMissionTime: SystemStatus;
+    launch: SystemStatus;
   };
-  simulationMode: {
-    gettingPressureDataFromCSV: SystemStatus;
-    calculatingAltitudeAndSpeed: SystemStatus;
+  ascentMode: {
+    ejectionDelay: SystemStatus;
   };
-  onAirMode: {
-    checkingAltitude: SystemStatus;
-    takingSensorData: SystemStatus;
-    takingCamera1Steam: SystemStatus;
-    saveToSDCard: SystemStatus;
-    transmitToGCS: SystemStatus;
+
+  cansatDeploymentMode: {
+    tiltCorrection: SystemStatus;
+    heatShieldDeployed: SystemStatus;
   };
-  deployment: {
-    payloadDeployed: SystemStatus;
+  arrowBreakingDecentMode: {
+    heatShieldReleasePreparation: SystemStatus;
+    heatShieldReleased: SystemStatus;
+  };
+
+  landingMode: {
+    parachuteDeployment: SystemStatus;
     bonusCameraStarted: SystemStatus;
-    heatShieldMechanismRunning: SystemStatus;
+    recoveryPreparation: SystemStatus;
+    landed: SystemStatus;
   };
 
   recoveryMode: {
     recoveryMechanismRunning: SystemStatus;
     GPSLocationPinning: SystemStatus;
+    audioBuzzerPinning: SystemStatus;
     deviceFound: SystemStatus;
+    telemetryOff: SystemStatus;
   };
 
   importCSV: SystemStatus;
