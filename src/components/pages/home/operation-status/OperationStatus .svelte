@@ -5,7 +5,7 @@
   import systemStepsStore from '@/stores/system.steps.store';
   import { FlaskConical } from 'lucide-svelte';
   import { ScrollArea } from '@/components/ui/scroll-area/index.js';
-  import { determineParentState } from '@/lib/helper';
+  import { determineParentState } from '@/lib/helpers/helper';
 
   type Tree = {
     label: { text: string; state: SystemStatus };

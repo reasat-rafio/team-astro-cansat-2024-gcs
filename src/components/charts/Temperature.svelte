@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatDate } from '@/lib/helper';
+  import formatDate from '@/lib/helpers/format-date';
   import { temperatureStore } from '@/stores/sensor.data.store';
   import {
     VisXYContainer,

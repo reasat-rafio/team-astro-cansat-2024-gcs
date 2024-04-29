@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import { validCommands } from '@/lib/helper';
+import { validCommands } from '@/lib/helpers/valid-terminal-commands';
 import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
 import commandHistoryStore from '../command.history.store';
 import updateCommandHistory from './helpers/update-command-history';

@@ -5,8 +5,8 @@ import {
   CMD_2043_SIM_DISABLE,
   CMD_2043_SIM_ENABLE,
   CMD_2043_ST_GPS,
-} from '@/lib/system-functions/';
-import { validCommands } from '@/lib/helper';
+} from '@/lib/helpers/terminal-actions';
+import { validCommands } from '@/lib/helpers/valid-terminal-commands';
 
 export default function cmdAction(command: string) {
   switch (command as (keyof typeof validCommands)[number]) {

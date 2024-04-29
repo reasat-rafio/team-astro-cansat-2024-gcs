@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { validCommands } from '@/lib/helper';
+  import { validCommands } from '@/lib/helpers/valid-terminal-commands';
   import Prompt from './Prompt.svelte';
   import terminalStore from '@/stores/terminal/terminal.store';
   import commandHistoryStore from '@/stores/command.history.store';

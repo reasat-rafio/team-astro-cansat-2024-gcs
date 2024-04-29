@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { formatDate } from '@/lib/helper';
+  import formatDate from '@/lib/helpers/format-date';
   import Prompt from './Prompt.svelte';
   import ChevronRight from '../icons/ChevronRight.svelte';
   import { slide } from 'svelte/transition';

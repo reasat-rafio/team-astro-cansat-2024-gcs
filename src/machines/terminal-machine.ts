@@ -4,7 +4,7 @@ import type {
   TerminalContext,
   TerminalEvent,
 } from '@/lib/@types/app.types';
-import { validCommands } from '@/lib/helper';
+import { validCommands } from '@/lib/helpers/valid-terminal-commands';
 import { assign, createMachine } from 'xstate';
 import { get } from 'svelte/store';
 import gcsStore from '@/stores/gcs.store';

@@ -12,7 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import { delay } from '$lib/helper';
+  import { delay } from '@/lib/helpers/helper';
   import gcsStore from '@/stores/gcs.store';
 
   ChartJS.register(

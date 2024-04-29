@@ -12,7 +12,7 @@
   } from 'chart.js';
   import { onMount } from 'svelte';
   import type { Point } from 'chart.js/dist/core/core.controller';
-  import { delay } from '$lib/helper';
+  import { delay } from '@/lib/helpers/helper';
   import gcsMachine from '@/machines/gcs-machine';
 
   ChartJS.register(
@@ -76,7 +76,7 @@
 
 <section>
   <div class="flex">
-    <h4 class="h6 ml-5 flex-1 text-tertiary-500">Gyroscope</h4>
+    <h4 class="h6 text-tertiary-500 ml-5 flex-1">Gyroscope</h4>
     <label class="flex items-center space-x-2">
       <input
         class="checkbox h-3 w-3"

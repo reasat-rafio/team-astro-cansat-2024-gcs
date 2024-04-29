@@ -1,5 +1,6 @@
 <script lang="ts">
-  import { calculatedAltitude, formatDate } from '@/lib/helper';
+  import formatDate from '@/lib/helpers/format-date';
+  import { calculatedAltitude } from '@/lib/helpers/helper';
   import { altitudeStore } from '@/stores/sensor.data.store';
   import {
     VisAxis,

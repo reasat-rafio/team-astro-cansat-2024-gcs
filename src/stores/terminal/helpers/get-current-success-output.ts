@@ -1,4 +1,4 @@
-import { validCommands } from '@/lib/helper';
+import { validCommands } from '@/lib/helpers/valid-terminal-commands';
 import { get } from 'svelte/store';
 import terminalStore from '../terminal.store';
 

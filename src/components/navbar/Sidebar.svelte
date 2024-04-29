@@ -5,10 +5,6 @@
   import Switch from '../ui/switch/switch.svelte';
   import { Label } from '../ui/label';
   import { uiStore } from '@/stores/ui.store.';
-
-  $: {
-    console.log($uiStore);
-  }
 </script>
 
 <Sheet.Root>
