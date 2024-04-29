@@ -1,67 +1,15 @@
-import { get, writable } from 'svelte/store';
+import { writable } from 'svelte/store';
 import { validCommands } from '@/lib/helper';
-import type {
-  TerminalCommand,
-  TerminalType,
-  UpdateCommandHistory,
-} from '@/lib/@types/app.types';
-import commandHistoryStore from './command.history.store';
-import {
-  CAL,
-  CMD_2043_CX_ON,
-  CMD_2043_SIM_ACTIVATE,
-  CMD_2043_SIM_DISABLE,
-  CMD_2043_SIM_ENABLE,
-  CMD_2043_ST_GPS,
-} from '@/lib/system-functions/';
+import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
+import commandHistoryStore from '../command.history.store';
+import updateCommandHistory from './helpers/update-command-history';
 
-function getTheIndexOfTheCommand(command: string) {
+export function getTheIndexOfTheCommand(command: string) {
   return Object.keys(validCommands).findIndex((key) => command.includes(key));
 }
 
-function createErrorTemplate(value: string, precedingCommands: string) {
+export function createErrorTemplate(value: string, precedingCommands: string) {
   return `<p>Error: Unable to execute <span class="text-red-600">${value}</span> before completing the prerequisite command(s): <span class="text-red-600">${precedingCommands}</span> </p>`;
-}
-
-export function getCurrentSuccessOutput() {
-  return (
-    validCommands[
-      get(terminalStore).currentCommand?.value as keyof typeof validCommands
-    ]?.successMessage ?? ''
-  );
-}
-
-export function cmdAction(command: string) {
-  switch (command as (keyof typeof validCommands)[number]) {
-    case 'CMD,2043,CX,ON':
-      return CMD_2043_CX_ON();
-
-    case 'CMD,2043,SIM,ENABLE':
-      return CMD_2043_SIM_ENABLE();
-
-    case 'CMD,2043,SIM,ACTIVATE':
-      return CMD_2043_SIM_ACTIVATE();
-
-    case 'CMD,2043,SIM,DISABLE':
-      return CMD_2043_SIM_DISABLE();
-
-    case 'CMD,2043,ST,GPS':
-      return CMD_2043_ST_GPS();
-
-    case 'CAL':
-      return CAL();
-
-    case 'CMD,2043,SIM,<PRESSURE>':
-      return {
-        success: true,
-        error: null,
-      };
-
-    default:
-      return {
-        error: "Command doesn't exist",
-      };
-  }
 }
 
 function createTerminalStore() {
@@ -70,23 +18,6 @@ function createTerminalStore() {
     currentCommand: undefined,
     currentCommandIdx: null,
   });
-
-  function updateCommandHistory({
-    currentState,
-    command,
-    output,
-    status,
-  }: UpdateCommandHistory) {
-    commandHistoryStore.setCommandHistory({ ...command, output, status });
-    return {
-      ...currentState,
-      currentCommand: command,
-      currentCommandIdx:
-        status === 'error'
-          ? currentState.currentCommandIdx
-          : getTheIndexOfTheCommand(command.value),
-    };
-  }
 
   function setUiState(terminalUiState: 'minimize' | 'maximize') {
     update((currentState) => ({ ...currentState, terminalUiState }));

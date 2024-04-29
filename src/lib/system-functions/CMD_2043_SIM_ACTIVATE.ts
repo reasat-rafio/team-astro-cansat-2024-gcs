@@ -2,7 +2,7 @@ import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
 import csvStore from '@/stores/csv.store';
-import { getCurrentSuccessOutput } from '@/stores/terminal.store';
+import getCurrentSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 import { onDestroy } from 'svelte';
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';

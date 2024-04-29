@@ -101,28 +101,28 @@
       label: {
         text: 'Launch Mode',
         state: determineParentState([
-          launchMode.sensorCalibration,
-          launchMode.setMissionTime,
-          launchMode.launch,
+          launchMode?.sensorCalibration,
+          launchMode?.setMissionTime,
+          launchMode?.launch,
         ]),
       },
       children: [
         {
           label: {
             text: 'Sensor Calibration',
-            state: launchMode.sensorCalibration,
+            state: launchMode?.sensorCalibration,
           },
         },
         {
           label: {
             text: 'Set Mission Time',
-            state: launchMode.setMissionTime,
+            state: launchMode?.setMissionTime,
           },
         },
         {
           label: {
             text: 'Launch',
-            state: launchMode.launch,
+            state: launchMode?.launch,
           },
         },
       ],
@@ -131,13 +131,13 @@
     {
       label: {
         text: 'Ascent Mode',
-        state: determineParentState([ascentMode.ejectionDelay]),
+        state: determineParentState([ascentMode?.ejectionDelay]),
       },
       children: [
         {
           label: {
             text: 'Ejection delay',
-            state: ascentMode.ejectionDelay,
+            state: ascentMode?.ejectionDelay,
           },
         },
       ],

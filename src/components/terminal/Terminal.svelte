@@ -1,6 +1,6 @@
 <script lang="ts">
   import { cn } from '@/lib/cn';
-  import terminalStore from '@/stores/terminal.store';
+  import terminalStore from '@/stores/terminal/terminal.store';
   import { Maximize, Minus, Terminal } from 'lucide-svelte';
   import { slide } from 'svelte/transition';
   import CommandDropDown from './CommandDropDown.svelte';
@@ -8,7 +8,6 @@
   import Input from './Input.svelte';
 
   let inputEl: HTMLSpanElement;
-  let activeSuggestedCommand: string | null = null;
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
@@ -49,7 +48,7 @@
       class="h-[450px] space-y-2 overflow-y-auto p-2 backdrop-blur-md scrollbar-thin">
       <History />
 
-      <Input bind:inputEl bind:activeSuggestedCommand />
+      <Input bind:inputEl />
     </div>
   {/if}
 </aside>

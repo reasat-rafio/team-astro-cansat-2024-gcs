@@ -44,7 +44,7 @@
   {#if children}
     <button
       class={cn(
-        'group flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-[#6a48f2]',
+        'group flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-primary',
         expanded ? '' : '',
       )}
       on:click={toggleExpansion}>
@@ -78,7 +78,7 @@
     {/if}
   {:else}
     <button
-      class="flex gap-x-2 rounded-lg px-5 py-2 text-left transition-colors duration-300 hover:bg-[#6a48f2]">
+      class="flex gap-x-2 rounded-lg px-5 py-2 text-left transition-colors duration-300 hover:bg-primary">
       {#if label.state === 'done'}
         <Check color="green" size={18} />
       {:else if label.state === 'inProgress'}

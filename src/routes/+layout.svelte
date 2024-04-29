@@ -1,7 +1,8 @@
 <script lang="ts">
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
-  import terminalStore, { cmdAction } from '@/stores/terminal.store';
+  import cmdAction from '@/stores/terminal/helpers/cmd-action';
+  import terminalStore from '@/stores/terminal/terminal.store';
   import { Toaster } from '@/components/ui/sonner';
   import { onMount } from 'svelte';
   import '../app.css';

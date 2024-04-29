@@ -1,7 +1,7 @@
 import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
-import { getCurrentSuccessOutput } from '@/stores/terminal.store';
+import getCurrentSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 import { get } from 'svelte/store';
 
 export default function CMD_2043_ST_GPS() {

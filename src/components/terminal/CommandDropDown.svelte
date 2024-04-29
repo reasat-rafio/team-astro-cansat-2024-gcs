@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select';
   import { validCommands } from '@/lib/helper';
-  import terminalStore from '@/stores/terminal.store';
+  import terminalStore from '@/stores/terminal/terminal.store';
 
   let selectedCmd: string | null = null;
 
