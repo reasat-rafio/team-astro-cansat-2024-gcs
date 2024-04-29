@@ -1,17 +1,15 @@
-import type { SystemStatus } from '@/lib/@types/app.types';
+import type { SystemStatus, ValidCommand } from '@/lib/@types/app.types';
 import { writable } from 'svelte/store';
 
 export interface TerminalType {
-  [key: string]: {
-    name: string;
-    description: string;
-    successMessage: string;
-    state: SystemStatus;
-  };
+  name: ValidCommand;
+  description: string;
+  successMessage: string;
+  state: SystemStatus;
 }
 
 function createValidTerminalCommandStore() {
-  const { set, subscribe, update } = writable([
+  const { set, subscribe, update } = writable<TerminalType[]>([
     {
       name: 'CMD,2043,CX,ON',
       description: 'Active container telemetry transmission',
@@ -38,7 +36,7 @@ function createValidTerminalCommandStore() {
       state: 'notStarted',
     },
     {
-      name: 'CMD,2043,SIM,<PRESSURE>',
+      name: 'CMD,2043,SIM,<~PRESSURE~>',
       description: 'Replace the pressure sensor data with the revived pressure',
       successMessage: 'Pressure is now set to the specified value',
       state: 'notStarted',

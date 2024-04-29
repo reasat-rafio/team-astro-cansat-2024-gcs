@@ -344,3 +344,13 @@ export type MqttPayloadTopic =
   | 'acceleration'
   | 'gyroscope'
   | 'pressure';
+
+export type ValidCommand =
+  | 'CMD,2043,CX,ON'
+  | 'CAL'
+  | 'CMD,2043,SIM,ENABLE'
+  | 'CMD,2043,SIM,ACTIVATE'
+  | 'CMD,2043,SIM,<~PRESSURE~>'
+  | 'CMD,2043,SIM,DISABLE'
+  | 'help'
+  | 'clear';
