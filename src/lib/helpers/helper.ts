@@ -49,3 +49,7 @@ export function determineParentState(childStates: State[]): State {
 
   return parentState;
 }
+
+export function escapeAngleBrackets(text: string) {
+  return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}

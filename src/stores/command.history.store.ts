@@ -29,7 +29,7 @@ function createCommandHistoryStore() {
       const lastCommand =
         currentState.commandHistory[currentState.commandHistory.length - 1];
 
-      lastCommand.status = status;
+      if (lastCommand?.status) lastCommand.status = status;
       return currentState;
     });
   }
@@ -39,7 +39,7 @@ function createCommandHistoryStore() {
       const lastCommand =
         currentState.commandHistory[currentState.commandHistory.length - 1];
 
-      lastCommand.output = output;
+      if (lastCommand?.output) lastCommand.output = output;
       return currentState;
     });
   }

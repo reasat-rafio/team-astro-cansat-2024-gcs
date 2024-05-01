@@ -20,9 +20,9 @@
     return () => window.removeEventListener('beforeunload', handleBeforeUnload);
   });
 
-  $: if ($terminalStore) {
-    cmdAction($terminalStore.currentCommand?.value as string);
-  }
+  // $: if ($terminalStore) {
+  //   cmdAction($terminalStore.currentCommand?.value as string);
+  // }
 
   onMount(() => {
     mqttHandler.client.subscribe('test');

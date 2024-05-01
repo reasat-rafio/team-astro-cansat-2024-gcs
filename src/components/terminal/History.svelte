@@ -4,6 +4,11 @@
   import ChevronRight from '../icons/ChevronRight.svelte';
   import { slide } from 'svelte/transition';
   import commandHistoryStore from '@/stores/command.history.store';
+  import { escapeAngleBrackets } from '@/lib/helpers/helper';
+
+  $: {
+    console.log({ $commandHistoryStore });
+  }
 </script>
 
 {#if !!$commandHistoryStore.commandHistory?.length}

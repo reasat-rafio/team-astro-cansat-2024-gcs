@@ -2,7 +2,7 @@ import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
 import csvStore from '@/stores/csv.store';
-import getCurrentSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
+import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 import { onDestroy } from 'svelte';
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
@@ -21,7 +21,7 @@ const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
     currentIndex++;
   } else {
     csvStore.setState('completed');
-    commandHistoryStore.setLatestCommandOutput(getCurrentSuccessOutput());
+    commandHistoryStore.setLatestCommandOutput(getSuccessOutput());
     commandHistoryStore.updateLastCommandStatus('success');
     console.log('Processing complete');
     clearInterval(intervalId);

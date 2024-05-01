@@ -1,7 +1,8 @@
 <script lang="ts">
   import * as Select from '@/components/ui/select';
-  import { validCommands } from '@/lib/helpers/valid-terminal-commands';
+  // import { validCommands } from '@/lib/helpers/valid-terminal-commands';
   import terminalStore from '@/stores/terminal/terminal.store';
+  import validTerminalCommandStoreStore from '@/stores/terminal/valid-terminal-command.sore';
 
   let selectedCmd: string | null = null;
 
@@ -18,7 +19,7 @@
     <Select.Value placeholder="Commands" />
   </Select.Trigger>
   <Select.Content>
-    {#each Object.keys(validCommands) as cmd}
+    {#each $validTerminalCommandStoreStore as { cmd }}
       <Select.Item
         on:click={(currCmd) => {
           if (currCmd) selectedCmd = String(currCmd);

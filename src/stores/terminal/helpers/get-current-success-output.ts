@@ -1,11 +1,8 @@
-import { validCommands } from '@/lib/helpers/valid-terminal-commands';
 import { get } from 'svelte/store';
-import terminalStore from '../terminal.store';
+import validTerminalCommandStoreStore from '../valid-terminal-command.sore';
 
-export default function getCurrentSuccessOutput() {
-  return (
-    validCommands[
-      get(terminalStore).currentCommand?.value as keyof typeof validCommands
-    ]?.successMessage ?? ''
-  );
+export default function getSuccessOutput(currentCmd: string) {
+  return get(validTerminalCommandStoreStore).find(
+    ({ cmd }) => cmd === currentCmd,
+  )?.successMessage;
 }

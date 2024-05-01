@@ -8,7 +8,7 @@ interface Type {
   command: TerminalCommand;
 }
 
-export default function CMD_2043_CX_ON({ $state, command }: Type) {
+export default function CMD_2043_CX_OFF({ $state, command }: Type) {
   try {
     const successMessage = getSuccessOutput(command.value);
 

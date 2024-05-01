@@ -289,7 +289,7 @@ export interface TerminalCommand {
   value: string;
 }
 export interface UpdateCommandHistory {
-  currentState: TerminalType;
+  $state: TerminalType;
   command: TerminalCommand;
   output: string;
   status: CommandStatus;
@@ -347,6 +347,8 @@ export type MqttPayloadTopic =
 
 export type ValidCommand =
   | 'CMD,2043,CX,ON'
+  | 'CMD,2043,CX,OFF'
+  | 'CMD,2043,ST,<UTC_TIME>|GPS'
   | 'CAL'
   | 'CMD,2043,SIM,ENABLE'
   | 'CMD,2043,SIM,ACTIVATE'
