@@ -6,15 +6,15 @@ interface Type {
   command: TerminalCommand;
 }
 
-export default function CMD_2043_SIMP_PRESSURE({ $state, command }: Type) {
+export default function CMD_2043_UTC_TIME__GPS({ $state, command }: Type) {
   try {
-    const pressureVal = command.value.split(',')[3];
+    const timeValue = command.value.split(',')[3];
 
     return updateCommandHistory({
       $state,
       command,
       status: 'success',
-      output: `<p class="text-green-600">${command.value} executed successfully. Pressure data has been set to ${pressureVal} </p>`,
+      output: `<p class="text-green-600">${command.value} executed successfully. Time has been set to ${timeValue}</p>`,
     });
   } catch (error) {
     return updateCommandHistory({

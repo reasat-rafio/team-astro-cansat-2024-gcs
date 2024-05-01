@@ -12,6 +12,10 @@ import {
 } from '@/lib/helpers/terminal-actions';
 import CMD_2043_CX_OFF from '@/lib/helpers/terminal-actions/CMD_2043_CX_OFF';
 import CMD_2043_SIMP_PRESSURE from '@/lib/helpers/terminal-actions/CMD_2043_SIMP_PRESSURE';
+import CMD_2043_BCN_ON from '@/lib/helpers/terminal-actions/CMD_2043_BCN_ON';
+import CMD_2043_BCN_OFF from '@/lib/helpers/terminal-actions/CMD_2043_BCN_OFF';
+import CMD_2043_CAL from '@/lib/helpers/terminal-actions/CMD_2043_CAL';
+import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_TIME__GPS';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
@@ -40,7 +44,7 @@ function createTerminalStore() {
           return displayHelp(command, $state);
       }
 
-      if (commandParts[0] !== 'CMD' || commandParts.length !== 4) {
+      if (commandParts[0] !== 'CMD' || commandParts.length < 3) {
         return updateCommandHistory({
           $state,
           command,
@@ -72,12 +76,15 @@ function createTerminalStore() {
               output: `<p class="text-destructive">Invalid command: CX command must be followed by ON or OFF</p>`,
             });
           }
-          if (lastParam === 'ON') {
-            return CMD_2043_CX_ON({ $state, command });
-          } else if (lastParam === 'OFF') {
-            return CMD_2043_CX_OFF({ $state, command });
+
+          switch (lastParam) {
+            case 'ON':
+              return CMD_2043_CX_ON({ $state, command });
+            case 'OFF':
+              return CMD_2043_CX_OFF({ $state, command });
           }
           break;
+
         case 'ST':
           if (lastParam !== 'GPS' && !lastParam.match(/\d{2}:\d{2}:\d{2}/)) {
             return updateCommandHistory({
@@ -87,7 +94,13 @@ function createTerminalStore() {
               output: `<p class="text-destructive">Invalid command: ST command must be followed by a valid time or GPS</p>`,
             });
           }
+
+          return CMD_2043_UTC_TIME__GPS({ $state, command });
           break;
+
+        case 'CAL':
+          return CMD_2043_CAL({ $state, command });
+
         case 'SIM':
           if (
             lastParam !== 'ENABLE' &&
@@ -102,16 +115,16 @@ function createTerminalStore() {
             });
           }
 
-          if (lastParam === 'ACTIVATE') {
-            // TODO fix this
-            // return CMD_2043_SIM_ACTIVATE({ $state, command });
-          } else if (lastParam === 'ENABLE') {
-            return CMD_2043_SIM_ENABLE({ $state, command });
-          } else if (lastParam === 'DISABLE') {
-            return CMD_2043_SIM_DISABLE({ $state, command });
+          switch (lastParam) {
+            case 'ACTIVATE':
+              return CMD_2043_SIM_ACTIVATE({ $state, command });
+            case 'ENABLE':
+              return CMD_2043_SIM_ENABLE({ $state, command });
+            case 'DISABLE':
+              return CMD_2043_SIM_DISABLE({ $state, command });
           }
-
           break;
+
         case 'SIMP':
           if (isNaN(parseInt(lastParam))) {
             return updateCommandHistory({
@@ -123,8 +136,8 @@ function createTerminalStore() {
           }
 
           return CMD_2043_SIMP_PRESSURE({ $state, command });
-
           break;
+
         case 'BCN':
           if (lastParam !== 'ON' && lastParam !== 'OFF') {
             return updateCommandHistory({
@@ -134,7 +147,15 @@ function createTerminalStore() {
               output: `<p class="text-destructive">Invalid command: BCN command must be followed by ON or OFF</p>`,
             });
           }
+
+          switch (lastParam) {
+            case 'ON':
+              return CMD_2043_BCN_ON({ $state, command });
+            case 'OFF':
+              return CMD_2043_BCN_OFF({ $state, command });
+          }
           break;
+
         default:
           return updateCommandHistory({
             command,
