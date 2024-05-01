@@ -28,6 +28,7 @@
     "gsap": "^3.12.5",
     "lucide-svelte": "^0.358.0",
     "mode-watcher": "^0.3.0",
+    "nanoid": "^5.0.7",
     "papaparse": "^5.4.1",
     "postcss": "^8.4.36",
     "prettier": "^3.2.5",

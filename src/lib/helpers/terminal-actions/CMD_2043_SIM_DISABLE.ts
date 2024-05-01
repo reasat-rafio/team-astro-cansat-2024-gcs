@@ -1,17 +1,28 @@
-import commandHistoryStore, {
-  lastCommand,
-} from '@/stores/command.history.store';
+import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
 import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
-import { get } from 'svelte/store';
+import updateCommandHistory from '@/stores/terminal/helpers/update-command-history';
 
-export default function CMD_2043_SIM_DISABLE() {
-  if (get(lastCommand).status === 'pending') {
-    setTimeout(() => {
-      commandHistoryStore.setLatestCommandOutput(getSuccessOutput());
-      commandHistoryStore.updateLastCommandStatus('success');
-    }, 500);
+interface Type {
+  $state: TerminalType;
+  command: TerminalCommand;
+}
+
+export default function CMD_2043_SIM_DISABLE({ $state, command }: Type) {
+  try {
+    const successMessage = getSuccessOutput(command.value);
+
+    return updateCommandHistory({
+      $state,
+      command,
+      status: 'success',
+      output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
+    });
+  } catch (error) {
+    return updateCommandHistory({
+      command,
+      $state,
+      status: 'error',
+      output: `<p class="text-destructive">Error: ${error}</p>`,
+    });
   }
-  return {
-    error: null,
-  };
 }

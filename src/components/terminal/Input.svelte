@@ -1,5 +1,4 @@
 <script lang="ts">
-  import { validCommands } from '@/lib/helpers/valid-terminal-commands';
   import Prompt from './Prompt.svelte';
   import terminalStore from '@/stores/terminal/terminal.store';
   import commandHistoryStore from '@/stores/command.history.store';
@@ -17,6 +16,8 @@
   function submitCommand(e: KEvent) {
     if (e.currentTarget && e.key === 'Enter') {
       e.preventDefault();
+      // const cmdParts = e.currentTarget.innerText.trim().split(',');
+
       terminalStore.setCurrentCommand({
         value: e.currentTarget.innerText.trim(),
         time: new Date(),

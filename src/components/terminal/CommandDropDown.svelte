@@ -4,28 +4,29 @@
   import terminalStore from '@/stores/terminal/terminal.store';
   import validTerminalCommandStoreStore from '@/stores/terminal/valid-terminal-command.sore';
 
-  let selectedCmd: string | null = null;
+  type SelectedCmd = { value: { cmd: string; id: string } };
+  let selectedCmd: SelectedCmd;
 
   $: if (selectedCmd) {
-    terminalStore.setCurrentCommand({ value: selectedCmd, time: new Date() });
+    terminalStore.setCurrentCommand({
+      id: selectedCmd.value.id,
+      value: selectedCmd.value.cmd,
+      time: new Date(),
+    });
   }
 </script>
 
 <Select.Root
+  bind:selected={selectedCmd}
   onSelectedChange={(currCmd) => {
-    if (currCmd) selectedCmd = String(currCmd?.value);
+    if (currCmd) selectedCmd = currCmd;
   }}>
   <Select.Trigger class="w-[300px] ">
     <Select.Value placeholder="Commands" />
   </Select.Trigger>
   <Select.Content>
-    {#each $validTerminalCommandStoreStore as { cmd }}
-      <Select.Item
-        on:click={(currCmd) => {
-          if (currCmd) selectedCmd = String(currCmd);
-        }}
-        class="cursor-pointer"
-        value={cmd}>
+    {#each $validTerminalCommandStoreStore as { cmd, id }}
+      <Select.Item class="cursor-pointer" value={{ cmd, id }}>
         {cmd}
       </Select.Item>
     {/each}

@@ -4,8 +4,14 @@ import commandHistoryStore from '../command.history.store';
 import updateCommandHistory from './helpers/update-command-history';
 import validTerminalCommandStoreStore from './valid-terminal-command.sore';
 import { escapeAngleBrackets } from '@/lib/helpers/helper';
-import { CMD_2043_CX_ON } from '@/lib/helpers/terminal-actions';
+import {
+  CMD_2043_CX_ON,
+  CMD_2043_SIM_ACTIVATE,
+  CMD_2043_SIM_DISABLE,
+  CMD_2043_SIM_ENABLE,
+} from '@/lib/helpers/terminal-actions';
 import CMD_2043_CX_OFF from '@/lib/helpers/terminal-actions/CMD_2043_CX_OFF';
+import CMD_2043_SIMP_PRESSURE from '@/lib/helpers/terminal-actions/CMD_2043_SIMP_PRESSURE';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
@@ -21,14 +27,28 @@ function createTerminalStore() {
   function setCurrentCommand(command: TerminalCommand) {
     update(($state) => {
       const { value } = command;
+      const commandParts = value.split(',');
 
-      if (command.value === 'clear') {
-        return clearCommandHistory(command, $state);
-      } else if (command.value === 'help') {
-        return displayHelp(command, $state);
+      // const isValidId = get(validTerminalCommandStoreStore).some(
+      //   (asd) => asd.id === id,
+      // );
+
+      switch (command.value) {
+        case 'clear':
+          return clearCommandHistory(command, $state);
+        case 'help':
+          return displayHelp(command, $state);
       }
 
-      const commandParts = value.split(',');
+      if (commandParts[0] !== 'CMD' || commandParts.length !== 4) {
+        return updateCommandHistory({
+          $state,
+          command,
+          status: 'error',
+          output: `<p class="text-destructive">Error: Invalid command</p>`,
+        });
+      }
+
       // Validate TEAM_ID
       if (parseInt(commandParts[1]) !== 2043) {
         return updateCommandHistory({
@@ -81,6 +101,16 @@ function createTerminalStore() {
               output: `<p class="text-destructive">Invalid command: SIM command must be followed by ENABLE, ACTIVATE or DISABLE</p>`,
             });
           }
+
+          if (lastParam === 'ACTIVATE') {
+            // TODO fix this
+            // return CMD_2043_SIM_ACTIVATE({ $state, command });
+          } else if (lastParam === 'ENABLE') {
+            return CMD_2043_SIM_ENABLE({ $state, command });
+          } else if (lastParam === 'DISABLE') {
+            return CMD_2043_SIM_DISABLE({ $state, command });
+          }
+
           break;
         case 'SIMP':
           if (isNaN(parseInt(lastParam))) {
@@ -91,6 +121,9 @@ function createTerminalStore() {
               output: `<p class="text-destructive">Invalid command: SIMP command must be followed by a number</p>`,
             });
           }
+
+          return CMD_2043_SIMP_PRESSURE({ $state, command });
+
           break;
         case 'BCN':
           if (lastParam !== 'ON' && lastParam !== 'OFF') {
@@ -153,7 +186,7 @@ function clearCommandHistory(
   };
 }
 
-function displayHelp(command: TerminalCommand, currentState: TerminalType) {
+function displayHelp(command: TerminalCommand, $state: TerminalType) {
   const helpText = get(validTerminalCommandStoreStore).map(
     ({ format, description }) =>
       `<span class="font-semibold">${escapeAngleBrackets(format as string)}:</span> <span>${description}</span>`,
@@ -161,7 +194,7 @@ function displayHelp(command: TerminalCommand, currentState: TerminalType) {
 
   return updateCommandHistory({
     command,
-    currentState,
+    $state,
     status: 'success',
     output: helpText.join('\n'),
   });

@@ -1,3 +1,8 @@
+import type {
+  CSV_HEAD,
+  TerminalCommand,
+  TerminalType,
+} from '@/lib/@types/app.types';
 import commandHistoryStore, {
   lastCommand,
 } from '@/stores/command.history.store';
@@ -6,7 +11,6 @@ import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-outp
 import { onDestroy } from 'svelte';
 import { toast } from 'svelte-sonner';
 import { get } from 'svelte/store';
-import type { CSV_HEAD } from '../@types/app.types';
 
 let currentIndex = 1;
 let intervalId: NodeJS.Timeout;
@@ -28,7 +32,11 @@ const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
   }
 };
 
-export default function CMD_2043_SIM_ACTIVATE() {
+interface Type {
+  $state: TerminalType;
+  command: TerminalCommand;
+}
+export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
   if (get(csvStore).state === 'idle') {
     toast.error('No CSV file loaded');
     commandHistoryStore.setLatestCommandOutput('No CSV file loaded');

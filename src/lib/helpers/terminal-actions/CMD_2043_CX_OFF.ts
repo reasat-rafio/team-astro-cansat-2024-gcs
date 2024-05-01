@@ -1,5 +1,5 @@
 import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
-import commandHistoryStore from '@/stores/command.history.store'; // lastCommand,
+// import commandHistoryStore from '@/stores/command.history.store'; // lastCommand,
 import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 import updateCommandHistory from '@/stores/terminal/helpers/update-command-history';
 
@@ -12,10 +12,10 @@ export default function CMD_2043_CX_OFF({ $state, command }: Type) {
   try {
     const successMessage = getSuccessOutput(command.value);
 
-    commandHistoryStore.setLatestCommandOutput(
-      `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
-    );
-    commandHistoryStore.updateLastCommandStatus('success');
+    // commandHistoryStore.setLatestCommandOutput(
+    //   `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
+    // );
+    // commandHistoryStore.updateLastCommandStatus('success');
 
     return updateCommandHistory({
       $state,

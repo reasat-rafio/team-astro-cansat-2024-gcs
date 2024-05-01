@@ -285,6 +285,7 @@ export interface MissionData {
 
 export type CommandStatus = 'success' | 'error' | 'pending';
 export interface TerminalCommand {
+  id?: string;
   time: Date;
   value: string;
 }

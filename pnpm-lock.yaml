@@ -96,6 +96,9 @@ importers:
       mode-watcher:
         specifier: ^0.3.0
         version: 0.3.0(svelte@4.2.12)
+      nanoid:
+        specifier: ^5.0.7
+        version: 5.0.7
       papaparse:
         specifier: ^5.4.1
         version: 5.4.1
@@ -2073,8 +2076,8 @@ packages:
     engines: {node: ^10 || ^12 || ^13.7 || ^14 || >=15.0.1}
     hasBin: true
 
-  nanoid@5.0.6:
-    resolution: {integrity: sha512-rRq0eMHoGZxlvaFOUdK1Ev83Bd1IgzzR+WJ3IbDJ7QOSdAxYjlurSPqFs9s4lJg29RT6nPwizFtJhQS6V5xgiA==}
+  nanoid@5.0.7:
+    resolution: {integrity: sha512-oLxFY2gd2IqnjcYyOXD8XGCftpGtZP2AbHbOkthDkvRywH5ayNtPVy9YlOPcHckXzbLTCHpkb7FB+yuxKV13pQ==}
     engines: {node: ^18 || >=20}
     hasBin: true
 
@@ -3157,7 +3160,7 @@ snapshots:
       '@internationalized/date': 3.5.2
       dequal: 2.0.3
       focus-trap: 7.5.4
-      nanoid: 5.0.6
+      nanoid: 5.0.7
       svelte: 4.2.12
 
   '@melt-ui/svelte@0.76.0(svelte@4.2.12)':
@@ -3167,7 +3170,7 @@ snapshots:
       '@internationalized/date': 3.5.2
       dequal: 2.0.3
       focus-trap: 7.5.4
-      nanoid: 5.0.6
+      nanoid: 5.0.7
       svelte: 4.2.12
 
   '@nodelib/fs.scandir@2.1.5':
@@ -3747,14 +3750,14 @@ snapshots:
     dependencies:
       '@internationalized/date': 3.5.2
       '@melt-ui/svelte': 0.68.0(svelte@4.2.12)
-      nanoid: 5.0.6
+      nanoid: 5.0.7
       svelte: 4.2.12
 
   bits-ui@0.19.7(svelte@4.2.12):
     dependencies:
       '@internationalized/date': 3.5.2
       '@melt-ui/svelte': 0.76.0(svelte@4.2.12)
-      nanoid: 5.0.6
+      nanoid: 5.0.7
       svelte: 4.2.12
 
   bl@4.1.0:
@@ -4818,7 +4821,7 @@ snapshots:
 
   nanoid@3.3.7: {}
 
-  nanoid@5.0.6: {}
+  nanoid@5.0.7: {}
 
   napi-build-utils@1.0.2: {}
 
@@ -4870,7 +4873,7 @@ snapshots:
 
   paneforge@0.0.2(svelte@4.2.12):
     dependencies:
-      nanoid: 5.0.6
+      nanoid: 5.0.7
       svelte: 4.2.12
 
   papaparse@5.4.1: {}
