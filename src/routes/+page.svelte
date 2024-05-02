@@ -1,7 +1,7 @@
 <script lang="ts">
   import Charts from '@/components/pages/home/charts/Charts.svelte';
   import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
-  import Streams from '@/components/pages/home/streams/Streams.svelte';
+  import Logs from '@/components/pages/home/logs/Logs.svelte';
   import SystemSteps from '@/components/pages/home/operation-status/OperationStatus .svelte';
   import { uiStore } from '@/stores/ui.store.';
   import * as Resizable from '@/components/ui/resizable';
@@ -35,7 +35,7 @@
         </Resizable.Pane>
         <Resizable.Handle />
         <Resizable.Pane defaultSize={40}>
-          <Streams />
+          <Logs />
         </Resizable.Pane>
       </Resizable.PaneGroup>
     </Resizable.Pane>

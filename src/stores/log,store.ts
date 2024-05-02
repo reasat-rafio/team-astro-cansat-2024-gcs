@@ -2,11 +2,11 @@ import { writable } from 'svelte/store';
 
 interface Log {
   value: string;
-  time: string;
+  time: Date;
 }
 
 function createLogStore() {
-  const { subscribe, update, set } = writable<Log[]>();
+  const { subscribe, update, set } = writable<Log[]>([]);
 
   function addLog(log: Log) {
     update(($store) => [...$store, log]);
