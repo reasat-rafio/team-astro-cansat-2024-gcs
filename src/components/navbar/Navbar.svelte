@@ -1,10 +1,11 @@
 <script lang="ts">
   import { uiStore } from '@/stores/ui.store.';
-  import CsvButtons from './CsvButtons.svelte';
+  import CsvImport from './CsvImport.svelte';
   import Button from '@/components/ui/button/button.svelte';
   import { Home, Activity } from 'lucide-svelte';
   import ThemeSwitcher from '../ThemeSwitcher.svelte';
   import Sidebar from './Sidebar.svelte';
+  import CsvExport from './CsvExport.svelte';
 
   const navItems = [
     { name: 'Home', icon: Home, url: '/' },
@@ -27,7 +28,8 @@
   </ul>
 
   <div class="flex space-x-2">
-    <CsvButtons />
+    <CsvImport />
+    <CsvExport />
     <ThemeSwitcher />
     <Sidebar />
   </div>

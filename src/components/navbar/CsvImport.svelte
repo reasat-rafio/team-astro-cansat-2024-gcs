@@ -4,7 +4,7 @@
   import Papa from 'papaparse';
   import Button from '../ui/button/button.svelte';
   import { toast } from 'svelte-sonner';
-  import { Download, Upload } from 'lucide-svelte';
+  import { Upload } from 'lucide-svelte';
 
   let importCSVEl: HTMLInputElement;
 
@@ -33,11 +33,6 @@
   variant="destructive">
   <span>Import CSV</span>
   <Upload size={18} />
-</Button>
-
-<Button class="flex gap-2" variant="outline">
-  <span>Export CSV</span>
-  <Download size={18} />
 </Button>
 
 <input
