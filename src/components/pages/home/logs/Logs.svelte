@@ -1,11 +1,10 @@
 <script lang="ts">
   import Header from '../Header.svelte';
   import { afterUpdate } from 'svelte';
-  // import csvStore from '@/stores/csv.store';
   import { slide } from 'svelte/transition';
   import { ScrollArea } from '@/components/ui/scroll-area/index.js';
   import { ScrollTextIcon } from 'lucide-svelte';
-  import logStore from '@/stores/log,store';
+  import logStore from '@/stores/log.store';
   import formatDate from '@/lib/helpers/format-date';
 
   let sectionEl: HTMLElement;

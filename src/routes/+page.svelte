@@ -1,10 +1,10 @@
 <script lang="ts">
   import Charts from '@/components/pages/home/charts/Charts.svelte';
-  import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
   import Logs from '@/components/pages/home/logs/Logs.svelte';
   import SystemSteps from '@/components/pages/home/operation-status/OperationStatus .svelte';
-  import { uiStore } from '@/stores/ui.store.';
+  import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
   import * as Resizable from '@/components/ui/resizable';
+  import { uiStore } from '@/stores/ui.store.';
 
   type Key =
     | 'Latitude'
@@ -13,7 +13,6 @@
     | 'Battery Voltage'
     | 'Temperature From BMP280'
     | 'Distance';
-  type Data = [Key, string][];
 </script>
 
 <section style="height: calc(100vh - {$uiStore.navbarHeight}px);" class="">

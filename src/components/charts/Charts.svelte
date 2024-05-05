@@ -7,6 +7,7 @@
   import TiltAngle from './TiltAngle.svelte';
   import AirSpeed from './AirSpeed.svelte';
   import GpsCoordinates from './GpsCoordinates.svelte';
+  import { cn } from '@/utils';
   // import Gyroscope from './Gyroscope.svelte';
   // import Acceleration from './Acceleration.svelte';
   // import CommandEcho from './charts/CommandEcho.svelte';
@@ -14,7 +15,8 @@
   // import SatellitesTracked from './SatellitesTracked.svelte';
 </script>
 
-<section class="flex h-full w-full flex-col space-y-6 pt-5">
+<section
+  class={cn('flex h-full w-full flex-col space-y-6 pt-5', $$props.class)}>
   <SectionHeader title="Payload" color="primary" />
 
   <div class="grid grid-cols-2 gap-[50px] [&>*]:h-[600px]">

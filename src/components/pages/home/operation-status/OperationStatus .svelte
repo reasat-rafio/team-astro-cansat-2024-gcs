@@ -58,6 +58,7 @@
           groundMode?.communicationModuleOn,
         ]),
       },
+
       children: [
         { label: { text: 'Power On, Idle', state: groundMode?.powerOnIdle } },
         {
