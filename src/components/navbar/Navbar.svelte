@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { uiStore } from '@/stores/ui.store.';
+  import { uiStore } from '@/stores/ui.store';
   import CsvImport from './CsvImport.svelte';
   import Button from '@/components/ui/button/button.svelte';
   import { ScrollTextIcon, Home, Activity } from 'lucide-svelte';

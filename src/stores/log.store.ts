@@ -1,3 +1,4 @@
+import { toast } from 'svelte-sonner';
 import { writable } from 'svelte/store';
 
 interface Log {
@@ -5,25 +6,24 @@ interface Log {
   time: Date;
 }
 
-function createLogStore() {
-  const { subscribe, update, set } = writable<Log[]>([]);
+const defaultValue: Log[] = [];
+const initialValue = JSON.parse(
+  window.localStorage.getItem('logs') ?? JSON.stringify(defaultValue),
+);
 
-  function addLog(log: Log) {
-    update(($store) => [...$store, log]);
-  }
+const logStore = writable<Log[]>(initialValue);
 
-  function clearLog() {
-    update(() => []);
-  }
-
-  return {
-    set,
-    update,
-    addLog,
-    subscribe,
-    clearLog,
-  };
+export function addLog(log: Log) {
+  logStore.update((logs) => [...logs, log]);
 }
 
-const logStore = createLogStore();
+export function clearLogs() {
+  logStore.set([]);
+  toast.success('Logs cleared');
+}
+
+logStore.subscribe((value) => {
+  window.localStorage.setItem('logs', JSON.stringify(value));
+});
+
 export default logStore;

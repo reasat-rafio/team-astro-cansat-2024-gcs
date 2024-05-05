@@ -4,7 +4,7 @@
   import SystemSteps from '@/components/pages/home/operation-status/OperationStatus .svelte';
   import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
   import * as Resizable from '@/components/ui/resizable';
-  import { uiStore } from '@/stores/ui.store.';
+  import { uiStore } from '@/stores/ui.store';
 
   type Key =
     | 'Latitude'

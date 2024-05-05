@@ -6,7 +6,7 @@
 
 <section class="min-h-screen w-full rounded-lg border p-4">
   {#if !!$logStore?.length}
-    <div class="flex w-full flex-col gap-y-4">
+    <div class="flex w-full flex-col gap-y-2">
       {#each $logStore as { value, time }, index}
         <div class="flex gap-5" transition:slide>
           <div class="flex-1">

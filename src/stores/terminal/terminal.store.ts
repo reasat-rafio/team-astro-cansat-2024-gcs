@@ -16,6 +16,7 @@ import CMD_2043_BCN_ON from '@/lib/helpers/terminal-actions/CMD_2043_BCN_ON';
 import CMD_2043_BCN_OFF from '@/lib/helpers/terminal-actions/CMD_2043_BCN_OFF';
 import CMD_2043_CAL from '@/lib/helpers/terminal-actions/CMD_2043_CAL';
 import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_TIME__GPS';
+import { addLog } from '../log.store';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
@@ -45,6 +46,10 @@ function createTerminalStore() {
       }
 
       if (commandParts[0] !== 'CMD' || commandParts.length < 3) {
+        addLog({
+          value: `Error: Invalid command - ${command.value}`,
+          time: command.time,
+        });
         return updateCommandHistory({
           $state,
           command,

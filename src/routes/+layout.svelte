@@ -5,7 +5,7 @@
   import { onMount } from 'svelte';
   import '../app.css';
   import mqttHandler from '@/lib/mqtt';
-  import { uiStore } from '@/stores/ui.store.';
+  import { uiStore } from '@/stores/ui.store';
 
   // onMount(() => {
   //   function handleBeforeUnload(e: BeforeUnloadEvent) {
