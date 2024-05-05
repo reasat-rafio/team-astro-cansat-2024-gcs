@@ -1,4 +1,5 @@
 import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
+import { addLog } from '@/stores/log.store';
 import updateCommandHistory from '@/stores/terminal/helpers/update-command-history';
 
 interface Type {
@@ -10,6 +11,11 @@ export default function CMD_2043_SIMP_PRESSURE({ $state, command }: Type) {
   try {
     const pressureVal = command.value.split(',')[3];
 
+    addLog({
+      value: `${command.value} executed successfully. Pressure data has been set to ${pressureVal}.`,
+      time: command.time,
+    });
+
     return updateCommandHistory({
       $state,
       command,
@@ -17,6 +23,8 @@ export default function CMD_2043_SIMP_PRESSURE({ $state, command }: Type) {
       output: `<p class="text-green-600">${command.value} executed successfully. Pressure data has been set to ${pressureVal} </p>`,
     });
   } catch (error) {
+    addLog({ value: `Error: ${error}`, time: command.time });
+
     return updateCommandHistory({
       command,
       $state,

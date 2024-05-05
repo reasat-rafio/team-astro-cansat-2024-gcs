@@ -11,6 +11,7 @@ import {
   gyroscopeStore,
 } from '@/stores/sensor.data.store';
 import { toast } from 'svelte-sonner';
+import { addLog } from '@/stores/log.store';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -18,10 +19,12 @@ const createMqttHandler = () => {
 
   mqttClient.on('error', (err) => {
     toast.error(`Error: ${err}`);
+    addLog({ value: `Error: ${err}`, time: new Date() });
     mqttClient.end();
   });
 
   mqttClient.on('connect', () => {
+    addLog({ value: `MQTT client connected`, time: new Date() });
     toast.success(`MQTT client connected`);
   });
 
