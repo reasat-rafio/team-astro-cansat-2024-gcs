@@ -7,6 +7,28 @@
   import mqttHandler from '@/lib/mqtt';
   import { uiStore } from '@/stores/ui.store';
 
+  async function detectSWUpdate() {
+    const registration = await navigator.serviceWorker.ready;
+
+    registration.addEventListener('updatefound', () => {
+      const newSw = registration.installing;
+      newSw?.addEventListener('statechange', () => {
+        if (newSw?.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            if (confirm('New version available. Reload to update?')) {
+              newSw.postMessage({ type: 'SKIP_WAITING' });
+              window.location.reload();
+            }
+          }
+        }
+      });
+    });
+  }
+
+  onMount(() => {
+    detectSWUpdate();
+  });
+
   // onMount(() => {
   //   function handleBeforeUnload(e: BeforeUnloadEvent) {
   //     e.preventDefault();
@@ -25,7 +47,8 @@
 
 <svelte:head>
   <html lang="en" />
-  <title>CANSAT GCS</title>
+
+  <title>Team Astro</title>
 </svelte:head>
 
 <Toaster
