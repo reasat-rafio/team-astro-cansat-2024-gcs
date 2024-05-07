@@ -13,9 +13,14 @@
     scrollToBottom();
   });
 
+  $: if ($logStore.length) {
+    scrollToBottom();
+  }
+
   function scrollToBottom() {
     if (sectionEl) {
-      sectionEl.scrollTop = sectionEl.scrollHeight;
+      sectionEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+      sectionEl.style.scrollMargin = `2.5rem`;
     }
   }
 </script>
@@ -23,7 +28,7 @@
 <ScrollArea class="h-full w-full p-4 pb-5">
   <Header icon={ScrollTextIcon} title="Logs" />
 
-  <div class="mt-5 flex w-full flex-col gap-y-2">
+  <div bind:this={sectionEl} class="mt-5 flex w-full flex-col gap-y-2">
     {#each $logStore as { value, time }, index}
       <div class="flex gap-5" transition:slide>
         <div class="flex-1">

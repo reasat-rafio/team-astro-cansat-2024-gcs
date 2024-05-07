@@ -5,7 +5,19 @@
   import Switch from '../ui/switch/switch.svelte';
   import { Label } from '../ui/label';
   import { uiStore } from '@/stores/ui.store';
-  import { clearLogs } from '@/stores/log.store';
+  import logStore, { addLog, clearLogs } from '@/stores/log.store';
+
+  $: if ($uiStore.showNotification) {
+    addLog({
+      time: new Date(),
+      value: 'Notification is enabled',
+    });
+  } else {
+    addLog({
+      time: new Date(),
+      value: 'Notification is disabled',
+    });
+  }
 </script>
 
 <Sheet.Root>

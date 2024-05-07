@@ -6,8 +6,14 @@
   import CommandDropDown from './CommandDropDown.svelte';
   import History from './History.svelte';
   import Input from './Input.svelte';
+  import commandHistoryStore from '@/stores/command.history.store';
 
   let inputEl: HTMLSpanElement;
+  let maximizeBlockEl: HTMLDivElement;
+
+  $: if ($commandHistoryStore?.commandHistory?.length && maximizeBlockEl) {
+    maximizeBlockEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
@@ -44,6 +50,7 @@
   </button>
   {#if $terminalStore.terminalUiState === 'maximize'}
     <div
+      bind:this={maximizeBlockEl}
       transition:slide
       class="h-[450px] space-y-2 overflow-y-auto p-2 backdrop-blur-md scrollbar-thin">
       <History />

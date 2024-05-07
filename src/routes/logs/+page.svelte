@@ -2,9 +2,17 @@
   import formatDate from '@/lib/helpers/format-date';
   import logStore from '@/stores/log.store';
   import { slide } from 'svelte/transition';
+
+  let sectionEl: HTMLElement;
+
+  $: if ($logStore?.length && sectionEl) {
+    sectionEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
 </script>
 
-<section class="min-h-screen w-full rounded-lg border p-4">
+<section
+  bind:this={sectionEl}
+  class="min-h-screen w-full rounded-lg border p-4">
   {#if !!$logStore?.length}
     <div class="flex w-full flex-col gap-y-2">
       {#each $logStore as { value, time }, index}
