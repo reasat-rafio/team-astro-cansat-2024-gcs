@@ -7,6 +7,7 @@
   import History from './History.svelte';
   import Input from './Input.svelte';
   import commandHistoryStore from '@/stores/command.history.store';
+  import { ScrollArea } from '@/components/ui/scroll-area/index.js';
 
   let inputEl: HTMLSpanElement;
   let maximizeBlockEl: HTMLDivElement;
@@ -25,7 +26,7 @@
   class={cn(
     'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md border border-primary bg-popover transition-all duration-300',
     {
-      'max-w-lg': $terminalStore.terminalUiState === 'minimize',
+      'max-w-xs': $terminalStore.terminalUiState === 'minimize',
       'max-w-4xl': $terminalStore.terminalUiState === 'maximize',
     },
   )}>
@@ -34,7 +35,9 @@
     class="flex w-full items-center justify-between bg-secondary p-1">
     <div class="flex items-center gap-2">
       <Terminal size={20} />
-      <CommandDropDown />
+      {#if $terminalStore.terminalUiState === 'maximize'}
+        <CommandDropDown />
+      {/if}
     </div>
 
     <div class="flex gap-4 text-popover-foreground">
@@ -49,13 +52,12 @@
     </div>
   </button>
   {#if $terminalStore.terminalUiState === 'maximize'}
-    <div
-      bind:this={maximizeBlockEl}
-      transition:slide
-      class="h-[450px] space-y-2 overflow-y-auto p-2 backdrop-blur-md scrollbar-thin">
-      <History />
+    <div bind:this={maximizeBlockEl} transition:slide class="backdrop-blur-md">
+      <ScrollArea class="h-[450px] space-y-2 p-2 pr-5">
+        <History />
 
-      <Input bind:inputEl />
+        <Input bind:inputEl />
+      </ScrollArea>
     </div>
   {/if}
 </aside>

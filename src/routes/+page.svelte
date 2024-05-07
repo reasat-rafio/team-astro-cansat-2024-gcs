@@ -15,24 +15,24 @@
     | 'Distance';
 </script>
 
-<section style="height: calc(100vh - {$uiStore.navbarHeight}px);" class="">
+<section style="height: calc(100vh - {$uiStore.navbarHeight}px);">
   <Resizable.PaneGroup direction="horizontal" class="w-full rounded-lg border">
     <Resizable.Pane defaultSize={25}>
       <SystemSteps />
     </Resizable.Pane>
-    <Resizable.Handle />
+    <Resizable.Handle withHandle />
 
     <Resizable.Pane defaultSize={15}>
       <Outputs />
     </Resizable.Pane>
 
-    <Resizable.Handle />
+    <Resizable.Handle withHandle />
     <Resizable.Pane defaultSize={60}>
       <Resizable.PaneGroup direction="vertical">
         <Resizable.Pane defaultSize={60}>
           <Charts />
         </Resizable.Pane>
-        <Resizable.Handle />
+        <Resizable.Handle withHandle />
         <Resizable.Pane defaultSize={40}>
           <Logs />
         </Resizable.Pane>
