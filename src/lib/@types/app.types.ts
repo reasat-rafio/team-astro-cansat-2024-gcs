@@ -15,7 +15,7 @@ export interface StringData {
 
 export interface XYZStringData {
   value: { x: string; y: string; z: string };
-  time: string;
+  time: Date;
 }
 export interface XYStringArrayData {
   values: { x: string; y: string }[];

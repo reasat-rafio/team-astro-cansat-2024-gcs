@@ -15,7 +15,7 @@
   export let width: string | number = 600;
 
   type Data = {
-    x: string;
+    x: Date;
     y: {
       x: number;
       y: number;
@@ -24,10 +24,10 @@
   };
 
   let loaded = false;
-  const x = (d: Data) => new Date(d.x).getTime();
+  const x = (d: Data) => d.x;
   const y = [(d: Data) => d.y.x, (d: Data) => d.y.y, (d: Data) => d.y.z];
   const colors = ['#2563EB', '#EB6C25', '#6a48f2'];
-  const color = (_: Data, i: number) => colors[i];
+  // const color = (_: Data, i: number) => colors[i];
   const items = [
     { name: 'TILT_X', color: colors[0] },
     { name: 'TILT_Y', color: colors[1] },

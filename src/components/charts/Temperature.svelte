@@ -13,10 +13,10 @@
   import { onMount } from 'svelte';
 
   export let width: string | number = 600;
+  type Data = { x: Date; y: number };
 
-  type Data = { x: string; y: number };
   let data: Data[] = [];
-  const x = (d: Data) => new Date(d.x).getTime();
+  const x = (d: Data) => d.x;
   const y = (d: Data) => d.y;
   let loaded = false;
   const colors = ['#2563EB'];
