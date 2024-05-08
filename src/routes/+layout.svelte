@@ -7,38 +7,38 @@
   import mqttHandler from '@/lib/mqtt';
   import { uiStore } from '@/stores/ui.store';
 
-  // async function detectSWUpdate() {
-  //   const registration = await navigator.serviceWorker.ready;
+  async function detectSWUpdate() {
+    const registration = await navigator.serviceWorker.ready;
 
-  //   registration.addEventListener('updatefound', () => {
-  //     const newSw = registration.installing;
-  //     newSw?.addEventListener('statechange', () => {
-  //       if (newSw?.state === 'installed') {
-  //         if (navigator.serviceWorker.controller) {
-  //           if (confirm('New version available. Reload to update?')) {
-  //             newSw.postMessage({ type: 'SKIP_WAITING' });
-  //             window.location.reload();
-  //           }
-  //         }
-  //       }
-  //     });
-  //   });
-  // }
+    registration.addEventListener('updatefound', () => {
+      const newSw = registration.installing;
+      newSw?.addEventListener('statechange', () => {
+        if (newSw?.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            if (confirm('New version available. Reload to update?')) {
+              newSw.postMessage({ type: 'SKIP_WAITING' });
+              window.location.reload();
+            }
+          }
+        }
+      });
+    });
+  }
 
-  // onMount(() => {
-  //   detectSWUpdate();
-  // });
+  onMount(() => {
+    detectSWUpdate();
+  });
 
-  // onMount(() => {
-  //   function handleBeforeUnload(e: BeforeUnloadEvent) {
-  //     e.preventDefault();
-  //     e.returnValue = '';
-  //     return 'Are you sure you want to leave? You are in the middle of something.';
-  //   }
+  onMount(() => {
+    function handleBeforeUnload(e: BeforeUnloadEvent) {
+      e.preventDefault();
+      e.returnValue = '';
+      return 'Are you sure you want to leave? You are in the middle of something.';
+    }
 
-  //   window.addEventListener('beforeunload', handleBeforeUnload);
-  //   return () => window.removeEventListener('beforeunload', handleBeforeUnload);
-  // });
+    window.addEventListener('beforeunload', handleBeforeUnload);
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload);
+  });
 
   onMount(() => {
     mqttHandler.client.subscribe('test');
