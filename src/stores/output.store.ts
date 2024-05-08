@@ -51,10 +51,20 @@ function createOutputStore() {
     cmdEcho: '0',
   });
 
+  function updateOutput(data: OutPutStore) {
+    update((store) => {
+      return {
+        ...store,
+        ...data,
+      };
+    });
+  }
+
   return {
     set,
     update,
     subscribe,
+    updateOutput,
   };
 }
 

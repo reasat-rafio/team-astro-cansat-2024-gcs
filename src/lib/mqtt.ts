@@ -10,6 +10,7 @@ import {
   gpsCoordinatesStore,
   gyroscopeStore,
 } from '@/stores/sensor.data.store';
+import outputStore from '@/stores/output.store';
 import { toast } from 'svelte-sonner';
 import { addLog } from '@/stores/log.store';
 import { parseTelemetryData } from './helpers/helper';
@@ -39,104 +40,77 @@ const createMqttHandler = () => {
 
       switch (topic) {
         case 'telemetry/data':
+          addLog({
+            value: `Received telemetry data:  ${message}`,
+            time: new Date(),
+          });
+
           const telemetryData = parseTelemetryData(decoder.decode(message));
           const time = new Date();
+          outputStore.updateOutput({
+            teamId: telemetryData.TEAM_ID,
+            missionTime: telemetryData.MISSION_TIME,
+            packetCount: telemetryData.PACKET_COUNT,
+            activeMode: 'Flight',
+            activeState: 'Ground',
+            altitude: telemetryData.ALTITUDE,
+            airSpeed: telemetryData.AIR_SPEED,
+            hsDeployed: telemetryData.HS_DEPLOYED,
+            pcDeployed: telemetryData.PC_DEPLOYED,
+            temperature: telemetryData.TEMPERATURE,
+            voltage: telemetryData.VOLTAGE,
+            pressure: telemetryData.PRESSURE,
+            gpsTime: telemetryData.GPS_TIME,
+            gpsAltitude: telemetryData.GPS_ALTITUDE,
+            gpsLatitude: telemetryData.GPS_LATITUDE,
+            gpsLongitude: telemetryData.GPS_LONGITUDE,
+            // gpsStas: telemetryData.GPS_STATUS,
+          });
 
           altitudeStore.updateAltitude({
             time,
             value: telemetryData.ALTITUDE,
           });
 
-          // airPressureStore.updateAirPressure({
-          //   time,
-          //   value: telemetryData.A,
-          // });
+          airPressureStore.updateAirPressure({
+            time,
+            value: telemetryData.PRESSURE,
+          });
+
+          temperatureStore.updateTemperature({
+            time,
+            value: telemetryData.TEMPERATURE,
+          });
+
+          batteryVoltageStore.updateBatteryVoltage({
+            time,
+            value: telemetryData.VOLTAGE,
+          });
+
+          tiltAngleStore.updateTiltAngle({
+            time,
+            value: {
+              x: telemetryData.TILT_X,
+              y: telemetryData.TILT_Y,
+              z: telemetryData.ROT_Z,
+            },
+          });
+
+          airSpeedStore.updateAirSpeed({
+            time,
+            value: telemetryData.AIR_SPEED,
+          });
+
+          gpsCoordinatesStore.updateGpsCoordinates({
+            time,
+            value: {
+              x: telemetryData.GPS_LATITUDE,
+              y: telemetryData.GPS_LONGITUDE,
+              z: telemetryData.GPS_ALTITUDE,
+            },
+          });
 
           break;
-
-        // case 'altitude':
-        //   altitudeStore.updateAltitude({
-        //     time: new Date(),
-        //     value: String(decodedMessage.value),
-        //   });
-
-        //   break;
-
-        // case 'air_pressure':
-        //   airPressureStore.updateAirPressure({
-        //     time: '2021-09-01T00:00:00Z',
-        //     value: String(decodedMessage.value),
-        //   });
-
-        //   break;
-
-        // case 'temperature':
-        //   temperatureStore.updateTemperature({
-        //     time: '',
-        //     value: String(decodedMessage.value),
-        //   });
-
-        //   break;
-
-        // case 'battery_voltage':
-        //   batteryVoltageStore.updateBatteryVoltage({
-        //     time: '',
-        //     value: String(decodedMessage.value),
-        //   });
-        //   break;
-
-        // case 'tilt_angle':
-        //   tiltAngleStore.updateTiltAngle({
-        //     time: '',
-        //     value: { x: '0', y: '0', z: '0' },
-        //   });
-
-        //   break;
-
-        // case 'air_speed':
-        //   airSpeedStore.updateAirSpeed({
-        //     time: '',
-        //     value: String(decodedMessage.value),
-        //   });
-
-        //   break;
-
-        // case 'command_echo':
-        //   // gcsService.send({
-        //   //   type: 'U',
-        //   //   airSpeed: decodedMessage as StringData
-        //   // });
-        //   break;
-
-        // case 'gps_coordinates':
-        //   gpsCoordinatesStore.updateGpsCoordinates({
-        //     time: '',
-        //     value: { x: '0', y: '0', z: '0' },
-        //   });
-
-        //   break;
-
-        // case 'longitude':
-        //   //   gcsService.send({
-        //   //     type: 'UPDATE_LONGITUDE',
-        //   //     longitude: decodedMessage as StringData,
-        //   //   });
-        //   break;
-
-        // case 'satellites_tracked':
-        //   //   gcsService.send({
-        //   //     type: 'UPDATE_SATELLITES_TRACKED',
-        //   //     satellitesTracked: decodedMessage as StringData,
-        //   //   });
-        //   break;
-
-        // case 'gyroscope':
-        //   gyroscopeStore.updateGyroscope({
-        //     time: '',
-        //     value: { x: '0', y: '0', z: '0' },
-        //   });
-
-        //   break;
 
         default:
           break;
