@@ -1,6 +1,5 @@
 <script lang="ts">
   import formatDate from '@/lib/helpers/format-date';
-  import { calculatedAltitude } from '@/lib/helpers/helper';
   import { altitudeStore } from '@/stores/sensor.data.store';
   import {
     VisAxis,
@@ -15,21 +14,21 @@
 
   export let width: string | number = 600;
 
-  type Data = { x: string; y: number };
+  type Data = { x: Date; y: number };
   let data: Data[] = [];
-  const x = (d: Data) => new Date(d.x).getTime();
+  const x = (d: Data) => d.x;
   const y = (d: Data) => d.y;
   let loaded = false;
   const colors = ['#2563EB'];
   const items = [{ name: 'ALTITUDE', color: colors[0] }];
   const template = (d: Data) =>
-    `<span>time :  ${d.x}<br / > value : ${d.y.toFixed(2)} </ span>`;
-  const tickFormat = (value: string) => formatDate(new Date(value));
+    `<span>time :  ${formatDate(d.x)}<br / > value : ${d.y.toFixed(2)} </ span>`;
+  const tickFormat = (value: Date) => formatDate(value);
   let selection: number[] = [];
   $: xDomain = selection as [number, number] | undefined;
 
   $: if ($altitudeStore?.currentVal && loaded) {
-    const y = calculatedAltitude(+$altitudeStore.currentVal?.value);
+    const y = +$altitudeStore.currentVal?.value;
     const x = $altitudeStore.currentVal?.time;
 
     data.push({ x, y });
@@ -40,7 +39,7 @@
     const history = $altitudeStore.history;
     if (!!history?.length)
       history.forEach(({ time, value }) => {
-        const y = calculatedAltitude(+value);
+        const y = +value;
         const x = time;
         data.push({ x, y });
         data = data;

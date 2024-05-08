@@ -41,7 +41,7 @@
   });
 
   onMount(() => {
-    mqttHandler.client.subscribe('test');
+    mqttHandler.client.subscribe('telemetry/data');
   });
 </script>
 

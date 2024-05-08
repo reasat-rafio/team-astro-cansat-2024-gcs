@@ -12,6 +12,7 @@ import {
 } from '@/stores/sensor.data.store';
 import { toast } from 'svelte-sonner';
 import { addLog } from '@/stores/log.store';
+import { parseTelemetryData } from './helpers/helper';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -32,96 +33,110 @@ const createMqttHandler = () => {
     'message',
     async (topic: MqttPayloadTopic, message: BufferSource) => {
       const decoder = new TextDecoder('utf8');
-      const decodedMessage = JSON.parse(decoder.decode(message)) as {
-        value: number;
-      };
-
-      console.log({ decodedMessage });
+      // const decodedMessage = JSON.parse(decoder.decode(message)) as {
+      //   value: number;
+      // };
 
       switch (topic) {
-        case 'altitude':
+        case 'telemetry/data':
+          const telemetryData = parseTelemetryData(decoder.decode(message));
+          const time = new Date();
+
           altitudeStore.updateAltitude({
-            time: new Date(),
-            value: String(decodedMessage.value),
+            time,
+            value: telemetryData.ALTITUDE,
           });
 
-          break;
-
-        case 'air_pressure':
-          airPressureStore.updateAirPressure({
-            time: '2021-09-01T00:00:00Z',
-            value: String(decodedMessage.value),
-          });
-
-          break;
-
-        case 'temperature':
-          temperatureStore.updateTemperature({
-            time: '',
-            value: String(decodedMessage.value),
-          });
-
-          break;
-
-        case 'battery_voltage':
-          batteryVoltageStore.updateBatteryVoltage({
-            time: '',
-            value: String(decodedMessage.value),
-          });
-          break;
-
-        case 'tilt_angle':
-          tiltAngleStore.updateTiltAngle({
-            time: '',
-            value: { x: '0', y: '0', z: '0' },
-          });
-
-          break;
-
-        case 'air_speed':
-          airSpeedStore.updateAirSpeed({
-            time: '',
-            value: String(decodedMessage.value),
-          });
-
-          break;
-
-        case 'command_echo':
-          // gcsService.send({
-          //   type: 'U',
-          //   airSpeed: decodedMessage as StringData
+          // airPressureStore.updateAirPressure({
+          //   time,
+          //   value: telemetryData.A,
           // });
-          break;
-
-        case 'gps_coordinates':
-          gpsCoordinatesStore.updateGpsCoordinates({
-            time: '',
-            value: { x: '0', y: '0', z: '0' },
-          });
 
           break;
 
-        case 'longitude':
-          //   gcsService.send({
-          //     type: 'UPDATE_LONGITUDE',
-          //     longitude: decodedMessage as StringData,
-          //   });
-          break;
+        // case 'altitude':
+        //   altitudeStore.updateAltitude({
+        //     time: new Date(),
+        //     value: String(decodedMessage.value),
+        //   });
 
-        case 'satellites_tracked':
-          //   gcsService.send({
-          //     type: 'UPDATE_SATELLITES_TRACKED',
-          //     satellitesTracked: decodedMessage as StringData,
-          //   });
-          break;
+        //   break;
 
-        case 'gyroscope':
-          gyroscopeStore.updateGyroscope({
-            time: '',
-            value: { x: '0', y: '0', z: '0' },
-          });
+        // case 'air_pressure':
+        //   airPressureStore.updateAirPressure({
+        //     time: '2021-09-01T00:00:00Z',
+        //     value: String(decodedMessage.value),
+        //   });
 
-          break;
+        //   break;
+
+        // case 'temperature':
+        //   temperatureStore.updateTemperature({
+        //     time: '',
+        //     value: String(decodedMessage.value),
+        //   });
+
+        //   break;
+
+        // case 'battery_voltage':
+        //   batteryVoltageStore.updateBatteryVoltage({
+        //     time: '',
+        //     value: String(decodedMessage.value),
+        //   });
+        //   break;
+
+        // case 'tilt_angle':
+        //   tiltAngleStore.updateTiltAngle({
+        //     time: '',
+        //     value: { x: '0', y: '0', z: '0' },
+        //   });
+
+        //   break;
+
+        // case 'air_speed':
+        //   airSpeedStore.updateAirSpeed({
+        //     time: '',
+        //     value: String(decodedMessage.value),
+        //   });
+
+        //   break;
+
+        // case 'command_echo':
+        //   // gcsService.send({
+        //   //   type: 'U',
+        //   //   airSpeed: decodedMessage as StringData
+        //   // });
+        //   break;
+
+        // case 'gps_coordinates':
+        //   gpsCoordinatesStore.updateGpsCoordinates({
+        //     time: '',
+        //     value: { x: '0', y: '0', z: '0' },
+        //   });
+
+        //   break;
+
+        // case 'longitude':
+        //   //   gcsService.send({
+        //   //     type: 'UPDATE_LONGITUDE',
+        //   //     longitude: decodedMessage as StringData,
+        //   //   });
+        //   break;
+
+        // case 'satellites_tracked':
+        //   //   gcsService.send({
+        //   //     type: 'UPDATE_SATELLITES_TRACKED',
+        //   //     satellitesTracked: decodedMessage as StringData,
+        //   //   });
+        //   break;
+
+        // case 'gyroscope':
+        //   gyroscopeStore.updateGyroscope({
+        //     time: '',
+        //     value: { x: '0', y: '0', z: '0' },
+        //   });
+
+        //   break;
 
         default:
           break;

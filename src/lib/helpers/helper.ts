@@ -1,3 +1,5 @@
+import type { TelemetryData } from '../@types/app.types';
+
 function calculateAltitude(
   P: number, // atmospheric pressure at a certain altitude in Pascals
   Pb: number, // atmospheric pressure at sea level in Pascals
@@ -52,4 +54,38 @@ export function determineParentState(childStates: State[]): State {
 
 export function escapeAngleBrackets(text: string) {
   return text.replace(/</g, '&lt;').replace(/>/g, '&gt;');
+}
+
+export function parseTelemetryData(dataString: string): TelemetryData {
+  const dataParts = dataString.split(', ');
+
+  const telemetryData: TelemetryData = {
+    TEAM_ID: dataParts[0],
+    MISSION_TIME: dataParts[1],
+    PACKET_COUNT: dataParts[2],
+    MODE: dataParts[3],
+    STATE: dataParts[4],
+    ALTITUDE: dataParts[5],
+    AIR_SPEED: dataParts[6],
+    HS_DEPLOYED: dataParts[7],
+    PC_DEPLOYED: dataParts[8],
+    TEMPERATURE: dataParts[9],
+    VOLTAGE: dataParts[10],
+    PRESSURE: dataParts[11],
+    GPS_TIME: dataParts[12],
+    GPS_ALTITUDE: dataParts[13],
+    GPS_LATITUDE: dataParts[14],
+    GPS_LONGITUDE: dataParts[15],
+    GPS_SATS: dataParts[16],
+    TILT_X: dataParts[17],
+    TILT_Y: dataParts[18],
+    ROT_Z: dataParts[19],
+    CMD_ECHO: dataParts[20],
+  };
+
+  if (dataParts.length > 21) {
+    telemetryData.OPTIONAL_DATA = dataParts.slice(21);
+  }
+
+  return telemetryData;
 }

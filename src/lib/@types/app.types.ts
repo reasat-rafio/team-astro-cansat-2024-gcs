@@ -10,7 +10,7 @@ export interface XYZStringArrayData {
 
 export interface StringData {
   value: string;
-  time: string;
+  time: Date;
 }
 
 export interface XYZStringData {
@@ -331,6 +331,7 @@ export type CSV_HEAD =
   | 'ATMOSPHERIC_PRESSURE';
 
 export type MqttPayloadTopic =
+  | 'telemetry/data'
   | 'altitude'
   | 'air_pressure'
   | 'temperature'
@@ -357,3 +358,28 @@ export type ValidCommand =
   | 'CMD,2043,SIM,DISABLE'
   | 'help'
   | 'clear';
+
+export interface TelemetryData {
+  TEAM_ID: string;
+  MISSION_TIME: string;
+  PACKET_COUNT: string;
+  MODE: string;
+  STATE: string;
+  ALTITUDE: string;
+  AIR_SPEED: string;
+  HS_DEPLOYED: string;
+  PC_DEPLOYED: string;
+  TEMPERATURE: string;
+  VOLTAGE: string;
+  PRESSURE: string;
+  GPS_TIME: string;
+  GPS_ALTITUDE: string;
+  GPS_LATITUDE: string;
+  GPS_LONGITUDE: string;
+  GPS_SATS: string;
+  TILT_X: string;
+  TILT_Y: string;
+  ROT_Z: string;
+  CMD_ECHO: string;
+  OPTIONAL_DATA?: string[];
+}
