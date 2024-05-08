@@ -23,7 +23,7 @@
   const items = [{ name: 'AIR_SPEED', color: colors[0] }];
   const template = (d: Data) =>
     `<span>time :  ${formatDate(d.x)}<br / > value : ${d.y.toFixed(2)} </ span>`;
-  const tickFormat = (value: string) => formatDate(new Date(value));
+  const tickFormat = (value: Date) => formatDate(value);
   let selection: number[] = [];
   $: xDomain = selection as [number, number] | undefined;
 

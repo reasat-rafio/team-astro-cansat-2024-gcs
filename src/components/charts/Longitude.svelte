@@ -1,4 +1,4 @@
-<script lang="ts">
+<!-- <script lang="ts">
   import { Line } from 'svelte-chartjs';
   import {
     Chart as ChartJS,
@@ -125,4 +125,4 @@
         }} />
     </div>
   </div>
-</section>
+</section> -->

@@ -36,7 +36,7 @@
 
   const template = (d: Data) =>
     `<span>time :  ${formatDate(d.x)}<br /> altitude : ${d.y.x}<br /> latitude : ${d.y.y}<br /> longitude : ${d.y.z}<br /> </ span>`;
-  const tickFormat = (value: string) => formatDate(value);
+  const tickFormat = (value: Date) => formatDate(value);
   let data: Data[] = [];
   let selection: number[] = [];
   $: xDomain = selection as [number, number] | undefined;
@@ -62,6 +62,7 @@
       });
     loaded = true;
   });
+  formatDate;
 
   function updateDomain(
     selection: [number, number],
