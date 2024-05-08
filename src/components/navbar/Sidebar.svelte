@@ -5,18 +5,20 @@
   import Switch from '../ui/switch/switch.svelte';
   import { Label } from '../ui/label';
   import { uiStore } from '@/stores/ui.store';
-  import logStore, { addLog, clearLogs } from '@/stores/log.store';
+  import { addLog, clearLogs } from '@/stores/log.store';
 
-  $: if ($uiStore.showNotification) {
-    addLog({
-      time: new Date(),
-      value: 'Notification is enabled',
-    });
-  } else {
-    addLog({
-      time: new Date(),
-      value: 'Notification is disabled',
-    });
+  function updateNotification(isChecked: boolean) {
+    if (isChecked) {
+      addLog({
+        time: new Date(),
+        value: 'Notification is enabled',
+      });
+    } else {
+      addLog({
+        time: new Date(),
+        value: 'Notification is disabled',
+      });
+    }
   }
 </script>
 
@@ -43,6 +45,7 @@
         <div class="flex w-full flex-col gap-2">
           <div class="flex w-full items-center space-x-2">
             <Switch
+              onCheckedChange={updateNotification}
               bind:checked={$uiStore.showNotification}
               id="show-notification" />
             <Label for="show-notification">Show Notification</Label>
