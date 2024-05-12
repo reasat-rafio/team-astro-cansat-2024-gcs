@@ -1,74 +1,65 @@
 <script lang="ts">
-  import formatDate from '@/lib/helpers/format-date';
-  import { airSpeedStore } from '@/stores/sensor.data.store';
+  import * as echarts from 'echarts';
+  import formatTime from '@/lib/helpers/format-date';
   import {
-    VisXYContainer,
-    VisLine,
-    VisAxis,
-    VisCrosshair,
-    VisTooltip,
-    VisBulletLegend,
-    VisBrush,
-  } from '@unovis/svelte';
-  import { onMount } from 'svelte';
+    airSpeedStore,
+    type SensorDataStore,
+  } from '@/stores/sensor.data.store';
 
-  export let width: string | number = 600;
+  export let width: string = '600px';
+  export let height: string = '450px';
 
-  type Data = { x: Date; y: number };
-  let data: Data[] = [];
-  let loaded = false;
-  const x = (d: Data) => d.x;
-  const y = (d: Data) => d.y;
-  const colors = ['#2563EB'];
-  const items = [{ name: 'AIR_SPEED', color: colors[0] }];
-  const template = (d: Data) =>
-    `<span>time :  ${formatDate(d.x)}<br / > value : ${d.y.toFixed(2)} </ span>`;
-  const tickFormat = (value: Date) => formatDate(value);
-  let selection: number[] = [];
-  $: xDomain = selection as [number, number] | undefined;
+  function chart(node: HTMLDivElement, props: SensorDataStore['history']) {
+    const chart = echarts.init(node);
+    chart.setOption({
+      tooltip: {
+        trigger: 'axis',
+        axisPointer: {
+          type: 'line',
+        },
+        formatter: (params: any) => `${params[0].name} : ${params[0].value}`,
+      },
 
-  $: if ($airSpeedStore?.currentVal && loaded) {
-    const y = +$airSpeedStore.currentVal?.value;
-    const x = $airSpeedStore.currentVal.time;
-
-    data.push({ x, y });
-    data = data;
-  }
-
-  onMount(() => {
-    const history = $airSpeedStore.history;
-    if (!!history?.length)
-      history.forEach(({ time, value }) => {
-        const y = +value;
-        const x = time;
-        data.push({ x, y });
-        data = data;
-      });
-    loaded = true;
-  });
-
-  function updateDomain(
-    selection: [number, number],
-    _: unknown,
-    userDriven: boolean,
-  ) {
-    if (userDriven) xDomain = selection;
+      dataZoom: [
+        {
+          type: 'inside',
+          start: 0,
+          end: 100,
+        },
+        {
+          start: 0,
+          end: 100,
+        },
+      ],
+      title: {
+        text: 'Air Speed',
+      },
+      xAxis: {
+        type: 'category',
+        data: props?.map(({ time }) => formatTime(time)),
+      },
+      yAxis: {
+        type: 'value',
+      },
+      series: [{ type: 'line', data: props?.map(({ value }) => value) }],
+    });
+    return {
+      update(props: SensorDataStore['history']) {
+        chart.setOption({
+          xAxis: {
+            data: props?.map(({ time }) => formatTime(time)),
+          },
+          series: [
+            {
+              data: props?.map(({ value }) => value),
+            },
+          ],
+        });
+      },
+    };
   }
 </script>
 
-<div class="h-full">
-  <VisXYContainer {xDomain} preventEmptyDomain {width} class="h-[500px]" {data}>
-    <VisBulletLegend {items} />
-    <VisAxis gridLine={false} type="x" label="Time" numTicks={6} {tickFormat} />
-    <VisLine {x} {y} />
-    <VisAxis gridLine={true} type="y" label="Value" />
-    <VisCrosshair {template} />
-    <VisTooltip />
-  </VisXYContainer>
-  <VisXYContainer preventEmptyDomain {width} class="h-[100px]" {data}>
-    <VisAxis gridLine={false} type="x" numTicks={6} {tickFormat} />
-    <VisBrush bind:selection onBrush={updateDomain} draggable={true} />
-    <VisLine {x} {y} />
-    <VisAxis gridLine={true} type="y" />
-  </VisXYContainer>
-</div>
+<div
+  use:chart={$airSpeedStore.history}
+  style="width: {width}; height: {height};" />

@@ -20,13 +20,13 @@
   <SectionHeader title="Payload" color="primary" />
 
   <div class="grid grid-cols-2 gap-[50px] [&>*]:h-[600px]">
-    <Altitude width="100%" />
-    <AirPressure width="100%" />
-    <AirSpeed width="100%" />
-    <Temperature width="100%" />
-    <BatteryVoltage width="100%" />
-    <TiltAngle width="100%" />
-    <GpsCoordinates width="100%" />
+    <Altitude width="100%" height="600px" />
+    <AirPressure width="100%" height="600px" />
+    <AirSpeed width="100%" height="600px" />
+    <Temperature width="100%" height="600px" />
+    <BatteryVoltage width="100%" height="600px" />
+    <TiltAngle width="100%" height="600px" />
+    <GpsCoordinates width="100%" height="600px" />
     <!-- <CommandEcho />
     <Longitude />
     <SatellitesTracked />

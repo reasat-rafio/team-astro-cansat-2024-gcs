@@ -46,6 +46,7 @@ const createMqttHandler = () => {
           });
 
           const telemetryData = parseTelemetryData(decoder.decode(message));
+
           const time = new Date();
           outputStore.updateOutput({
             teamId: telemetryData.TEAM_ID,

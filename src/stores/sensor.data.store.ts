@@ -1,11 +1,13 @@
 import type { StringData, XYZStringData } from '@/lib/@types/app.types';
 import { writable } from 'svelte/store';
 
+export type SensorDataStore = {
+  currentVal: StringData | null;
+  history: StringData[];
+};
+
 function createAltitudeStore() {
-  const { subscribe, update } = writable<{
-    currentVal: StringData | null;
-    history: StringData[];
-  }>({
+  const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
     history: [],
   });
@@ -27,10 +29,7 @@ function createAltitudeStore() {
 export const altitudeStore = createAltitudeStore();
 
 function createAirPressureStore() {
-  const { subscribe, update } = writable<{
-    currentVal: StringData | null;
-    history: StringData[];
-  }>({
+  const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
     history: [],
   });
@@ -51,10 +50,7 @@ function createAirPressureStore() {
 export const airPressureStore = createAirPressureStore();
 
 function createTemperatureStore() {
-  const { subscribe, update } = writable<{
-    currentVal: StringData | null;
-    history: StringData[];
-  }>({
+  const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
     history: [],
   });
@@ -76,10 +72,7 @@ function createTemperatureStore() {
 export const temperatureStore = createTemperatureStore();
 
 function createAirSpeedStore() {
-  const { subscribe, update } = writable<{
-    currentVal: StringData | null;
-    history: StringData[];
-  }>({
+  const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
     history: [],
   });
@@ -101,10 +94,7 @@ function createAirSpeedStore() {
 export const airSpeedStore = createAirSpeedStore();
 
 function createBatteryVoltageStore() {
-  const { subscribe, update } = writable<{
-    currentVal: StringData | null;
-    history: StringData[];
-  }>({
+  const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
     history: [],
   });
@@ -149,11 +139,13 @@ function createGpsCoordinatesStore() {
 
 export const gpsCoordinatesStore = createGpsCoordinatesStore();
 
+export type SensorData2Store = {
+  currentVal: XYZStringData | null;
+  history: XYZStringData[];
+};
+
 function createGyroscopeStore() {
-  const { subscribe, update } = writable<{
-    currentVal: XYZStringData | null;
-    history: XYZStringData[];
-  }>({
+  const { subscribe, update } = writable<SensorData2Store>({
     currentVal: null,
     history: [],
   });
@@ -175,10 +167,7 @@ function createGyroscopeStore() {
 export const gyroscopeStore = createGyroscopeStore();
 
 function createTiltAngleStore() {
-  const { subscribe, update } = writable<{
-    currentVal: XYZStringData | null;
-    history: XYZStringData[];
-  }>({
+  const { subscribe, update } = writable<SensorData2Store>({
     currentVal: null,
     history: [],
   });
