@@ -53,7 +53,7 @@
   </button>
   {#if $terminalStore.terminalUiState === 'maximize'}
     <div bind:this={maximizeBlockEl} transition:slide class="backdrop-blur-md">
-      <ScrollArea class="h-[450px] space-y-2 p-2 pr-5">
+      <ScrollArea class="h-[450px] space-y-2 p-2 pb-5 pr-5">
         <History />
 
         <Input bind:inputEl />

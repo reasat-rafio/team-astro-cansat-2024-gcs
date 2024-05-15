@@ -6,13 +6,7 @@
   import * as Resizable from '@/components/ui/resizable';
   import { uiStore } from '@/stores/ui.store';
 
-  type Key =
-    | 'Latitude'
-    | 'Longitude'
-    | 'Altitude (GPS)'
-    | 'Battery Voltage'
-    | 'Temperature From BMP280'
-    | 'Distance';
+  let logPlaneSize = 0;
 </script>
 
 <section style="height: calc(100vh - {$uiStore.navbarHeight}px);">
@@ -33,8 +27,12 @@
           <Charts />
         </Resizable.Pane>
         <Resizable.Handle withHandle />
-        <Resizable.Pane defaultSize={40}>
-          <Logs />
+        <Resizable.Pane
+          defaultSize={40}
+          onResize={(size) => (logPlaneSize = size)}>
+          {#key logPlaneSize}
+            <Logs />
+          {/key}
         </Resizable.Pane>
       </Resizable.PaneGroup>
     </Resizable.Pane>
