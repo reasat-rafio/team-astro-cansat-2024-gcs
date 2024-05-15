@@ -20,6 +20,20 @@
       });
     }
   }
+
+  function updateLogLock(isChecked: boolean) {
+    if (isChecked) {
+      addLog({
+        time: new Date(),
+        value: 'Log is locked',
+      });
+    } else {
+      addLog({
+        time: new Date(),
+        value: 'Log is unlocked',
+      });
+    }
+  }
 </script>
 
 <Sheet.Root>
@@ -49,6 +63,14 @@
               bind:checked={$uiStore.showNotification}
               id="show-notification" />
             <Label for="show-notification">Show Notification</Label>
+          </div>
+
+          <div class="flex w-full items-center space-x-2">
+            <Switch
+              onCheckedChange={updateLogLock}
+              bind:checked={$uiStore.lockLog}
+              id="show-log-lock" />
+            <Label for="show-log-lock">Lock Log</Label>
           </div>
 
           <Button

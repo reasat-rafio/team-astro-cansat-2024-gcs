@@ -1,11 +1,12 @@
 <script lang="ts">
   import formatDate from '@/lib/helpers/format-date';
   import logStore from '@/stores/log.store';
+  import { uiStore } from '@/stores/ui.store';
   import { slide } from 'svelte/transition';
 
   let sectionEl: HTMLElement;
 
-  $: if ($logStore?.length && sectionEl) {
+  $: if ($logStore?.length && sectionEl && $uiStore.lockLog) {
     sectionEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
   }
 </script>

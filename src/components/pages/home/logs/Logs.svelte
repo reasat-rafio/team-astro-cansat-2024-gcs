@@ -6,12 +6,14 @@
   import logStore from '@/stores/log.store';
   import formatDate from '@/lib/helpers/format-date';
   import { delay } from '@/lib/helpers/helper';
+  import { uiStore } from '@/stores/ui.store';
 
   let sectionEl: HTMLElement;
   $: if ($logStore.length) scrollToBottom();
 
   async function scrollToBottom() {
     if (!sectionEl) return;
+    if (!$uiStore.lockLog) return;
 
     await delay(180).then(() => {
       sectionEl.scrollIntoView({
