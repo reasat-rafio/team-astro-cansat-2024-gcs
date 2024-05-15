@@ -8,8 +8,8 @@ interface OutPutStore {
   activeState: string;
   altitude: string;
   airSpeed: string;
-  hsDeployed: boolean;
-  pcDeployed: boolean;
+  hsDeployed: string;
+  pcDeployed: string;
   temperature: string;
   voltage: string;
   pressure: string;
@@ -20,7 +20,6 @@ interface OutPutStore {
   gpsStas: string;
   tiltX: string;
   tiltY: string;
-  tiltZ: string;
   rotZ: string;
   cmdEcho: string;
 }
@@ -34,8 +33,8 @@ function createOutputStore() {
     activeState: '0',
     altitude: '0',
     airSpeed: '0',
-    hsDeployed: false,
-    pcDeployed: false,
+    hsDeployed: 'N',
+    pcDeployed: 'N',
     temperature: '0',
     voltage: '0',
     pressure: '0',
@@ -46,7 +45,6 @@ function createOutputStore() {
     gpsStas: '0',
     tiltX: '0',
     tiltY: '0',
-    tiltZ: '0',
     rotZ: '0',
     cmdEcho: '0',
   });

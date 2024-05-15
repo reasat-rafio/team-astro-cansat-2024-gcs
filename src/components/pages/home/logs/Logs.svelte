@@ -1,6 +1,6 @@
 <script lang="ts">
   import Header from '../Header.svelte';
-  import { afterUpdate } from 'svelte';
+  // import { afterUpdate } from 'svelte';
   import { slide } from 'svelte/transition';
   import { ScrollArea } from '@/components/ui/scroll-area/index.js';
   import { ScrollTextIcon } from 'lucide-svelte';
@@ -8,10 +8,11 @@
   import formatDate from '@/lib/helpers/format-date';
 
   let sectionEl: HTMLElement;
+  let inputEl: HTMLInputElement;
 
-  afterUpdate(() => {
-    scrollToBottom();
-  });
+  // afterUpdate(() => {
+  //   scrollToBottom();
+  // });
 
   $: if ($logStore.length) {
     scrollToBottom();
@@ -20,7 +21,6 @@
   function scrollToBottom() {
     if (sectionEl) {
       sectionEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
-      sectionEl.style.scrollMargin = `2.5rem`;
     }
   }
 </script>
@@ -42,4 +42,5 @@
       </div>
     {/each}
   </div>
+  <input bind:this={inputEl} type="text" />
 </ScrollArea>

@@ -57,7 +57,7 @@ export function escapeAngleBrackets(text: string) {
 }
 
 export function parseTelemetryData(dataString: string): TelemetryData {
-  const dataParts = dataString.split(',');
+  const dataParts = dataString.trim().split(', ');
 
   const telemetryData: TelemetryData = {
     TEAM_ID: dataParts[0],

@@ -29,7 +29,6 @@
     <Item formatKey="GPS_SATS" value={$outputStore.gpsStas} />
     <Item formatKey="TILT_X" value={$outputStore.tiltX} />
     <Item formatKey="TILT_Y" value={$outputStore.tiltY} />
-    <Item formatKey="TILT_Z" value={$outputStore.tiltZ} />
     <Item formatKey="ROT_Z" value={$outputStore.rotZ} />
     <Item formatKey="CMD_ECHO" value={$outputStore.cmdEcho} />
   </div>

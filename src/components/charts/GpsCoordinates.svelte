@@ -10,7 +10,7 @@
   export let height: string = '450px';
 
   function chart(node: HTMLDivElement, props: SensorData2Store['history']) {
-    const chart = echarts.init(node);
+    const chart = echarts.init(node, null, { renderer: 'canvas' });
 
     chart.setOption({
       tooltip: {

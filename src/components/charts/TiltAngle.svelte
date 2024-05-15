@@ -10,7 +10,7 @@
   export let height: string = '450px';
 
   function chart(node: HTMLDivElement, props: SensorData2Store['history']) {
-    const chart = echarts.init(node);
+    const chart = echarts.init(node, null, { renderer: 'canvas' });
 
     chart.setOption({
       tooltip: {
@@ -19,9 +19,10 @@
           type: 'line',
         },
         formatter: (params: any) => `
-          ${params[0].name} : ${params[0].value}<br />
-          ${params[1].name} : ${params[1].value}<br />
-          ${params[2].name} : ${params[2].value}
+          time: ${params[0].name}<br />
+          x : ${params[0].value}<br />
+          y : ${params[1].value}<br />
+          z : ${params[2].value}
         `,
       },
 

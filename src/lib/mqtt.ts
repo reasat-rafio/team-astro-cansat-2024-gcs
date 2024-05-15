@@ -52,8 +52,8 @@ const createMqttHandler = () => {
             teamId: telemetryData.TEAM_ID,
             missionTime: telemetryData.MISSION_TIME,
             packetCount: telemetryData.PACKET_COUNT,
-            activeMode: 'Flight',
-            activeState: 'Ground',
+            activeMode: telemetryData.MODE,
+            activeState: telemetryData.STATE,
             altitude: telemetryData.ALTITUDE,
             airSpeed: telemetryData.AIR_SPEED,
             hsDeployed: telemetryData.HS_DEPLOYED,
@@ -65,7 +65,11 @@ const createMqttHandler = () => {
             gpsAltitude: telemetryData.GPS_ALTITUDE,
             gpsLatitude: telemetryData.GPS_LATITUDE,
             gpsLongitude: telemetryData.GPS_LONGITUDE,
-            // gpsStas: telemetryData.GPS_STATUS,
+            gpsStas: telemetryData.GPS_SATS,
+            tiltX: telemetryData.TILT_X,
+            tiltY: telemetryData.TILT_Y,
+            rotZ: telemetryData.ROT_Z,
+            cmdEcho: telemetryData.CMD_ECHO,
           });
 
           altitudeStore.updateAltitude({

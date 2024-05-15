@@ -6,12 +6,7 @@ interface Log {
   time: Date;
 }
 
-const defaultValue: Log[] = [];
-const initialValue = JSON.parse(
-  window.localStorage.getItem('logs') ?? JSON.stringify(defaultValue),
-);
-
-const logStore = writable<Log[]>(initialValue);
+const logStore = writable<Log[]>([]);
 
 export function addLog(log: Log) {
   logStore.update((logs) => [...logs, log]);
@@ -21,9 +16,5 @@ export function clearLogs() {
   logStore.set([]);
   toast.success('Logs cleared');
 }
-
-logStore.subscribe((value) => {
-  window.localStorage.setItem('logs', JSON.stringify(value));
-});
 
 export default logStore;
