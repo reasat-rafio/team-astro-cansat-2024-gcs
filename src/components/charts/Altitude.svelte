@@ -1,13 +1,12 @@
 <script lang="ts">
   import * as echarts from 'echarts';
-  import formatTime from '@/lib/helpers/format-date';
   import { altitudeStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
   export let height: string = '450px';
 
-  $: xAxisData = $altitudeStore.history.map(({ time }) => formatTime(time));
-  $: seriesData = $altitudeStore.history.map(({ value }) => value);
+  $: xAxisData = $altitudeStore.history.time;
+  $: seriesData = $altitudeStore.history.value;
 
   function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
@@ -22,11 +21,11 @@
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
+          start: 70,
           end: 100,
         },
         {
-          start: 0,
+          start: 70,
           end: 100,
         },
       ],
@@ -51,6 +50,4 @@
   }
 </script>
 
-<div
-  use:chart={$altitudeStore.history.length}
-  style="width: {width}; height: {height};" />
+<div use:chart={xAxisData.length} style="width: {width}; height: {height};" />

@@ -117,6 +117,9 @@ importers:
       svelte-check:
         specifier: ^3.7.1
         version: 3.7.1(postcss-load-config@4.0.1(postcss@8.4.38))(postcss@8.4.38)(svelte@4.2.16)
+      svelte-tiny-virtual-list:
+        specifier: ^2.1.0
+        version: 2.1.0
       tailwind-merge:
         specifier: ^2.3.0
         version: 2.3.0
@@ -2395,6 +2398,9 @@ packages:
     resolution: {integrity: sha512-txuL0JBUs0v6qGrr0PGCsbXmKHuthdrAkfISYi8umuveF7+gINb6EXl6VmKY9aHhyxCqvVgqd6yophQNrnor4w==}
     peerDependencies:
       svelte: '>=3 <5'
+
+  svelte-tiny-virtual-list@2.1.0:
+    resolution: {integrity: sha512-+zREgm9JM65eQGlrFHUWFjekfsaX0H/Vd0aJgVvZZ6zbTua2ofxXt/c8pCEvji/deF/UKdQ1lNw5gix+tq01ZA==}
 
   svelte@4.2.16:
     resolution: {integrity: sha512-mQwHpqHD2PmFcCyHaZ7XiTqposaLvJ75WpYcyY5/ce3qxbYtwQpZ+M7ZKP+2CG5U6kfnBZBpPLyofhlE6ROrnQ==}
@@ -4807,6 +4813,8 @@ snapshots:
   svelte-sonner@0.3.24(svelte@4.2.16):
     dependencies:
       svelte: 4.2.16
+
+  svelte-tiny-virtual-list@2.1.0: {}
 
   svelte@4.2.16:
     dependencies:

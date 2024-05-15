@@ -1,13 +1,12 @@
 <script lang="ts">
   import * as echarts from 'echarts';
-  import formatTime from '@/lib/helpers/format-date';
   import { temperatureStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
   export let height: string = '450px';
 
-  $: xAxisData = $temperatureStore.history.map(({ time }) => formatTime(time));
-  $: seriesData = $temperatureStore.history.map(({ value }) => value);
+  $: xAxisData = $temperatureStore.history.time;
+  $: seriesData = $temperatureStore.history.value;
 
   function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
@@ -23,11 +22,11 @@
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
+          start: 70,
           end: 100,
         },
         {
-          start: 0,
+          start: 70,
           end: 100,
         },
       ],
@@ -36,20 +35,20 @@
       },
       xAxis: {
         type: 'category',
-        data: seriesData,
+        data: xAxisData,
       },
       yAxis: { type: 'value' },
-      series: [{ type: 'line', data: xAxisData }],
+      series: [{ type: 'line', data: seriesData }],
     });
     return {
       update(_: number) {
         chart.setOption({
           xAxis: {
-            data: seriesData,
+            data: xAxisData,
           },
           series: [
             {
-              data: xAxisData,
+              data: seriesData,
             },
           ],
         });
@@ -58,6 +57,4 @@
   }
 </script>
 
-<div
-  use:chart={$temperatureStore.history.length}
-  style="width: {width}; height: {height};" />
+<div use:chart={xAxisData.length} style="width: {width}; height: {height};" />

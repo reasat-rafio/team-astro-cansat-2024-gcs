@@ -3,20 +3,26 @@ import { writable } from 'svelte/store';
 
 export type SensorDataStore = {
   currentVal: StringData | null;
-  history: StringData[];
+  history: { time: string[]; value: string[] };
 };
 
 function createAltitudeStore() {
   const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
-    history: [],
+    history: {
+      time: [],
+      value: [],
+    },
   });
 
   function updateAltitude(val: StringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: [...$store.history.value, val.value],
+      },
     }));
   }
 
@@ -31,14 +37,20 @@ export const altitudeStore = createAltitudeStore();
 function createAirPressureStore() {
   const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
-    history: [],
+    history: {
+      time: [],
+      value: [],
+    },
   });
 
   function updateAirPressure(val: StringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: [...$store.history.value, val.value],
+      },
     }));
   }
 
@@ -52,14 +64,20 @@ export const airPressureStore = createAirPressureStore();
 function createTemperatureStore() {
   const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
-    history: [],
+    history: {
+      time: [],
+      value: [],
+    },
   });
 
   function updateTemperature(val: StringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: [...$store.history.value, val.value],
+      },
     }));
   }
 
@@ -74,14 +92,20 @@ export const temperatureStore = createTemperatureStore();
 function createAirSpeedStore() {
   const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
-    history: [],
+    history: {
+      time: [],
+      value: [],
+    },
   });
 
   function updateAirSpeed(val: StringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: [...$store.history.value, val.value],
+      },
     }));
   }
 
@@ -96,14 +120,20 @@ export const airSpeedStore = createAirSpeedStore();
 function createBatteryVoltageStore() {
   const { subscribe, update } = writable<SensorDataStore>({
     currentVal: null,
-    history: [],
+    history: {
+      time: [],
+      value: [],
+    },
   });
 
   function updateBatteryVoltage(val: StringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: [...$store.history.value, val.value],
+      },
     }));
   }
 
@@ -117,17 +147,34 @@ export const batteryVoltageStore = createBatteryVoltageStore();
 function createGpsCoordinatesStore() {
   const { subscribe, update } = writable<{
     currentVal: XYZStringData | null;
-    history: XYZStringData[];
+    history: {
+      value: { x: string[]; y: string[]; z: string[] };
+      time: string[];
+    };
   }>({
     currentVal: null,
-    history: [],
+    history: {
+      value: {
+        x: [],
+        y: [],
+        z: [],
+      },
+      time: [],
+    },
   });
 
   function updateGpsCoordinates(val: XYZStringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: {
+          x: [...$store.history.value.x, val.value.x],
+          y: [...$store.history.value.y, val.value.y],
+          z: [...$store.history.value.z, val.value.z],
+        },
+      },
     }));
   }
 
@@ -141,20 +188,37 @@ export const gpsCoordinatesStore = createGpsCoordinatesStore();
 
 export type SensorData2Store = {
   currentVal: XYZStringData | null;
-  history: XYZStringData[];
+  history: {
+    value: { x: string[]; y: string[]; z: string[] };
+    time: string[];
+  };
 };
 
 function createGyroscopeStore() {
   const { subscribe, update } = writable<SensorData2Store>({
     currentVal: null,
-    history: [],
+    history: {
+      value: {
+        x: [],
+        y: [],
+        z: [],
+      },
+      time: [],
+    },
   });
 
   function updateGyroscope(val: XYZStringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: {
+          x: [...$store.history.value.x, val.value.x],
+          y: [...$store.history.value.y, val.value.y],
+          z: [...$store.history.value.z, val.value.z],
+        },
+      },
     }));
   }
 
@@ -169,14 +233,28 @@ export const gyroscopeStore = createGyroscopeStore();
 function createTiltAngleStore() {
   const { subscribe, update } = writable<SensorData2Store>({
     currentVal: null,
-    history: [],
+    history: {
+      value: {
+        x: [],
+        y: [],
+        z: [],
+      },
+      time: [],
+    },
   });
 
   function updateTiltAngle(val: XYZStringData) {
     update(($store) => ({
       ...$store,
       currentVal: val,
-      history: [...$store.history, val],
+      history: {
+        time: [...$store.history.time, val.time],
+        value: {
+          x: [...$store.history.value.x, val.value.x],
+          y: [...$store.history.value.y, val.value.y],
+          z: [...$store.history.value.z, val.value.z],
+        },
+      },
     }));
   }
 

@@ -46,8 +46,6 @@
 </script>
 
 <svelte:head>
-  <html lang="en" />
-
   <title>Team Astro</title>
 </svelte:head>
 

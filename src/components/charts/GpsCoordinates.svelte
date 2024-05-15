@@ -6,12 +6,10 @@
   export let width: string = '600px';
   export let height: string = '450px';
 
-  $: xAxisData = $gpsCoordinatesStore.history.map(({ time }) =>
-    formatTime(time),
-  );
-  $: seriesDataX = $gpsCoordinatesStore.history.map(({ value }) => value.x);
-  $: seriesDataY = $gpsCoordinatesStore.history.map(({ value }) => value.y);
-  $: seriesDataZ = $gpsCoordinatesStore.history.map(({ value }) => value.z);
+  $: xAxisData = $gpsCoordinatesStore.history.time;
+  $: seriesDataX = $gpsCoordinatesStore.history.value.x;
+  $: seriesDataY = $gpsCoordinatesStore.history.value.y;
+  $: seriesDataZ = $gpsCoordinatesStore.history.value.z;
 
   function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
@@ -32,11 +30,11 @@
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
+          start: 70,
           end: 100,
         },
         {
-          start: 0,
+          start: 70,
           end: 100,
         },
       ],
@@ -97,6 +95,4 @@
   }
 </script>
 
-<div
-  use:chart={$gpsCoordinatesStore.history.length}
-  style="width: {width}; height: {height};" />
+<div use:chart={xAxisData.length} style="width: {width}; height: {height};" />

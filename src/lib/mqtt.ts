@@ -14,6 +14,7 @@ import outputStore from '@/stores/output.store';
 import { toast } from 'svelte-sonner';
 import { addLog } from '@/stores/log.store';
 import { parseTelemetryData } from './helpers/helper';
+import formatTime from './helpers/format-date';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -47,7 +48,7 @@ const createMqttHandler = () => {
 
           const telemetryData = parseTelemetryData(decoder.decode(message));
 
-          const time = new Date();
+          const time = formatTime(new Date());
           outputStore.updateOutput({
             teamId: telemetryData.TEAM_ID,
             missionTime: telemetryData.MISSION_TIME,

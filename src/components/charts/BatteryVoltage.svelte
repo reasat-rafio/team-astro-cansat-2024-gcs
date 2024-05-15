@@ -6,10 +6,8 @@
   export let width: string = '600px';
   export let height: string = '450px';
 
-  $: xAxisData = $batteryVoltageStore.history.map(({ time }) =>
-    formatTime(time),
-  );
-  $: seriesData = $batteryVoltageStore.history.map(({ value }) => value);
+  $: xAxisData = $batteryVoltageStore.history.time;
+  $: seriesData = $batteryVoltageStore.history.value;
 
   function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
@@ -25,11 +23,11 @@
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
+          start: 70,
           end: 100,
         },
         {
-          start: 0,
+          start: 70,
           end: 100,
         },
       ],
@@ -62,6 +60,4 @@
   }
 </script>
 
-<div
-  use:chart={$batteryVoltageStore.history.length}
-  style="width: {width}; height: {height};" />
+<div use:chart={xAxisData.length} style="width: {width}; height: {height};" />

@@ -1,13 +1,12 @@
 <script lang="ts">
   import * as echarts from 'echarts';
-  import formatTime from '@/lib/helpers/format-date';
   import { airSpeedStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
   export let height: string = '450px';
 
-  $: xAxisData = $airSpeedStore.history.map(({ time }) => formatTime(time));
-  $: seriesData = $airSpeedStore.history.map(({ value }) => value);
+  $: xAxisData = $airSpeedStore.history.time;
+  $: seriesData = $airSpeedStore.history.value;
 
   function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
@@ -23,11 +22,11 @@
       dataZoom: [
         {
           type: 'inside',
-          start: 0,
+          start: 70,
           end: 100,
         },
         {
-          start: 0,
+          start: 70,
           end: 100,
         },
       ],
@@ -60,6 +59,4 @@
   }
 </script>
 
-<div
-  use:chart={$airSpeedStore.history.length}
-  style="width: {width}; height: {height};" />
+<div use:chart={xAxisData.length} style="width: {width}; height: {height};" />

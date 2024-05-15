@@ -10,12 +10,12 @@ export interface XYZStringArrayData {
 
 export interface StringData {
   value: string;
-  time: Date;
+  time: string;
 }
 
 export interface XYZStringData {
   value: { x: string; y: string; z: string };
-  time: Date;
+  time: string;
 }
 export interface XYStringArrayData {
   values: { x: string; y: string }[];

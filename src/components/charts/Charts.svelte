@@ -8,6 +8,7 @@
   import AirSpeed from './AirSpeed.svelte';
   import GpsCoordinates from './GpsCoordinates.svelte';
   import { cn } from '@/utils';
+
   // import Gyroscope from './Gyroscope.svelte';
   // import Acceleration from './Acceleration.svelte';
   // import CommandEcho from './charts/CommandEcho.svelte';
@@ -19,7 +20,7 @@
   class={cn('flex h-full w-full flex-col space-y-6 pt-5', $$props.class)}>
   <SectionHeader title="Payload" color="primary" />
 
-  <div class="grid grid-cols-2 gap-[50px] [&>*]:h-[600px]">
+  <div class="grid grid-cols-2 gap-[50px]">
     <Altitude width="100%" height="600px" />
     <AirPressure width="100%" height="600px" />
     <AirSpeed width="100%" height="600px" />
