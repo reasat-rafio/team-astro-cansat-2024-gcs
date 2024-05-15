@@ -1,15 +1,17 @@
 <script lang="ts">
   import * as echarts from 'echarts';
   import formatTime from '@/lib/helpers/format-date';
-  import {
-    batteryVoltageStore,
-    type SensorDataStore,
-  } from '@/stores/sensor.data.store';
+  import { batteryVoltageStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
   export let height: string = '450px';
 
-  function chart(node: HTMLDivElement, props: SensorDataStore['history']) {
+  $: xAxisData = $batteryVoltageStore.history.map(({ time }) =>
+    formatTime(time),
+  );
+  $: seriesData = $batteryVoltageStore.history.map(({ value }) => value);
+
+  function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
     chart.setOption({
       tooltip: {
@@ -36,22 +38,22 @@
       },
       xAxis: {
         type: 'category',
-        data: props?.map(({ time }) => formatTime(time)),
+        data: xAxisData,
       },
       yAxis: {
         type: 'value',
       },
-      series: [{ type: 'line', data: props?.map(({ value }) => value) }],
+      series: [{ type: 'line', data: seriesData }],
     });
     return {
-      update(props: SensorDataStore['history']) {
+      update(_: number) {
         chart.setOption({
           xAxis: {
-            data: props?.map(({ time }) => formatTime(time)),
+            data: xAxisData,
           },
           series: [
             {
-              data: props?.map(({ value }) => value),
+              data: seriesData,
             },
           ],
         });
@@ -61,5 +63,5 @@
 </script>
 
 <div
-  use:chart={$batteryVoltageStore.history}
+  use:chart={$batteryVoltageStore.history.length}
   style="width: {width}; height: {height};" />

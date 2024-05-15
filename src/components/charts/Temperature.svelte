@@ -1,15 +1,15 @@
 <script lang="ts">
   import * as echarts from 'echarts';
   import formatTime from '@/lib/helpers/format-date';
-  import {
-    temperatureStore,
-    type SensorDataStore,
-  } from '@/stores/sensor.data.store';
+  import { temperatureStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
   export let height: string = '450px';
 
-  function chart(node: HTMLDivElement, props: SensorDataStore['history']) {
+  $: xAxisData = $temperatureStore.history.map(({ time }) => formatTime(time));
+  $: seriesData = $temperatureStore.history.map(({ value }) => value);
+
+  function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
     chart.setOption({
       tooltip: {
@@ -36,23 +36,20 @@
       },
       xAxis: {
         type: 'category',
-        data: props?.map(({ time }) => formatTime(time)),
+        data: seriesData,
       },
-      yAxis: {
-        type: 'value',
-        data: props?.map(({ value }) => value),
-      },
-      series: [{ type: 'line', data: props?.map(({ value }) => value) }],
+      yAxis: { type: 'value' },
+      series: [{ type: 'line', data: xAxisData }],
     });
     return {
-      update(props: SensorDataStore['history']) {
+      update(_: number) {
         chart.setOption({
           xAxis: {
-            data: props?.map(({ time }) => formatTime(time)),
+            data: seriesData,
           },
           series: [
             {
-              data: props?.map(({ value }) => value),
+              data: xAxisData,
             },
           ],
         });
@@ -62,5 +59,5 @@
 </script>
 
 <div
-  use:chart={$temperatureStore.history}
+  use:chart={$temperatureStore.history.length}
   style="width: {width}; height: {height};" />

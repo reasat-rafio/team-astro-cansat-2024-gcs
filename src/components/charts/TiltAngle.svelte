@@ -1,15 +1,17 @@
 <script lang="ts">
   import * as echarts from 'echarts';
   import formatTime from '@/lib/helpers/format-date';
-  import {
-    tiltAngleStore,
-    type SensorData2Store,
-  } from '@/stores/sensor.data.store';
+  import { tiltAngleStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
   export let height: string = '450px';
 
-  function chart(node: HTMLDivElement, props: SensorData2Store['history']) {
+  $: xAxisData = $tiltAngleStore.history.map(({ time }) => formatTime(time));
+  $: seriesDataX = $tiltAngleStore.history.map(({ value }) => value.x);
+  $: seriesDataY = $tiltAngleStore.history.map(({ value }) => value.y);
+  $: seriesDataZ = $tiltAngleStore.history.map(({ value }) => value.z);
+
+  function chart(node: HTMLDivElement, _: number) {
     const chart = echarts.init(node, null, { renderer: 'canvas' });
 
     chart.setOption({
@@ -42,7 +44,7 @@
       },
       xAxis: {
         type: 'category',
-        data: props?.map(({ time }) => formatTime(time)),
+        data: xAxisData,
       },
       yAxis: {
         type: 'value',
@@ -51,41 +53,41 @@
         {
           type: 'line',
           name: 'TILT_X',
-          data: props?.map(({ value }) => value.x),
+          data: seriesDataX,
         },
         {
           type: 'line',
           name: 'TILT_Y',
-          data: props?.map(({ value }) => value.y),
+          data: seriesDataY,
         },
         {
           type: 'line',
           name: 'ROT_Z',
-          data: props?.map(({ value }) => value.z),
+          data: seriesDataZ,
         },
       ],
     });
     return {
-      update(props: SensorData2Store['history']) {
+      update(_: number) {
         chart.setOption({
           xAxis: {
-            data: props?.map(({ time }) => formatTime(time)),
+            data: xAxisData,
           },
           series: [
             {
               type: 'line',
               name: 'GPS_ALTITUDE',
-              data: props?.map(({ value }) => value.x),
+              data: seriesDataX,
             },
             {
               type: 'line',
               name: 'GPS_LATITUDE',
-              data: props?.map(({ value }) => value.y),
+              data: seriesDataY,
             },
             {
               type: 'line',
               name: 'GPS_LONGITUDE',
-              data: props?.map(({ value }) => value.z),
+              data: seriesDataZ,
             },
           ],
         });
@@ -95,5 +97,5 @@
 </script>
 
 <div
-  use:chart={$tiltAngleStore.history}
+  use:chart={$tiltAngleStore.history.length}
   style="width: {width}; height: {height};" />
