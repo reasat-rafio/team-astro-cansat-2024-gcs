@@ -89,3 +89,9 @@ export function parseTelemetryData(dataString: string): TelemetryData {
 
   return telemetryData;
 }
+
+export function delay(ms: number): Promise<void> {
+  return new Promise<void>((resolve) => {
+    setTimeout(resolve, ms);
+  });
+}
