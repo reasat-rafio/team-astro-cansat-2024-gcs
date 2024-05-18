@@ -13,6 +13,21 @@
     <Item formatKey="TEAM_ID" value={$outputStore.teamId} />
     <Item formatKey="MISSION_TIME" value={$outputStore.missionTime} />
     <Item formatKey="PACKET_COUNT" value={$outputStore.packetCount} />
+    <Item
+      formatKey="HEALTHY_PACKET"
+      value={String(
+        parseInt($outputStore.packetCount) -
+          (parseInt($outputStore.unhealthyPacket) +
+            parseInt($outputStore.packetLoss)),
+      )} />
+    <Item
+      formatKey="UNHEALTHY_PACKET"
+      color="error"
+      value={$outputStore.unhealthyPacket} />
+    <Item
+      formatKey="PACKET_LOSS"
+      color="error"
+      value={$outputStore.packetLoss} />
     <Item formatKey="MODE" value={$outputStore.activeMode} />
     <Item formatKey="STATE" value={$outputStore.activeState} />
     <Item formatKey="ALTITUDE" value={$outputStore.altitude} />

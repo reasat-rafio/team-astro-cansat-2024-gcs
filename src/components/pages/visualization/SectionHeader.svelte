@@ -4,10 +4,10 @@
   import H5 from '@/components/ui/H5.svelte';
   import H6 from '@/components/ui/H6.svelte';
   import Button from '@/components/ui/button/button.svelte';
+  import outputStore from '@/stores/output.store';
   // import gcsStore from '@/stores/gcs.store';
   import { onMount } from 'svelte';
 
-  export let title: string;
   export let batteryLevel = 20;
   export let CorruptedPackets = 0;
   export let color: 'primary' | 'secondary' = 'primary';
@@ -34,16 +34,10 @@
 <div class="space-y-3">
   <div class="flex items-center">
     <header class="flex flex-1 items-end space-x-4">
-      <H3
-        class="{color === 'primary'
-          ? 'text-primary'
-          : 'text-[#6a48f2]'} underline">
-        {title}
-      </H3>
       <span class="flex items-end space-x-1">
         <H5>STATE :</H5>
         <H6 class="capitalize text-yellow-500">
-          {_state}
+          {$outputStore.activeState}
         </H6>
       </span>
     </header>
@@ -56,12 +50,25 @@
 
   <div class="flex space-x-3">
     <p>
+      Total Packets : <span class="text-green-600">
+        {$outputStore.packetCount}
+      </span>
+    </p>
+
+    <p>
       Healthy Packets : <span class="text-green-600">
-        {_healthyPackets}
+        {$outputStore.healthyPacket}
       </span>
     </p>
     <p>
-      Corrupted Packets : <span class="text-red-600">{CorruptedPackets}</span>
+      Corrupted Packets : <span class="text-red-600">
+        {$outputStore.unhealthyPacket}
+      </span>
+    </p>
+    <p>
+      Packets Lost : <span class="text-red-600">
+        {$outputStore.packetLoss}
+      </span>
     </p>
   </div>
 </div>

@@ -4,6 +4,9 @@ interface OutPutStore {
   teamId: string;
   missionTime: string;
   packetCount: string;
+  healthyPacket: string;
+  unhealthyPacket: string;
+  packetLoss: string;
   activeMode: string;
   activeState: string;
   altitude: string;
@@ -29,8 +32,11 @@ function createOutputStore() {
     teamId: '2043',
     missionTime: '0',
     packetCount: '0',
+    healthyPacket: '0',
+    unhealthyPacket: '0',
+    packetLoss: '0',
     activeMode: '0',
-    activeState: '0',
+    activeState: 'IDLE',
     altitude: '0',
     airSpeed: '0',
     hsDeployed: 'N',
@@ -49,12 +55,38 @@ function createOutputStore() {
     cmdEcho: '0',
   });
 
-  function updateOutput(data: OutPutStore) {
+  function updatePacketCount(data: string) {
     update((store) => {
       return {
         ...store,
-        ...data,
+        packetCount: data,
       };
+    });
+  }
+
+  function updatePacketLoss(packetLoss: number) {
+    update((store) => {
+      return {
+        ...store,
+        packetLoss: String(parseInt(store.packetLoss) + packetLoss),
+      };
+    });
+  }
+
+  function incrementUnhealthyPacket() {
+    update((store) => {
+      return {
+        ...store,
+        unhealthyPacket: (parseInt(store.unhealthyPacket) + 1).toString(),
+      };
+    });
+  }
+
+  function updateOutput(
+    data: Omit<OutPutStore, 'packetLoss' | 'unhealthyPacket' | 'healthyPacket'>,
+  ) {
+    update((store) => {
+      return { ...store, ...data };
     });
   }
 
@@ -63,6 +95,9 @@ function createOutputStore() {
     update,
     subscribe,
     updateOutput,
+    updatePacketLoss,
+    updatePacketCount,
+    incrementUnhealthyPacket,
   };
 }
 

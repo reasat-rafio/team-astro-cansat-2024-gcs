@@ -1,5 +1,7 @@
 import { addLog } from '@/stores/log.store';
 import type { TelemetryData } from '../@types/app.types';
+import outputStore from '@/stores/output.store';
+import { get } from 'svelte/store';
 
 export function isValidTelemetryData(dataParts: string[]): boolean {
   if (dataParts.length < 20) return false;
@@ -87,15 +89,10 @@ export function parseTelemetryData(dataString: string): TelemetryData | null {
   return telemetryData;
 }
 
-export function processTelemetryData(dataString: string): TelemetryData | null {
+export function processTelemetryData(dataString: string) {
   const telemetryData = parseTelemetryData(dataString);
-  if (telemetryData) {
-    return telemetryData;
-  } else {
-    addLog({
-      value: `Invalid telemetry data received: ${dataString}`,
-      time: new Date(),
-    });
-    return null;
-  }
+
+  return telemetryData
+    ? { isValid: true, data: telemetryData }
+    : { isValid: false, data: dataString };
 }
