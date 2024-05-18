@@ -361,25 +361,25 @@ export type ValidCommand =
 
 export interface TelemetryData {
   TEAM_ID: string;
-  MISSION_TIME: string;
-  PACKET_COUNT: string;
+  MISSION_TIME: number;
+  PACKET_COUNT: number;
   MODE: string;
   STATE: string;
-  ALTITUDE: string;
-  AIR_SPEED: string;
+  ALTITUDE: number;
+  AIR_SPEED: number;
   HS_DEPLOYED: string;
   PC_DEPLOYED: string;
-  TEMPERATURE: string;
-  VOLTAGE: string;
-  PRESSURE: string;
+  TEMPERATURE: number;
+  VOLTAGE: number;
+  PRESSURE: number;
   GPS_TIME: string;
   GPS_ALTITUDE: string;
   GPS_LATITUDE: string;
   GPS_LONGITUDE: string;
   GPS_SATS: string;
-  TILT_X: string;
-  TILT_Y: string;
-  ROT_Z: string;
+  TILT_X: number;
+  TILT_Y: number;
+  ROT_Z: number;
   CMD_ECHO: string;
   OPTIONAL_DATA?: string[];
 }

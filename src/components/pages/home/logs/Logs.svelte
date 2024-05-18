@@ -9,12 +9,16 @@
   import { uiStore } from '@/stores/ui.store';
 
   let sectionEl: HTMLElement;
-  $: if ($logStore.length) scrollToBottom();
+  $: if ($logStore?.length) updateLogs();
 
-  async function scrollToBottom() {
+  async function updateLogs() {
     if (!sectionEl) return;
     if (!$uiStore.lockLog) return;
 
+    scrollToBottom();
+  }
+
+  async function scrollToBottom() {
     await delay(180).then(() => {
       sectionEl.scrollIntoView({
         behavior: 'smooth',

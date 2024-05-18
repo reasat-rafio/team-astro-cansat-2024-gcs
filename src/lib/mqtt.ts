@@ -8,13 +8,12 @@ import {
   temperatureStore,
   tiltAngleStore,
   gpsCoordinatesStore,
-  gyroscopeStore,
 } from '@/stores/sensor.data.store';
 import outputStore from '@/stores/output.store';
 import { toast } from 'svelte-sonner';
 import { addLog } from '@/stores/log.store';
-import { parseTelemetryData } from './helpers/helper';
 import formatTime from './helpers/format-date';
+import { processTelemetryData } from './helpers/telemetry-data';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -46,65 +45,67 @@ const createMqttHandler = () => {
             time: new Date(),
           });
 
-          const telemetryData = parseTelemetryData(decoder.decode(message));
-
+          const telemetryData = processTelemetryData(decoder.decode(message));
           const time = formatTime(new Date());
+
+          if (!telemetryData) break;
+
           outputStore.updateOutput({
             teamId: telemetryData.TEAM_ID,
-            missionTime: telemetryData.MISSION_TIME,
-            packetCount: telemetryData.PACKET_COUNT,
+            missionTime: String(telemetryData.MISSION_TIME),
+            packetCount: String(telemetryData.PACKET_COUNT),
             activeMode: telemetryData.MODE,
             activeState: telemetryData.STATE,
-            altitude: telemetryData.ALTITUDE,
-            airSpeed: telemetryData.AIR_SPEED,
+            altitude: String(telemetryData.ALTITUDE),
+            airSpeed: String(telemetryData.AIR_SPEED),
             hsDeployed: telemetryData.HS_DEPLOYED,
             pcDeployed: telemetryData.PC_DEPLOYED,
-            temperature: telemetryData.TEMPERATURE,
-            voltage: telemetryData.VOLTAGE,
-            pressure: telemetryData.PRESSURE,
+            temperature: String(telemetryData.TEMPERATURE),
+            voltage: String(telemetryData.VOLTAGE),
+            pressure: String(telemetryData.PRESSURE),
             gpsTime: telemetryData.GPS_TIME,
             gpsAltitude: telemetryData.GPS_ALTITUDE,
             gpsLatitude: telemetryData.GPS_LATITUDE,
             gpsLongitude: telemetryData.GPS_LONGITUDE,
             gpsStas: telemetryData.GPS_SATS,
-            tiltX: telemetryData.TILT_X,
-            tiltY: telemetryData.TILT_Y,
-            rotZ: telemetryData.ROT_Z,
+            tiltX: String(telemetryData.TILT_X),
+            tiltY: String(telemetryData.TILT_Y),
+            rotZ: String(telemetryData.ROT_Z),
             cmdEcho: telemetryData.CMD_ECHO,
           });
 
           altitudeStore.updateAltitude({
             time,
-            value: telemetryData.ALTITUDE,
+            value: String(telemetryData.ALTITUDE),
           });
 
           airPressureStore.updateAirPressure({
             time,
-            value: telemetryData.PRESSURE,
+            value: String(telemetryData.PRESSURE),
           });
 
           temperatureStore.updateTemperature({
             time,
-            value: telemetryData.TEMPERATURE,
+            value: String(telemetryData.TEMPERATURE),
           });
 
           batteryVoltageStore.updateBatteryVoltage({
             time,
-            value: telemetryData.VOLTAGE,
+            value: String(telemetryData.VOLTAGE),
           });
 
           tiltAngleStore.updateTiltAngle({
             time,
             value: {
-              x: telemetryData.TILT_X,
-              y: telemetryData.TILT_Y,
-              z: telemetryData.ROT_Z,
+              x: String(telemetryData.TILT_X),
+              y: String(telemetryData.TILT_Y),
+              z: String(telemetryData.ROT_Z),
             },
           });
 
           airSpeedStore.updateAirSpeed({
             time,
-            value: telemetryData.AIR_SPEED,
+            value: String(telemetryData.AIR_SPEED),
           });
 
           gpsCoordinatesStore.updateGpsCoordinates({
