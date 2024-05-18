@@ -16,11 +16,16 @@
   class="min-h-screen w-full rounded-lg border p-4">
   {#if !!$logStore?.length}
     <div class="flex w-full flex-col gap-y-2">
-      {#each $logStore as { value, time }, index}
+      {#each $logStore as { value, time, state }, index}
         <div class="flex gap-5" transition:slide>
           <div class="flex-1">
             <span class="text-primary">{index + 1}.</span>
-            <span>{value}</span>
+            <span>
+              {#if state === 'error'}
+                <span class="text-red-600">Error:</span>
+              {/if}
+              {value}
+            </span>
           </div>
 
           <div class="w-fit text-sm text-primary">

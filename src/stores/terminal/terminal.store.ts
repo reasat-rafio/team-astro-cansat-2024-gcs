@@ -48,7 +48,7 @@ function createTerminalStore() {
 
       if (commandParts[0] !== 'CMD' || commandParts.length < 3) {
         addLog({
-          value: `Error: Invalid command - ${command.value}`,
+          value: `Invalid command - ${command.value}`,
           time: command.time,
           state: 'error',
         });
@@ -63,10 +63,11 @@ function createTerminalStore() {
       // Validate TEAM_ID
       if (parseInt(commandParts[1]) !== 2043) {
         addLog({
-          value: `Error: Invalid TEAM_ID - ${command.value}`,
+          value: `Invalid TEAM_ID - ${command.value}`,
           time: command.time,
           state: 'error',
         });
+
 
         return updateCommandHistory({
           $state,
@@ -83,7 +84,7 @@ function createTerminalStore() {
         case 'CX':
           if (lastParam !== 'ON' && lastParam !== 'OFF') {
             addLog({
-              value: `Error: Invalid command: CX command must be followed by ON or OFF - ${command.value}`,
+              value: `Invalid command: CX command must be followed by ON or OFF - ${command.value}`,
               time: command.time,
               state: 'error',
             });
@@ -109,7 +110,7 @@ function createTerminalStore() {
         case 'ST':
           if (lastParam !== 'GPS' && !lastParam.match(/\d{2}:\d{2}:\d{2}/)) {
             addLog({
-              value: `Error: Invalid command: ST command must be followed by a valid time or GPS - ${command.value}`,
+              value: `Invalid command: ST command must be followed by a valid time or GPS - ${command.value}`,
               time: command.time,
               state: 'error',
             });
@@ -136,7 +137,7 @@ function createTerminalStore() {
             lastParam !== 'DISABLE'
           ) {
             addLog({
-              value: `Error: Invalid command: SIM command must be followed by ENABLE, ACTIVATE or DISABLE - ${command.value}`,
+              value: `Invalid command: SIM command must be followed by ENABLE, ACTIVATE or DISABLE - ${command.value}`,
               time: command.time,
               state: 'error',
             });
@@ -193,7 +194,7 @@ function createTerminalStore() {
         case 'BCN':
           if (lastParam !== 'ON' && lastParam !== 'OFF') {
             addLog({
-              value: `Error: Invalid command: BCN command must be followed by ON or OFF - ${command.value}`,
+              value: `Invalid command: BCN command must be followed by ON or OFF - ${command.value}`,
               time: command.time,
               state: 'error',
             });
@@ -218,7 +219,7 @@ function createTerminalStore() {
 
         default:
           addLog({
-            value: `Error: Invalid command: ${commandType} is not a valid command - ${command.value}`,
+            value: `Invalid command: ${commandType} is not a valid command - ${command.value}`,
             time: command.time,
             state: 'error',
           });

@@ -26,7 +26,7 @@ export default function CMD_2043_CAL({ $state, command }: Type) {
     });
   } catch (error) {
     addLog({
-      value: `Error: ${error}`,
+      value: `${error}`,
       time: command.time,
       state: 'error',
     });

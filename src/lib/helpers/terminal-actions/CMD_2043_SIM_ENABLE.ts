@@ -24,7 +24,7 @@ export default function CMD_2043_SIM_ENABLE({ $state, command }: Type) {
     });
   } catch (error) {
     addLog({
-      value: `Error: ${error}`,
+      value: `${error}`,
       time: command.time,
       state: 'error',
     });

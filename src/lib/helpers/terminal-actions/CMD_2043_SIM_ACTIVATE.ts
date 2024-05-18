@@ -69,7 +69,7 @@ export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
       output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
     });
   } catch (error) {
-    addLog({ value: `Error: ${error}`, time: command.time });
+    addLog({ value: `${error}`, time: command.time });
 
     return updateCommandHistory({
       command,

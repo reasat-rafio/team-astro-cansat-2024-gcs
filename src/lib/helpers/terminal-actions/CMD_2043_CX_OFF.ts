@@ -31,7 +31,7 @@ export default function CMD_2043_CX_OFF({ $state, command }: Type) {
       output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
     });
   } catch (error) {
-    addLog({ value: `Error: ${error}`, time: command.time, state: 'error' });
+    addLog({ value: `${error}`, time: command.time, state: 'error' });
 
     return updateCommandHistory({
       command,

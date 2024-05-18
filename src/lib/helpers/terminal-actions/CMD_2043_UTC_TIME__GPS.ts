@@ -25,7 +25,7 @@ export default function CMD_2043_UTC_TIME__GPS({ $state, command }: Type) {
     });
   } catch (error) {
     addLog({
-      value: `Error: ${error}`,
+      value: `${error}`,
       time: command.time,
       state: 'error',
     });

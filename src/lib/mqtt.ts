@@ -22,7 +22,7 @@ const createMqttHandler = () => {
 
   mqttClient.on('error', (err) => {
     toast.error(`Error: ${err}`);
-    addLog({ value: `Error: ${err}`, time: new Date(), state: 'error' });
+    addLog({ value: `${err}`, time: new Date(), state: 'error' });
     mqttClient.end();
   });
 

@@ -37,10 +37,10 @@
       <div class="flex gap-5" transition:slide>
         <div class="flex-1">
           <span class="text-primary">{index + 1}.</span>
-          <span
-            class:text-red-600={state === 'error'}
-            class:text-green-600={state === 'success'}
-            class:text-foreground={state === 'info'}>
+          <span>
+            {#if state === 'error'}
+              <span class="text-red-600">Error:</span>
+            {/if}
             {value}
           </span>
         </div>

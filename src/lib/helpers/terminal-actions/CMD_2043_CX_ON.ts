@@ -26,7 +26,7 @@ export default function CMD_2043_CX_ON({ $state, command }: Type) {
     });
   } catch (error) {
     addLog({
-      value: `Error: ${error}`,
+      value: `${error}`,
       time: command.time,
       state: 'error',
     });

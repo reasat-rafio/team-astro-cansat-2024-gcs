@@ -14,6 +14,7 @@ export default function CMD_2043_SIMP_PRESSURE({ $state, command }: Type) {
     addLog({
       value: `${command.value} executed successfully. Pressure data has been set to ${pressureVal}.`,
       time: command.time,
+      state: 'success',
     });
 
     return updateCommandHistory({
@@ -23,7 +24,7 @@ export default function CMD_2043_SIMP_PRESSURE({ $state, command }: Type) {
       output: `<p class="text-green-600">${command.value} executed successfully. Pressure data has been set to ${pressureVal} </p>`,
     });
   } catch (error) {
-    addLog({ value: `Error: ${error}`, time: command.time });
+    addLog({ value: `${error}`, time: command.time, state: 'error' });
 
     return updateCommandHistory({
       command,
