@@ -33,11 +33,16 @@
   <Header icon={ScrollTextIcon} title="Logs" />
 
   <div bind:this={sectionEl} class="mt-5 flex w-full flex-col gap-y-2">
-    {#each $logStore as { value, time }, index}
+    {#each $logStore as { value, time, state }, index}
       <div class="flex gap-5" transition:slide>
         <div class="flex-1">
           <span class="text-primary">{index + 1}.</span>
-          <span>{value}</span>
+          <span
+            class:text-red-600={state === 'error'}
+            class:text-green-600={state === 'success'}
+            class:text-foreground={state === 'info'}>
+            {value}
+          </span>
         </div>
 
         <div class="w-fit text-sm text-primary">

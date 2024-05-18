@@ -12,11 +12,13 @@
       addLog({
         time: new Date(),
         value: 'Notification is enabled',
+        state: 'success',
       });
     } else {
       addLog({
         time: new Date(),
         value: 'Notification is disabled',
+        state: 'success',
       });
     }
   }
@@ -26,11 +28,13 @@
       addLog({
         time: new Date(),
         value: 'Log is locked',
+        state: 'success',
       });
     } else {
       addLog({
         time: new Date(),
         value: 'Log is unlocked',
+        state: 'success',
       });
     }
   }

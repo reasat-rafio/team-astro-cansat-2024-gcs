@@ -3,16 +3,11 @@ import type {
   TerminalCommand,
   TerminalType,
 } from '@/lib/@types/app.types';
-import commandHistoryStore, {
-  lastCommand,
-} from '@/stores/command.history.store';
+import commandHistoryStore from '@/stores/command.history.store';
 import csvStore from '@/stores/csv.store';
 import { addLog } from '@/stores/log.store';
 import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 import updateCommandHistory from '@/stores/terminal/helpers/update-command-history';
-import { onDestroy } from 'svelte';
-import { toast } from 'svelte-sonner';
-import { get } from 'svelte/store';
 
 let currentIndex = 1;
 let intervalId: NodeJS.Timeout;

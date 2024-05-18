@@ -1,7 +1,4 @@
-import { addLog } from '@/stores/log.store';
 import type { TelemetryData } from '../@types/app.types';
-import outputStore from '@/stores/output.store';
-import { get } from 'svelte/store';
 
 export function isValidTelemetryData(dataParts: string[]): boolean {
   if (dataParts.length < 20) return false;

@@ -50,6 +50,7 @@ function createTerminalStore() {
         addLog({
           value: `Error: Invalid command - ${command.value}`,
           time: command.time,
+          state: 'error',
         });
         return updateCommandHistory({
           $state,
@@ -64,6 +65,7 @@ function createTerminalStore() {
         addLog({
           value: `Error: Invalid TEAM_ID - ${command.value}`,
           time: command.time,
+          state: 'error',
         });
 
         return updateCommandHistory({
@@ -83,6 +85,7 @@ function createTerminalStore() {
             addLog({
               value: `Error: Invalid command: CX command must be followed by ON or OFF - ${command.value}`,
               time: command.time,
+              state: 'error',
             });
 
             return updateCommandHistory({
@@ -108,6 +111,7 @@ function createTerminalStore() {
             addLog({
               value: `Error: Invalid command: ST command must be followed by a valid time or GPS - ${command.value}`,
               time: command.time,
+              state: 'error',
             });
 
             return updateCommandHistory({
@@ -134,6 +138,7 @@ function createTerminalStore() {
             addLog({
               value: `Error: Invalid command: SIM command must be followed by ENABLE, ACTIVATE or DISABLE - ${command.value}`,
               time: command.time,
+              state: 'error',
             });
 
             return updateCommandHistory({
@@ -171,6 +176,7 @@ function createTerminalStore() {
             addLog({
               value: `Invalid command: SIMP command must be followed by a number - ${command.value}`,
               time: command.time,
+              state: 'error',
             });
 
             return updateCommandHistory({
@@ -189,6 +195,7 @@ function createTerminalStore() {
             addLog({
               value: `Error: Invalid command: BCN command must be followed by ON or OFF - ${command.value}`,
               time: command.time,
+              state: 'error',
             });
 
             return updateCommandHistory({
@@ -213,6 +220,7 @@ function createTerminalStore() {
           addLog({
             value: `Error: Invalid command: ${commandType} is not a valid command - ${command.value}`,
             time: command.time,
+            state: 'error',
           });
 
           return updateCommandHistory({

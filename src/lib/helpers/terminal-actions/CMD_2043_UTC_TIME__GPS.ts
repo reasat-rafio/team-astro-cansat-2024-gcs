@@ -14,6 +14,7 @@ export default function CMD_2043_UTC_TIME__GPS({ $state, command }: Type) {
     addLog({
       value: `${command.value} executed successfully. Time has been set to ${timeValue}.`,
       time: command.time,
+      state: 'success',
     });
 
     return updateCommandHistory({
@@ -23,7 +24,11 @@ export default function CMD_2043_UTC_TIME__GPS({ $state, command }: Type) {
       output: `<p class="text-green-600">${command.value} executed successfully. Time has been set to ${timeValue}</p>`,
     });
   } catch (error) {
-    addLog({ value: `Error: ${error}`, time: command.time });
+    addLog({
+      value: `Error: ${error}`,
+      time: command.time,
+      state: 'error',
+    });
 
     return updateCommandHistory({
       command,

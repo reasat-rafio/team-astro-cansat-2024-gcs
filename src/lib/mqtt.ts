@@ -22,12 +22,16 @@ const createMqttHandler = () => {
 
   mqttClient.on('error', (err) => {
     toast.error(`Error: ${err}`);
-    addLog({ value: `Error: ${err}`, time: new Date() });
+    addLog({ value: `Error: ${err}`, time: new Date(), state: 'error' });
     mqttClient.end();
   });
 
   mqttClient.on('connect', () => {
-    addLog({ value: `MQTT client connected`, time: new Date() });
+    addLog({
+      value: `MQTT client connected`,
+      time: new Date(),
+      state: 'success',
+    });
     toast.success(`MQTT client connected`);
   });
 
@@ -41,6 +45,7 @@ const createMqttHandler = () => {
           addLog({
             value: `Received telemetry data:  ${message}`,
             time: new Date(),
+            state: 'info',
           });
 
           const telemetryData = processTelemetryData(decoder.decode(message));
@@ -52,6 +57,7 @@ const createMqttHandler = () => {
             addLog({
               value: `Invalid telemetry data received: ${telemetryData.data}`,
               time: new Date(),
+              state: 'error',
             });
 
             break;
