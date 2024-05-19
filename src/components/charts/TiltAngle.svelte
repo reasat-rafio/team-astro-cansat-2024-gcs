@@ -26,6 +26,9 @@
           z : ${params[2].value}
         `,
       },
+      legend: {
+        data: ['tilt_x', 'tilt_y', 'rot_z'],
+      },
 
       dataZoom: [
         {
@@ -51,17 +54,17 @@
       series: [
         {
           type: 'line',
-          name: 'TILT_X',
+          name: 'tilt_x',
           data: seriesDataX,
         },
         {
           type: 'line',
-          name: 'TILT_Y',
+          name: 'tilt_y',
           data: seriesDataY,
         },
         {
           type: 'line',
-          name: 'ROT_Z',
+          name: 'rot_z',
           data: seriesDataZ,
         },
       ],
@@ -75,17 +78,17 @@
           series: [
             {
               type: 'line',
-              name: 'GPS_ALTITUDE',
+              name: 'tilt_x',
               data: seriesDataX,
             },
             {
               type: 'line',
-              name: 'GPS_LATITUDE',
+              name: 'tilt_y',
               data: seriesDataY,
             },
             {
               type: 'line',
-              name: 'GPS_LONGITUDE',
+              name: 'rot_z',
               data: seriesDataZ,
             },
           ],

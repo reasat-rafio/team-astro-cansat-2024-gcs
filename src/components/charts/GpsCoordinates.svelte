@@ -27,6 +27,9 @@
           longitude : ${params[2].value}
         `,
       },
+      legend: {
+        data: ['altitude', 'latitude', 'longitude'],
+      },
 
       dataZoom: [
         {
@@ -52,17 +55,17 @@
       series: [
         {
           type: 'line',
-          name: 'GPS_ALTITUDE',
+          name: 'altitude',
           data: seriesDataX,
         },
         {
           type: 'line',
-          name: 'GPS_LATITUDE',
+          name: 'latitude',
           data: seriesDataY,
         },
         {
           type: 'line',
-          name: 'GPS_LONGITUDE',
+          name: 'longitude',
           data: seriesDataZ,
         },
       ],
@@ -76,17 +79,17 @@
           series: [
             {
               type: 'line',
-              name: 'GPS_ALTITUDE',
+              name: 'altitude',
               data: seriesDataX,
             },
             {
               type: 'line',
-              name: 'GPS_LATITUDE',
+              name: 'latitude',
               data: seriesDataY,
             },
             {
               type: 'line',
-              name: 'GPS_LONGITUDE',
+              name: 'longitude',
               data: seriesDataZ,
             },
           ],
