@@ -3,6 +3,7 @@
   import Button from '../ui/button/button.svelte';
   import { Download } from 'lucide-svelte';
   import rowTelemetryStore from '@/stores/row-telemetry';
+  import { addLog } from '@/stores/log.store';
 
   const header = [
     'TEAM_ID',
@@ -39,6 +40,12 @@
     link.href = window.URL.createObjectURL(blob);
     link.download = fileName;
     link.click();
+
+    addLog({
+      value: 'CSV Exported',
+      state: 'success',
+      time: new Date(),
+    });
   }
 </script>
 

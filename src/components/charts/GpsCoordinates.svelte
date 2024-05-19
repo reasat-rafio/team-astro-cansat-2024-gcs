@@ -21,9 +21,10 @@
           type: 'line',
         },
         formatter: (params: any) => `
-          ${params[0].name} : ${params[0].value}<br />
-          ${params[1].name} : ${params[1].value}<br />
-          ${params[2].name} : ${params[2].value}
+          time: ${params[0].name}<br />
+          altitude : ${params[0].value}<br />
+          latitude : ${params[1].value}<br />
+          longitude : ${params[2].value}
         `,
       },
 
