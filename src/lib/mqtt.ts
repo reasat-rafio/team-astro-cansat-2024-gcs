@@ -15,6 +15,7 @@ import { addLog } from '@/stores/log.store';
 import formatTime from './helpers/format-date';
 import { processTelemetryData } from './helpers/telemetry-data';
 import { get } from 'svelte/store';
+import rowTelemetryStore from '@/stores/row-telemetry';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -34,6 +35,10 @@ const createMqttHandler = () => {
     });
     toast.success(`MQTT client connected`);
   });
+
+  // mqttClient.on('reconnect', () => {
+  //   toast.info(`Reconnecting to MQTT server`);
+  // })
 
   mqttClient.on(
     'message',
@@ -64,6 +69,8 @@ const createMqttHandler = () => {
           }
 
           // if the  data is valid, update the output store
+          rowTelemetryStore.updateTelemetry(decoder.decode(message));
+
           const t = telemetryData.data as TelemetryData;
           const lastPacketCount = parseInt(get(outputStore).packetCount);
           const currentPacketCount = t.PACKET_COUNT;

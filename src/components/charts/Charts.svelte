@@ -20,14 +20,14 @@
   class={cn('flex h-full w-full flex-col space-y-6 pt-5', $$props.class)}>
   <SectionHeader color="primary" />
 
-  <div class="grid grid-cols-2 gap-[50px]">
-    <Altitude width="100%" height="600px" />
-    <AirPressure width="100%" height="600px" />
-    <AirSpeed width="100%" height="600px" />
-    <Temperature width="100%" height="600px" />
-    <BatteryVoltage width="100%" height="600px" />
-    <TiltAngle width="100%" height="600px" />
-    <GpsCoordinates width="100%" height="600px" />
+  <div class="grid grid-cols-3 gap-[50px]">
+    <Altitude width="100%" height="400px" />
+    <AirPressure width="100%" height="400px" />
+    <!-- <AirSpeed width="100%" height="400px" /> -->
+    <Temperature width="100%" height="400px" />
+    <BatteryVoltage width="100%" height="400px" />
+    <TiltAngle width="100%" height="400px" />
+    <GpsCoordinates width="100%" height="400px" />
     <!-- <CommandEcho />
     <Longitude />
     <SatellitesTracked />

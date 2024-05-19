@@ -37,7 +37,7 @@
       <Altitude />
       <AirPressure />
       <Temperature />
-      <AirSpeed />
+      <!-- <AirSpeed /> -->
       <BatteryVoltage />
       <GpsCoordinates />
       <TiltAngle />

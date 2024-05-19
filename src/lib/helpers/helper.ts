@@ -59,3 +59,22 @@ export function delay(ms: number): Promise<void> {
     setTimeout(resolve, ms);
   });
 }
+
+export function expandDecimal(num: number, decimals: number): string {
+  // Convert number to string
+  const numStr: string = num.toString();
+
+  // Split integer and decimal parts
+  const parts: string[] = numStr.split('.');
+
+  // Generate random decimal numbers
+  let randomDecimals: string = '';
+  for (let i: number = 0; i < decimals; i++) {
+    randomDecimals += Math.floor(Math.random() * 10).toString(); // Generates random number from 0 to 9
+  }
+
+  // Concatenate integer part, decimal point, and random decimals
+  const expandedNum: string = parts[0] + '.' + randomDecimals;
+
+  return expandedNum;
+}

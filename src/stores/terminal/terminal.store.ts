@@ -99,10 +99,8 @@ function createTerminalStore() {
 
           switch (lastParam) {
             case 'ON':
-              mqttHandler.client.publish('ground_station/commands', 'CX/ON');
               return CMD_2043_CX_ON({ $state, command });
             case 'OFF':
-              mqttHandler.client.publish('ground_station/commands', 'CX/OFF');
               return CMD_2043_CX_OFF({ $state, command });
           }
           break;
