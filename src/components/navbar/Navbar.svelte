@@ -8,6 +8,7 @@
   import CsvExport from './CsvExport.svelte';
   import { page } from '$app/stores';
   import { cn } from '@/utils';
+  import Clock from './Clock.svelte';
 
   $: activeRoute = $page.url.pathname;
   const navItems = [
@@ -37,6 +38,7 @@
   </ul>
 
   <div class="flex space-x-2">
+    <Clock />
     <CsvImport />
     <CsvExport />
     <ThemeSwitcher />

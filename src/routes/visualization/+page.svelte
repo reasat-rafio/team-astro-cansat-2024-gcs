@@ -12,7 +12,7 @@
   itemSize={850}> -->
 <!-- slot="item" -->
 <section class="h-full w-full [&>*]:border-gray-600 [&>*]:p-5">
-  <div class="min-h-screen divide-y divide-gray-500">
+  <div class="divide-y divide-gray-500">
     <Charts class="pt-0" />
   </div>
 </section>

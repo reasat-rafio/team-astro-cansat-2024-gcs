@@ -21,9 +21,9 @@
         },
         formatter: (params: any) => `
           time: ${params[0].name}<br />
-          x : ${params[0].value}<br />
-          y : ${params[1].value}<br />
-          z : ${params[2].value}
+          tilt_x : ${params[0].value}<br />
+          tilt_y : ${params[1].value}<br />
+          rot_z : ${params[2].value}
         `,
       },
       legend: {

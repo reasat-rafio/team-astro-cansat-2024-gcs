@@ -5,7 +5,7 @@
   import Temperature from './Temperature.svelte';
   import SectionHeader from '../pages/visualization/SectionHeader.svelte';
   import TiltAngle from './TiltAngle.svelte';
-  import AirSpeed from './AirSpeed.svelte';
+  // import AirSpeed from './AirSpeed.svelte';
   import GpsCoordinates from './GpsCoordinates.svelte';
   import { cn } from '@/utils';
 
@@ -21,13 +21,13 @@
   <SectionHeader color="primary" />
 
   <div class="grid grid-cols-3 gap-[50px]">
-    <Altitude width="100%" height="400px" />
-    <AirPressure width="100%" height="400px" />
-    <!-- <AirSpeed width="100%" height="400px" /> -->
-    <Temperature width="100%" height="400px" />
-    <BatteryVoltage width="100%" height="400px" />
-    <TiltAngle width="100%" height="400px" />
-    <GpsCoordinates width="100%" height="400px" />
+    <Altitude width="100%" height="350px" />
+    <AirPressure width="100%" height="350px" />
+    <!-- <AirSpeed width="100%" height="350px" /> -->
+    <Temperature width="100%" height="350px" />
+    <BatteryVoltage width="100%" height="350px" />
+    <TiltAngle width="100%" height="350px" />
+    <GpsCoordinates width="100%" height="350px" />
     <!-- <CommandEcho />
     <Longitude />
     <SatellitesTracked />

@@ -4,6 +4,7 @@ interface UIStore {
   navbarHeight: number;
   showNotification: boolean;
   lockLog: boolean;
+  startClock: boolean;
 }
 
 function createUiStore() {
@@ -11,6 +12,7 @@ function createUiStore() {
     navbarHeight: 0,
     showNotification: true,
     lockLog: true,
+    startClock: false,
   });
 
   function setNavbarHeight(height: number) {
@@ -21,11 +23,16 @@ function createUiStore() {
     update((state) => ({ ...state, lockLog: lock }));
   }
 
+  function setStartClock(start: boolean) {
+    update((state) => ({ ...state, startClock: start }));
+  }
+
   return {
     set,
     update,
     subscribe,
     setLockLog,
+    setStartClock,
     setNavbarHeight,
   };
 }
