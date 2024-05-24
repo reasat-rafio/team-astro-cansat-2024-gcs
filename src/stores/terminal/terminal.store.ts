@@ -68,7 +68,6 @@ function createTerminalStore() {
           state: 'error',
         });
 
-
         return updateCommandHistory({
           $state,
           command,
@@ -125,7 +124,6 @@ function createTerminalStore() {
           break;
 
         case 'CAL':
-          mqttHandler.client.publish('ground_station/commands', 'CAL');
           return CMD_2043_CAL({ $state, command });
 
         case 'SIM':
@@ -150,22 +148,10 @@ function createTerminalStore() {
 
           switch (lastParam) {
             case 'ACTIVATE':
-              mqttHandler.client.publish(
-                'ground_station/commands',
-                'SIM/ACTIVATE',
-              );
               return CMD_2043_SIM_ACTIVATE({ $state, command });
             case 'ENABLE':
-              mqttHandler.client.publish(
-                'ground_station/commands',
-                'SIM/ENABLE',
-              );
               return CMD_2043_SIM_ENABLE({ $state, command });
             case 'DISABLE':
-              mqttHandler.client.publish(
-                'ground_station/commands',
-                'SIM/DISABLE',
-              );
               return CMD_2043_SIM_DISABLE({ $state, command });
           }
           break;
@@ -207,10 +193,8 @@ function createTerminalStore() {
 
           switch (lastParam) {
             case 'ON':
-              mqttHandler.client.publish('ground_station/commands', 'BCN/ON');
               return CMD_2043_BCN_ON({ $state, command });
             case 'OFF':
-              mqttHandler.client.publish('ground_station/commands', 'BCN/OFF');
               return CMD_2043_BCN_OFF({ $state, command });
           }
           break;

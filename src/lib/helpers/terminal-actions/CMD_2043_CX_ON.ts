@@ -11,35 +11,20 @@ interface Type {
 }
 
 export default function CMD_2043_CX_ON({ $state, command }: Type) {
-  try {
-    const successMessage = getSuccessOutput(command.value);
-    mqttHandler.client.publish('ground_station/commands', 'CX/ON');
-    uiStore.setStartClock(true);
+  const successMessage = getSuccessOutput(command.value);
+  mqttHandler.client.publish('ground_station/commands', 'CX/ON');
+  uiStore.setStartClock(true);
 
-    addLog({
-      value: `${command.value} executed successfully. ${successMessage}.`,
-      time: command.time,
-      state: 'success',
-    });
+  addLog({
+    value: `${command.value} executed successfully. ${successMessage}.`,
+    time: command.time,
+    state: 'success',
+  });
 
-    return updateCommandHistory({
-      $state,
-      command,
-      status: 'success',
-      output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
-    });
-  } catch (error) {
-    addLog({
-      value: `${error}`,
-      time: command.time,
-      state: 'error',
-    });
-
-    return updateCommandHistory({
-      command,
-      $state,
-      status: 'error',
-      output: `<p class="text-destructive">Error: ${error}</p>`,
-    });
-  }
+  return updateCommandHistory({
+    $state,
+    command,
+    status: 'success',
+    output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
+  });
 }

@@ -3,6 +3,7 @@ import type {
   TerminalCommand,
   TerminalType,
 } from '@/lib/@types/app.types';
+import mqttHandler from '@/lib/mqtt';
 import commandHistoryStore from '@/stores/command.history.store';
 import csvStore from '@/stores/csv.store';
 import { addLog } from '@/stores/log.store';
@@ -12,22 +13,22 @@ import updateCommandHistory from '@/stores/terminal/helpers/update-command-histo
 let currentIndex = 1;
 let intervalId: NodeJS.Timeout;
 
-const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
-  if (currentIndex < csvData.length) {
-    const currentLine = csvData[currentIndex];
+// const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
+//   if (currentIndex < csvData.length) {
+//     const currentLine = csvData[currentIndex];
 
-    csvStore.setSteamObj(currentLine, headerRow);
-    csvStore.updateCsvStreams(currentLine.join(','));
+//     csvStore.setSteamObj(currentLine, headerRow);
+//     csvStore.updateCsvStreams(currentLine.join(','));
 
-    currentIndex++;
-  } else {
-    csvStore.setState('completed');
-    commandHistoryStore.setLatestCommandOutput(getSuccessOutput());
-    commandHistoryStore.updateLastCommandStatus('success');
-    console.log('Processing complete');
-    clearInterval(intervalId);
-  }
-};
+//     currentIndex++;
+//   } else {
+//     csvStore.setState('completed');
+//     commandHistoryStore.setLatestCommandOutput(getSuccessOutput());
+//     commandHistoryStore.updateLastCommandStatus('success');
+//     console.log('Processing complete');
+//     clearInterval(intervalId);
+//   }
+// };
 
 interface Type {
   $state: TerminalType;
@@ -54,28 +55,18 @@ export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
   // onDestroy(() => {
   //   clearInterval(intervalId);
   // });
-  try {
-    const successMessage = getSuccessOutput(command.value);
+  const successMessage = getSuccessOutput(command.value);
+  mqttHandler.client.publish('ground_station/commands', 'SIM/ACTIVATE');
 
-    addLog({
-      value: `${command.value} executed successfully. ${successMessage}.`,
-      time: command.time,
-    });
+  addLog({
+    value: `${command.value} executed successfully. ${successMessage}.`,
+    time: command.time,
+  });
 
-    return updateCommandHistory({
-      $state,
-      command,
-      status: 'success',
-      output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
-    });
-  } catch (error) {
-    addLog({ value: `${error}`, time: command.time });
-
-    return updateCommandHistory({
-      command,
-      $state,
-      status: 'error',
-      output: `<p class="text-destructive">Error: ${error}</p>`,
-    });
-  }
+  return updateCommandHistory({
+    $state,
+    command,
+    status: 'success',
+    output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
+  });
 }
