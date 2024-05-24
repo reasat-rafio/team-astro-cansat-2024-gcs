@@ -45,6 +45,6 @@
     <Item formatKey="TILT_X" value={$outputStore.tiltX} />
     <Item formatKey="TILT_Y" value={$outputStore.tiltY} />
     <Item formatKey="ROT_Z" value={$outputStore.rotZ} />
-    <Item formatKey="CMD_ECHO" value={$outputStore.cmdEcho} />
+    <Item formatKey="CMD" value={$outputStore.cmdEcho} />
   </div>
 </ScrollArea>

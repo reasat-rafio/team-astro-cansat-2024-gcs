@@ -15,7 +15,7 @@
       <span
         class:text-primary={color === 'default'}
         class:text-red-600={color === 'error'}
-        in:fade={{ duration: 150 }}
+        in:fade={{ duration: 400 }}
         class="font-semibold capitalize">
         {value}
       </span>

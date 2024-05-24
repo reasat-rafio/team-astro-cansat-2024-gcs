@@ -17,7 +17,8 @@
         axisPointer: {
           type: 'line',
         },
-        formatter: (params: any) => `${params[0].name} : ${params[0].value}`,
+        formatter: (params: any) =>
+          `time: ${params[0].name} : value: ${params[0].value} V`,
       },
 
       dataZoom: [

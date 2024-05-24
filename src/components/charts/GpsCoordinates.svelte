@@ -1,6 +1,5 @@
 <script lang="ts">
   import * as echarts from 'echarts';
-  import formatTime from '@/lib/helpers/format-date';
   import { gpsCoordinatesStore } from '@/stores/sensor.data.store';
 
   export let width: string = '600px';
