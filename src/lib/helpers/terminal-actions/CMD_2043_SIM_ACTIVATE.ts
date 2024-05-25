@@ -55,18 +55,22 @@ export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
   // onDestroy(() => {
   //   clearInterval(intervalId);
   // });
-  const successMessage = getSuccessOutput(command.value);
+
   mqttHandler.client.publish('ground_station/commands', 'SIM/ACTIVATE');
+  commandHistoryStore.setCommandHistory({
+    ...command,
+    output: `<p>${command.value} executed successfully. Waiting for response..</p>`,
+    status: 'pending',
+  });
 
   addLog({
-    value: `${command.value} executed successfully. ${successMessage}.`,
+    value: `${command.value} executed successfully. Waiting for response..`,
     time: command.time,
   });
 
-  return updateCommandHistory({
-    $state,
-    command,
-    status: 'success',
-    output: `<p class="text-green-600">${command.value} executed successfully. ${successMessage}.</p>`,
-  });
+  return {
+    ...$state,
+    currentCommand: command,
+    currentCommandIdx: 0,
+  };
 }

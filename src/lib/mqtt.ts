@@ -20,6 +20,9 @@ import {
 import { get } from 'svelte/store';
 import rowTelemetryStore from '@/stores/row-telemetry';
 import systemStepsStore from '@/stores/system.steps.store';
+import commandHistoryStore from '@/stores/command.history.store';
+import terminalStore from '@/stores/terminal/terminal.store';
+import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -40,9 +43,9 @@ const createMqttHandler = () => {
     toast.success(`MQTT client connected`);
   });
 
-  // mqttClient.on('reconnect', () => {
-  //   toast.info(`Reconnecting to MQTT server`);
-  // })
+  mqttClient.on('reconnect', () => {
+    toast.info(`Reconnecting to MQTT server`);
+  });
 
   mqttClient.on(
     'message',
@@ -165,14 +168,50 @@ const createMqttHandler = () => {
           }
 
           if (typeof response.data !== 'string') {
+            console.log(response);
+
             switch (response.data.command) {
               case 'SIM/ACTIVATE':
+                const { currentCommand } = get(terminalStore);
+
                 switch (response.data.status) {
                   case 'SUCCESS':
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+
                     systemStepsStore.setSimulationEnable('done');
                     systemStepsStore.setSimulationActivate('done');
+
                     break;
                   case 'FAILED':
+                    if (!currentCommand) return;
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'error',
+                      output: `<p class="text-red-600">${currentCommand.value} failed. ${response.data.message.toLowerCase()}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} failed. ${response.data.message.toLowerCase()}`,
+                      time: new Date(),
+                      state: 'error',
+                    });
+
                     systemStepsStore.setSimulationActivate('error');
                     break;
                 }
@@ -181,6 +220,25 @@ const createMqttHandler = () => {
               case 'SIM/ENABLE':
                 switch (response.data.status) {
                   case 'SUCCESS':
+                    const { currentCommand } = get(terminalStore);
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+
                     systemStepsStore.setSimulationEnable('done');
                     break;
                   case 'FAILED':
@@ -193,30 +251,33 @@ const createMqttHandler = () => {
               case 'SIM/DISABLE':
                 switch (response.data.status) {
                   case 'SUCCESS':
+                    const { currentCommand } = get(terminalStore);
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+
                     systemStepsStore.setSimulationEnable('notStarted');
+                    systemStepsStore.setSimulationActivate('notStarted');
                     break;
                   case 'FAILED':
                     systemStepsStore.setSimulationEnable('error');
                     break;
                 }
 
-                break;
-            }
-
-            switch (response.data.status) {
-              case 'SUCCESS':
-                addLog({
-                  value: `Command response: ${response.data.command} ${response.data.status} ${response.data.message}`,
-                  time: new Date(),
-                  state: 'success',
-                });
-                break;
-              case 'FAILED':
-                addLog({
-                  value: `Command response: ${response.data.command} ${response.data.status} ${response.data.message.toLowerCase()}`,
-                  time: new Date(),
-                  state: 'error',
-                });
                 break;
             }
           }
