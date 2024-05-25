@@ -24,21 +24,12 @@
     recoveryMode,
   } = $systemStepsStore);
 
-  $: {
-    console.log({
-      a: determineParentState([
-        simulationMode?.simulationEnable,
-        simulationMode?.simulationActivate,
-        simulationMode?.gettingPressureDataFromCSV,
-        simulationMode?.calculatingAltitudeAndSpeed,
-      ]),
-    });
-  }
   $: tree = [
     {
       label: {
         text: 'Simulation Mode',
         state: determineParentState([
+          simulationMode?.importCSV,
           simulationMode?.simulationEnable,
           simulationMode?.simulationActivate,
           simulationMode?.gettingPressureDataFromCSV,
@@ -46,6 +37,12 @@
         ]),
       },
       children: [
+        {
+          label: {
+            text: 'Import CSV',
+            state: simulationMode?.importCSV,
+          },
+        },
         {
           label: {
             text: 'Simulation Enabled',

@@ -8,8 +8,9 @@
   import Input from './Input.svelte';
   import commandHistoryStore from '@/stores/command.history.store';
   import { ScrollArea } from '@/components/ui/scroll-area/index.js';
+  import { uiStore } from '@/stores/ui.store';
 
-  let inputEl: HTMLSpanElement;
+  // let inputEl: HTMLSpanElement;
   let maximizeBlockEl: HTMLDivElement;
 
   $: if ($commandHistoryStore?.commandHistory?.length && maximizeBlockEl) {
@@ -22,7 +23,7 @@
 <aside
   role="button"
   tabindex="0"
-  on:click={() => inputEl.focus()}
+  on:click={() => $uiStore.terminalInputEl?.focus()}
   class={cn(
     'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md border border-primary bg-popover transition-all duration-300',
     {
@@ -56,7 +57,7 @@
       <ScrollArea class="h-[450px] space-y-2 p-2 pb-5 pr-5">
         <History />
 
-        <Input bind:inputEl />
+        <Input />
       </ScrollArea>
     </div>
   {/if}

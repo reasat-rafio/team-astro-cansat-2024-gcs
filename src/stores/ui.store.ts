@@ -5,6 +5,7 @@ interface UIStore {
   showNotification: boolean;
   lockLog: boolean;
   startClock: boolean;
+  terminalInputEl: HTMLSpanElement | null;
 }
 
 function createUiStore() {
@@ -13,6 +14,7 @@ function createUiStore() {
     showNotification: true,
     lockLog: true,
     startClock: false,
+    terminalInputEl: null,
   });
 
   function setNavbarHeight(height: number) {
@@ -27,12 +29,17 @@ function createUiStore() {
     update((state) => ({ ...state, startClock: start }));
   }
 
+  function setTerminalInputEl(el: HTMLSpanElement) {
+    update((state) => ({ ...state, terminalInputEl: el }));
+  }
+
   return {
     set,
     update,
     subscribe,
     setLockLog,
     setStartClock,
+    setTerminalInputEl,
     setNavbarHeight,
   };
 }

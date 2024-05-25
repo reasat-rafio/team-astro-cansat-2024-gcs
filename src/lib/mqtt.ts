@@ -1,28 +1,28 @@
-import mqtt from 'mqtt';
-import type { MqttPayloadTopic, TelemetryData } from './@types/app.types';
+import commandHistoryStore from '@/stores/command.history.store';
+import { addLog } from '@/stores/log.store';
+import outputStore from '@/stores/output.store';
+import rowTelemetryStore from '@/stores/row-telemetry';
 import {
   airPressureStore,
   airSpeedStore,
   altitudeStore,
   batteryVoltageStore,
+  gpsCoordinatesStore,
   temperatureStore,
   tiltAngleStore,
-  gpsCoordinatesStore,
 } from '@/stores/sensor.data.store';
-import outputStore from '@/stores/output.store';
+import systemStepsStore from '@/stores/system.steps.store';
+import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
+import terminalStore from '@/stores/terminal/terminal.store';
+import mqtt from 'mqtt';
 import { toast } from 'svelte-sonner';
-import { addLog } from '@/stores/log.store';
+import { get } from 'svelte/store';
+import type { MqttPayloadTopic, TelemetryData } from './@types/app.types';
 import formatTime from './helpers/format-date';
 import {
   processResponseData,
   processTelemetryData,
 } from './helpers/telemetry-data';
-import { get } from 'svelte/store';
-import rowTelemetryStore from '@/stores/row-telemetry';
-import systemStepsStore from '@/stores/system.steps.store';
-import commandHistoryStore from '@/stores/command.history.store';
-import terminalStore from '@/stores/terminal/terminal.store';
-import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
 
 // MQTT handler
 const createMqttHandler = () => {

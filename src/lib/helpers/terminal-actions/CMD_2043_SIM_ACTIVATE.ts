@@ -1,60 +1,34 @@
-import type {
-  CSV_HEAD,
-  TerminalCommand,
-  TerminalType,
-} from '@/lib/@types/app.types';
+import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
 import mqttHandler from '@/lib/mqtt';
 import commandHistoryStore from '@/stores/command.history.store';
 import csvStore from '@/stores/csv.store';
 import { addLog } from '@/stores/log.store';
-import getSuccessOutput from '@/stores/terminal/helpers/get-current-success-output';
-import updateCommandHistory from '@/stores/terminal/helpers/update-command-history';
-
-let currentIndex = 1;
-let intervalId: NodeJS.Timeout;
-
-// const processLine = (csvData: string[][], headerRow: CSV_HEAD[]) => {
-//   if (currentIndex < csvData.length) {
-//     const currentLine = csvData[currentIndex];
-
-//     csvStore.setSteamObj(currentLine, headerRow);
-//     csvStore.updateCsvStreams(currentLine.join(','));
-
-//     currentIndex++;
-//   } else {
-//     csvStore.setState('completed');
-//     commandHistoryStore.setLatestCommandOutput(getSuccessOutput());
-//     commandHistoryStore.updateLastCommandStatus('success');
-//     console.log('Processing complete');
-//     clearInterval(intervalId);
-//   }
-// };
+import systemStepsStore from '@/stores/system.steps.store';
+import terminalStore from '@/stores/terminal/terminal.store';
+import { uiStore } from '@/stores/ui.store';
+import { get } from 'svelte/store';
 
 interface Type {
   $state: TerminalType;
   command: TerminalCommand;
 }
+
+let currentIndex = 0;
+let intervalId: NodeJS.Timeout;
+
 export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
-  // if (get(csvStore).state === 'idle') {
-  //   toast.error('No CSV file loaded');
-  //   commandHistoryStore.setLatestCommandOutput('No CSV file loaded');
-  //   commandHistoryStore.updateLastCommandStatus('error');
-  //   return;
-  // }
-
-  // if (intervalId) clearInterval(intervalId);
-
-  // if (get(lastCommand).status === 'pending') {
-  //   csvStore.setState('processing');
-  //   const csvData = get(csvStore).rawData;
-  //   const headerRow = csvData[0] as CSV_HEAD[];
-
-  //   intervalId = setInterval(() => processLine(csvData, headerRow), 1000);
-  // }
-
-  // onDestroy(() => {
-  //   clearInterval(intervalId);
-  // });
+  if (get(systemStepsStore).simulationMode.importCSV !== 'done') {
+    commandHistoryStore.setCommandHistory({
+      ...command,
+      output: `<p class="text-red-600">Import CSV file first</p>`,
+      status: 'error',
+    });
+    return {
+      ...$state,
+      currentCommand: command,
+      currentCommandIdx: 0,
+    };
+  }
 
   mqttHandler.client.publish('ground_station/commands', 'SIM/ACTIVATE');
   commandHistoryStore.setCommandHistory({
@@ -68,9 +42,40 @@ export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
     time: command.time,
   });
 
+  // Start processing lines from the CSV file
+  const csvData = get(csvStore).rawData;
+  intervalId = setInterval(() => processLine(csvData), 1000); // 1 Hz interval
+
   return {
     ...$state,
     currentCommand: command,
     currentCommandIdx: 0,
   };
 }
+
+type KEvent = KeyboardEvent & {
+  currentTarget: EventTarget & HTMLSpanElement;
+};
+
+const processLine = (csvData: string[][]) => {
+  if (currentIndex < csvData.length) {
+    const currentLine = csvData[currentIndex];
+    if (currentIndex !== 0) {
+      if (get(uiStore)?.terminalInputEl) {
+        const terminalInputEl = get(uiStore)?.terminalInputEl;
+        if (terminalInputEl) {
+          terminalStore.setCurrentCommand({
+            value: `CMD,2043,SIMP,${currentLine[1]}`,
+            time: new Date(),
+          });
+          terminalInputEl.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+    }
+
+    currentIndex++;
+  } else {
+    // If all lines are processed, clear the interval
+    clearInterval(intervalId);
+  }
+};

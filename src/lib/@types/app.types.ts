@@ -39,6 +39,7 @@ export interface MachineContext {
 
 export interface SystemSteps {
   simulationMode: {
+    importCSV: SystemStatus;
     simulationEnable: SystemStatus;
     simulationActivate: SystemStatus;
     gettingPressureDataFromCSV: SystemStatus;

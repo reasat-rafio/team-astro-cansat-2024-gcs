@@ -2,8 +2,7 @@
   import Prompt from './Prompt.svelte';
   import terminalStore from '@/stores/terminal/terminal.store';
   import commandHistoryStore from '@/stores/command.history.store';
-
-  export let inputEl: HTMLSpanElement;
+  import { uiStore } from '@/stores/ui.store';
 
   type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;
@@ -38,7 +37,7 @@
   <!-- svelte-ignore a11y-interactive-supports-focus -->
   <div class="relative flex-1">
     <span
-      bind:this={inputEl}
+      bind:this={$uiStore.terminalInputEl}
       on:keyup={keyPressAction}
       data-placeholder="Type help to get started."
       class="block h-fit resize-y overflow-hidden border-none bg-transparent outline-none"

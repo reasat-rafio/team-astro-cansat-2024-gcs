@@ -53,43 +53,43 @@ function createCsvStore() {
         {} as StreamsObj,
       );
 
-      altitudeStore.updateAltitude({
-        time: obj.GPS_TIME,
-        value: obj.ATMOSPHERIC_PRESSURE,
-      });
-      airPressureStore.updateAirPressure({
-        time: obj.GPS_TIME,
-        value: obj.PRESSURE,
-      });
+      // altitudeStore.updateAltitude({
+      //   time: obj.GPS_TIME,
+      //   value: obj.ATMOSPHERIC_PRESSURE,
+      // });
+      // airPressureStore.updateAirPressure({
+      //   time: obj.GPS_TIME,
+      //   value: obj.PRESSURE,
+      // });
 
-      temperatureStore.updateTemperature({
-        time: obj.GPS_TIME,
-        value: obj.TEMPERATURE,
-      });
+      // temperatureStore.updateTemperature({
+      //   time: obj.GPS_TIME,
+      //   value: obj.TEMPERATURE,
+      // });
 
-      airSpeedStore.updateAirSpeed({
-        time: obj.GPS_TIME,
-        value: obj.AIR_SPEED,
-      });
+      // airSpeedStore.updateAirSpeed({
+      //   time: obj.GPS_TIME,
+      //   value: obj.AIR_SPEED,
+      // });
 
-      batteryVoltageStore.updateBatteryVoltage({
-        time: obj.GPS_TIME,
-        value: obj.VOLTAGE,
-      });
+      // batteryVoltageStore.updateBatteryVoltage({
+      //   time: obj.GPS_TIME,
+      //   value: obj.VOLTAGE,
+      // });
 
-      tiltAngleStore.updateTiltAngle({
-        time: obj.GPS_TIME,
-        value: { x: obj.TILT_X, y: obj.TILT_Y, z: obj.ROT_Z },
-      });
+      // tiltAngleStore.updateTiltAngle({
+      //   time: obj.GPS_TIME,
+      //   value: { x: obj.TILT_X, y: obj.TILT_Y, z: obj.ROT_Z },
+      // });
 
-      gpsCoordinatesStore.updateGpsCoordinates({
-        time: obj.GPS_TIME,
-        value: {
-          x: obj.GPS_LATITUDE,
-          y: obj.GPS_LONGITUDE,
-          z: obj.GPS_ALTITUDE,
-        },
-      });
+      // gpsCoordinatesStore.updateGpsCoordinates({
+      //   time: obj.GPS_TIME,
+      //   value: {
+      //     x: obj.GPS_LATITUDE,
+      //     y: obj.GPS_LONGITUDE,
+      //     z: obj.GPS_ALTITUDE,
+      //   },
+      // });
 
       return {
         ...$store,
