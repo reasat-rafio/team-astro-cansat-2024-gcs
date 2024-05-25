@@ -117,6 +117,35 @@ function createOutputStore() {
     });
   }
 
+  function clearOutput() {
+    set({
+      teamId: '2043',
+      missionTime: '0',
+      packetCount: '0',
+      // healthyPacket: '0',
+      unhealthyPacket: '0',
+      packetLoss: '0',
+      activeMode: '0',
+      activeState: 'IDLE',
+      altitude: '0',
+      airSpeed: '0',
+      hsDeployed: 'N',
+      pcDeployed: 'N',
+      temperature: '0',
+      voltage: '0',
+      pressure: '0',
+      gpsTime: '0',
+      gpsAltitude: '0',
+      gpsLatitude: '0',
+      gpsLongitude: '0',
+      gpsStas: '0',
+      tiltX: '0',
+      tiltY: '0',
+      rotZ: '0',
+      cmdEcho: '0',
+    });
+  }
+
   return {
     set,
     update,
@@ -127,6 +156,7 @@ function createOutputStore() {
     setUnhealthyPacket,
     resetPacketLoss,
     resetMissionTime,
+    clearOutput,
     incrementUnhealthyPacket,
   };
 }

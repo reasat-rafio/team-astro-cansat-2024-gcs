@@ -1,11 +1,14 @@
 <script lang="ts">
   import * as Sheet from '@/components/ui/sheet/index.js';
   import Button from '../ui/button/button.svelte';
-  import { MenuIcon, Trash2Icon } from 'lucide-svelte';
+  import { MenuIcon, Trash2Icon, RefreshCcw } from 'lucide-svelte';
   import Switch from '../ui/switch/switch.svelte';
   import { Label } from '../ui/label';
   import { uiStore } from '@/stores/ui.store';
   import { addLog, clearLogs } from '@/stores/log.store';
+  import outputStore from '@/stores/output.store';
+  import { clearAllSensorData } from '@/stores/sensor.data.store';
+  import { toast } from 'svelte-sonner';
 
   function updateNotification(isChecked: boolean) {
     if (isChecked) {
@@ -37,6 +40,13 @@
         state: 'success',
       });
     }
+  }
+
+  function clearStorage() {
+    outputStore.clearOutput();
+    clearAllSensorData();
+    clearLogs();
+    toast.success('All storage cleared');
   }
 </script>
 
@@ -83,6 +93,14 @@
             class="w-full space-x-2">
             <span>Clear Logs</span>
             <Trash2Icon size={18} />
+          </Button>
+
+          <Button
+            on:click={clearStorage}
+            variant="outline"
+            class="w-full space-x-2">
+            <span>Clear Storage</span>
+            <RefreshCcw size={18} />
           </Button>
         </div>
       </Sheet.Footer>

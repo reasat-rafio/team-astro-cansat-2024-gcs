@@ -28,6 +28,7 @@ function createAltitudeStore() {
 
   return {
     subscribe,
+    update,
     updateAltitude,
   };
 }
@@ -56,6 +57,7 @@ function createAirPressureStore() {
 
   return {
     subscribe,
+    update,
     updateAirPressure,
   };
 }
@@ -83,6 +85,7 @@ function createTemperatureStore() {
 
   return {
     subscribe,
+    update,
     updateTemperature,
   };
 }
@@ -111,6 +114,7 @@ function createAirSpeedStore() {
 
   return {
     subscribe,
+    update,
     updateAirSpeed,
   };
 }
@@ -139,6 +143,7 @@ function createBatteryVoltageStore() {
 
   return {
     subscribe,
+    update,
     updateBatteryVoltage,
   };
 }
@@ -180,6 +185,7 @@ function createGpsCoordinatesStore() {
 
   return {
     subscribe,
+    update,
     updateGpsCoordinates,
   };
 }
@@ -224,6 +230,7 @@ function createGyroscopeStore() {
 
   return {
     subscribe,
+    update,
     updateGyroscope,
   };
 }
@@ -260,8 +267,44 @@ function createTiltAngleStore() {
 
   return {
     subscribe,
+    update,
     updateTiltAngle,
   };
 }
 
 export const tiltAngleStore = createTiltAngleStore();
+
+export function clearAllSensorData() {
+  altitudeStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: [] },
+  }));
+  airPressureStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: [] },
+  }));
+  temperatureStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: [] },
+  }));
+  airSpeedStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: [] },
+  }));
+  batteryVoltageStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: [] },
+  }));
+  gpsCoordinatesStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: { x: [], y: [], z: [] } },
+  }));
+  gyroscopeStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: { x: [], y: [], z: [] } },
+  }));
+  tiltAngleStore.update((store) => ({
+    currentVal: null,
+    history: { time: [], value: { x: [], y: [], z: [] } },
+  }));
+}
