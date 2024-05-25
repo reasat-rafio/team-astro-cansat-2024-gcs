@@ -34,20 +34,40 @@ export const calculatedAltitude = (atmosphericPressure: number) =>
 
 type State = 'notStarted' | 'inProgress' | 'done' | 'error';
 export function determineParentState(childStates: State[]): State {
-  let parentState: State = 'notStarted';
+  let countNotStarted = 0;
+  let countInProgress = 0;
+  let countDone = 0;
+  let countError = 0;
 
   for (const state of childStates) {
-    if (state === 'error') {
-      parentState = 'error';
-      break;
-    } else if (state === 'inProgress') {
-      parentState = 'inProgress';
+    if (state === 'inProgress') {
+      countInProgress++;
     } else if (state === 'done') {
-      parentState = 'done';
+      countDone++;
+    } else if (state === 'error') {
+      countError++;
+    } else if (state === 'notStarted') {
+      countNotStarted++;
     }
   }
 
-  return parentState;
+  if (countInProgress > 0) {
+    return 'inProgress';
+  } else if (
+    countDone > 0 &&
+    countDone + countNotStarted === childStates.length
+  ) {
+    return 'inProgress';
+  } else if (countDone === childStates.length) {
+    return 'done';
+  } else if (countError === childStates.length) {
+    return 'error';
+  } else if (countNotStarted === childStates.length) {
+    return 'notStarted';
+  } else {
+    // Default state if none of the specific conditions are met
+    return 'notStarted';
+  }
 }
 
 export function escapeAngleBrackets(text: string) {

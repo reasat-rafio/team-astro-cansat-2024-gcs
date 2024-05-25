@@ -1,14 +1,13 @@
 <script lang="ts">
-  import ChevronRight from '@/components/icons/ChevronRight.svelte';
   import { fade } from 'svelte/transition';
-
+  import { ChevronRight } from 'lucide-svelte';
   export let formatKey: string;
   export let value: string;
   export let color: 'default' | 'error' = 'default';
 </script>
 
 <li class="flex items-center space-x-3">
-  <ChevronRight color="green" size={18} />
+  <ChevronRight class="stroke-primary" size={20} />
   <span>
     {formatKey}:{' '}
     {#key value}

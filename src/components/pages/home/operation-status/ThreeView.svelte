@@ -2,7 +2,12 @@
   import { slide } from 'svelte/transition';
   import { gsap } from 'gsap';
   import type { SystemStatus } from '@/lib/@types/app.types';
-  import { Check, CircleDashed, CircleSlash, Flame } from 'lucide-svelte';
+  import {
+    Check,
+    CircleDashed,
+    CircleSlash,
+    ChevronRight,
+  } from 'lucide-svelte';
   import { cn } from '@/utils';
 
   type Tree = {
@@ -44,7 +49,7 @@
   {#if children}
     <button
       class={cn(
-        'group flex gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-primary',
+        'group flex items-center gap-x-2 rounded-lg px-5 py-2 pl-[1em] text-left transition-colors duration-300 hover:bg-primary hover:text-white',
         expanded ? '' : '',
       )}
       on:click={toggleExpansion}>
@@ -63,14 +68,28 @@
             stroke-width="3"
             stroke-linecap="round" />
         </svg>
-        <Flame size={18} />
+
+        {#if label?.state === 'done'}
+          <Check color="green" class="group-hover:stroke-white" size={18} />
+        {:else if label?.state === 'inProgress'}
+          <CircleDashed
+            size={18}
+            class="animate-spin group-hover:stroke-white" />
+        {:else if label?.state === 'notStarted'}
+          <ChevronRight
+            stroke-opacity="0"
+            size={20}
+            class="fill-primary group-hover:fill-white" />
+        {:else if label?.state === 'error'}
+          <CircleSlash size={18} color="red" />
+        {/if}
       </span>
-      {label.text}
+      {label?.text}
     </button>
     {#if expanded}
       <div transition:slide>
         {#each children as child}
-          <div class="pl-[1em]" transition:slide>
+          <div class="pl-[1.7em]" transition:slide>
             <svelte:self tree={child} />
           </div>
         {/each}
@@ -78,18 +97,20 @@
     {/if}
   {:else}
     <button
-      class="flex gap-x-2 rounded-lg px-5 py-2 text-left transition-colors duration-300 hover:bg-primary">
-      {#if label.state === 'done'}
-        <Check color="green" size={18} />
-      {:else if label.state === 'inProgress'}
-        <CircleDashed color="yellow" size={18} class="animate-spin" />
-      {:else if label.state === 'notStarted'}
-        <Flame size={18} />
-      {:else if label.state === 'error'}
+      class="group flex items-center gap-x-2 rounded-lg px-5 py-2 text-left transition-colors duration-300 hover:bg-primary hover:text-background">
+      {#if label?.state === 'done'}
+        <Check color="green" class="group-hover:stroke-white" size={18} />
+      {:else if label?.state === 'inProgress'}
+        <CircleDashed class="animate-spin group-hover:stroke-white" size={18} />
+      {:else if label?.state === 'notStarted'}
+        <ChevronRight
+          class="stroke-primary group-hover:stroke-white"
+          size={18} />
+      {:else if label?.state === 'error'}
         <CircleSlash size={18} color="red" />
       {/if}
 
-      {label.text}
+      {label?.text}
     </button>
   {/if}
 </li>

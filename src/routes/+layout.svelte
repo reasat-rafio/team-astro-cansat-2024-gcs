@@ -42,6 +42,7 @@
 
   onMount(() => {
     mqttHandler.client.subscribe('telemetry/data');
+    mqttHandler.client.subscribe('ground_station/commands_response');
   });
 </script>
 

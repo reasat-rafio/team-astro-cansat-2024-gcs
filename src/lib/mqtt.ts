@@ -13,9 +13,13 @@ import outputStore from '@/stores/output.store';
 import { toast } from 'svelte-sonner';
 import { addLog } from '@/stores/log.store';
 import formatTime from './helpers/format-date';
-import { processTelemetryData } from './helpers/telemetry-data';
+import {
+  processResponseData,
+  processTelemetryData,
+} from './helpers/telemetry-data';
 import { get } from 'svelte/store';
 import rowTelemetryStore from '@/stores/row-telemetry';
+import systemStepsStore from '@/stores/system.steps.store';
 
 // MQTT handler
 const createMqttHandler = () => {
@@ -145,6 +149,77 @@ const createMqttHandler = () => {
               z: t.GPS_ALTITUDE,
             },
           });
+
+          break;
+
+        case 'ground_station/commands_response':
+          const response = processResponseData(decoder.decode(message));
+
+          if (!response.isValid) {
+            addLog({
+              value: `Invalid command response received: ${response.data}`,
+              time: new Date(),
+              state: 'error',
+            });
+            break;
+          }
+
+          if (typeof response.data !== 'string') {
+            switch (response.data.command) {
+              case 'SIM/ACTIVATE':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    systemStepsStore.setSimulationEnable('done');
+                    systemStepsStore.setSimulationActivate('done');
+                    break;
+                  case 'FAILED':
+                    systemStepsStore.setSimulationActivate('error');
+                    break;
+                }
+
+                break;
+              case 'SIM/ENABLE':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    systemStepsStore.setSimulationEnable('done');
+                    break;
+                  case 'FAILED':
+                    systemStepsStore.setSimulationEnable('error');
+                    break;
+                }
+
+                break;
+
+              case 'SIM/DISABLE':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    systemStepsStore.setSimulationEnable('notStarted');
+                    break;
+                  case 'FAILED':
+                    systemStepsStore.setSimulationEnable('error');
+                    break;
+                }
+
+                break;
+            }
+
+            switch (response.data.status) {
+              case 'SUCCESS':
+                addLog({
+                  value: `Command response: ${response.data.command} ${response.data.status} ${response.data.message}`,
+                  time: new Date(),
+                  state: 'success',
+                });
+                break;
+              case 'FAILED':
+                addLog({
+                  value: `Command response: ${response.data.command} ${response.data.status} ${response.data.message.toLowerCase()}`,
+                  time: new Date(),
+                  state: 'error',
+                });
+                break;
+            }
+          }
 
           break;
 

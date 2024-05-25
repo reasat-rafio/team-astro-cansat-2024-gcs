@@ -39,6 +39,8 @@ export interface MachineContext {
 
 export interface SystemSteps {
   simulationMode: {
+    simulationEnable: SystemStatus;
+    simulationActivate: SystemStatus;
     gettingPressureDataFromCSV: SystemStatus;
     calculatingAltitudeAndSpeed: SystemStatus;
   };
@@ -332,20 +334,7 @@ export type CSV_HEAD =
 
 export type MqttPayloadTopic =
   | 'telemetry/data'
-  | 'altitude'
-  | 'air_pressure'
-  | 'temperature'
-  | 'battery_voltage'
-  | 'tilt_angle'
-  | 'air_speed'
-  | 'command_echo'
-  | 'gps_coordinates'
-  | 'longitude'
-  | 'satellites_tracked'
-  //
-  | 'acceleration'
-  | 'gyroscope'
-  | 'pressure';
+  | 'ground_station/commands_response';
 
 export type ValidCommand =
   | 'CMD,2043,CX,ON'

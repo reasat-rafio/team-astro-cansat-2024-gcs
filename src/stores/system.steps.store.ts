@@ -4,6 +4,8 @@ import { writable } from 'svelte/store';
 function createSystemSteps() {
   const { subscribe, update } = writable<SystemSteps>({
     simulationMode: {
+      simulationEnable: 'notStarted',
+      simulationActivate: 'notStarted',
       gettingPressureDataFromCSV: 'notStarted',
       calculatingAltitudeAndSpeed: 'notStarted',
     },
@@ -59,13 +61,28 @@ function createSystemSteps() {
     flightEnable: 'notStarted',
   });
 
-  function setImportCsvStatus(importCSV: SystemStatus) {
-    update(($store) => ({ ...$store, importCSV }));
+  function setSimulationEnable(simulationEnable: SystemStatus) {
+    update(($store) => ({
+      ...$store,
+      simulationMode: { ...$store.simulationMode, simulationEnable },
+    }));
   }
+
+  function setSimulationActivate(simulationActivate: SystemStatus) {
+    update(($store) => ({
+      ...$store,
+      simulationMode: { ...$store.simulationMode, simulationActivate },
+    }));
+  }
+   function setImportCsvStatus(importCSV: SystemStatus) {
+     update(($store) => ({ ...$store, importCSV }));
+   }
 
   return {
     subscribe,
     setImportCsvStatus,
+    setSimulationEnable,
+    setSimulationActivate,
   };
 }
 

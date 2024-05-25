@@ -51,9 +51,7 @@ export function isValidTelemetryData(dataParts: string[]): boolean {
 export function parseTelemetryData(dataString: string): TelemetryData | null {
   const dataParts = dataString.trim().split(', ');
 
-  if (!isValidTelemetryData(dataParts)) {
-    return null;
-  }
+  if (!isValidTelemetryData(dataParts)) return null;
 
   const telemetryData: TelemetryData = {
     TEAM_ID: dataParts[0],
@@ -91,5 +89,36 @@ export function processTelemetryData(dataString: string) {
 
   return telemetryData
     ? { isValid: true, data: telemetryData }
+    : { isValid: false, data: dataString };
+}
+
+function isValidResponseData(dataParts: string[]): boolean {
+  if (dataParts.length !== 3) return false;
+
+  const CMD = /^[A-Z_\/]+$/.test(dataParts[0]);
+  const STATUS = /^[A-Z_]+$/.test(dataParts[1]);
+  const MESSAGE = typeof dataParts[2] === 'string';
+
+  return CMD && STATUS && MESSAGE;
+}
+function parseResponseData(dataString: string) {
+  const dataParts = dataString.trim().split(', ');
+
+  if (!isValidResponseData(dataParts)) return null;
+
+  const response = {
+    command: dataParts[0],
+    status: dataParts[1],
+    message: dataParts[2],
+  };
+
+  return response;
+}
+
+export function processResponseData(dataString: string) {
+  const responseData = parseResponseData(dataString);
+
+  return responseData
+    ? { isValid: true, data: responseData }
     : { isValid: false, data: dataString };
 }

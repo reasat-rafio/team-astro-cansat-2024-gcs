@@ -24,16 +24,40 @@
     recoveryMode,
   } = $systemStepsStore);
 
-  let tree: Tree[] = [
+  $: {
+    console.log({
+      a: determineParentState([
+        simulationMode?.simulationEnable,
+        simulationMode?.simulationActivate,
+        simulationMode?.gettingPressureDataFromCSV,
+        simulationMode?.calculatingAltitudeAndSpeed,
+      ]),
+    });
+  }
+  $: tree = [
     {
       label: {
         text: 'Simulation Mode',
         state: determineParentState([
+          simulationMode?.simulationEnable,
+          simulationMode?.simulationActivate,
           simulationMode?.gettingPressureDataFromCSV,
           simulationMode?.calculatingAltitudeAndSpeed,
         ]),
       },
       children: [
+        {
+          label: {
+            text: 'Simulation Enabled',
+            state: simulationMode?.simulationEnable,
+          },
+        },
+        {
+          label: {
+            text: 'Simulation Activate',
+            state: simulationMode?.simulationActivate,
+          },
+        },
         {
           label: {
             text: 'Getting Pressure Data From CSV',
@@ -262,7 +286,7 @@
         { label: { text: 'Telemetry Off', state: recoveryMode?.telemetryOff } },
       ],
     },
-  ];
+  ] as Tree[];
 </script>
 
 <ScrollArea class="h-full w-full p-4">
