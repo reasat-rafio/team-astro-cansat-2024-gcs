@@ -3,7 +3,6 @@ import CMD_2043_CX_ON from './CMD_2043_CX_ON';
 import CMD_2043_SIM_ENABLE from './CMD_2043_SIM_ENABLE';
 import CMD_2043_SIM_DISABLE from './CMD_2043_SIM_DISABLE';
 import CMD_2043_ST_GPS from './CMD_2043_UTC_TIME__GPS';
-import CAL from './CAL';
 
 export {
   CMD_2043_SIM_ACTIVATE,
@@ -11,5 +10,4 @@ export {
   CMD_2043_SIM_ENABLE,
   CMD_2043_SIM_DISABLE,
   CMD_2043_ST_GPS,
-  CAL,
 };

@@ -21,9 +21,9 @@
         },
         formatter: (params: any) => `
           time: ${params[0].name}<br />
-          altitude : ${params[0].value}<br />
-          latitude : ${params[1].value}<br />
-          longitude : ${params[2].value}
+          altitude : ${params[0].value} meters<br />
+          latitude : ${params[1].value}°<br />
+          longitude : ${params[2].value}°
         `,
       },
       legend: {
