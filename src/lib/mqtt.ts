@@ -168,12 +168,27 @@ const createMqttHandler = () => {
           }
 
           if (typeof response.data !== 'string') {
-            console.log(response);
+            const { currentCommand } = get(terminalStore);
 
             switch (response.data.command) {
-              case 'SIM/ACTIVATE':
-                const { currentCommand } = get(terminalStore);
+              case 'CAL':
+                if (!currentCommand) return;
 
+                commandHistoryStore.setCommandHistory({
+                  ...currentCommand,
+                  status: 'success',
+                  output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${response.data.message}</p>`,
+                });
+
+                addLog({
+                  value: `${currentCommand.value} executed successfully. ${response.data.message}`,
+                  time: new Date(),
+                  state: 'success',
+                });
+
+                break;
+
+              case 'SIM/ACTIVATE':
                 switch (response.data.status) {
                   case 'SUCCESS':
                     if (!currentCommand) return;

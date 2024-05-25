@@ -82,6 +82,33 @@ function createOutputStore() {
     });
   }
 
+  function setUnhealthyPacket(data: string) {
+    update((store) => {
+      return {
+        ...store,
+        unhealthyPacket: data,
+      };
+    });
+  }
+
+  function resetMissionTime() {
+    update((store) => {
+      return {
+        ...store,
+        missionTime: '0',
+      };
+    });
+  }
+
+  function resetPacketLoss() {
+    update((store) => {
+      return {
+        ...store,
+        packetLoss: '0',
+      };
+    });
+  }
+
   function updateOutput(
     data: Omit<OutPutStore, 'packetLoss' | 'unhealthyPacket' | 'healthyPacket'>,
   ) {
@@ -97,6 +124,9 @@ function createOutputStore() {
     updateOutput,
     updatePacketLoss,
     updatePacketCount,
+    setUnhealthyPacket,
+    resetPacketLoss,
+    resetMissionTime,
     incrementUnhealthyPacket,
   };
 }
