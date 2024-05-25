@@ -1,34 +1,12 @@
 <script lang="ts">
   import BatteryIcon from '@/components/icons/BatteryIcon.svelte';
-  import H3 from '@/components/ui/H3.svelte';
   import H5 from '@/components/ui/H5.svelte';
   import H6 from '@/components/ui/H6.svelte';
   import Button from '@/components/ui/button/button.svelte';
   import outputStore from '@/stores/output.store';
-  // import gcsStore from '@/stores/gcs.store';
   import { onMount } from 'svelte';
 
   export let batteryLevel = 20;
-  export let CorruptedPackets = 0;
-  export let color: 'primary' | 'secondary' = 'primary';
-
-  let _state = 'idle';
-  let _healthyPackets = '82';
-
-  // let _state = $gcsStore.actorRef.getSnapshot().context.state;
-  // let _healthyPackets =
-  //   $gcsStore.actorRef.getSnapshot().context.sensorData.packetCount;
-
-  // onMount(() => {
-  //   const subscriber = $gcsStore.actorRef.subscribe((state) => {
-  //     if (state.context) {
-  //       _state = state.context.state;
-  //       _healthyPackets = state.context.sensorData.packetCount;
-  //     }
-  //   });
-
-  //   return () => subscriber.unsubscribe();
-  // });
 </script>
 
 <div class="space-y-3">
@@ -57,7 +35,9 @@
 
     <p>
       Healthy Packets : <span class="text-green-600">
-        {$outputStore.healthyPacket}
+        {parseInt($outputStore.packetCount) -
+          (parseInt($outputStore.unhealthyPacket) +
+            parseInt($outputStore.packetLoss))}
       </span>
     </p>
     <p>

@@ -4,7 +4,7 @@ interface OutPutStore {
   teamId: string;
   missionTime: string;
   packetCount: string;
-  healthyPacket: string;
+  // healthyPacket: string;
   unhealthyPacket: string;
   packetLoss: string;
   activeMode: string;
@@ -32,7 +32,7 @@ function createOutputStore() {
     teamId: '2043',
     missionTime: '0',
     packetCount: '0',
-    healthyPacket: '0',
+    // healthyPacket: '0',
     unhealthyPacket: '0',
     packetLoss: '0',
     activeMode: '0',

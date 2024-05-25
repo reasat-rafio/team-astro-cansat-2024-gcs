@@ -18,7 +18,7 @@
 
 <section
   class={cn('flex h-full w-full flex-col space-y-6 pt-5', $$props.class)}>
-  <SectionHeader color="primary" />
+  <SectionHeader />
 
   <div class="grid grid-cols-3 gap-[50px]">
     <Altitude width="100%" height="350px" />
