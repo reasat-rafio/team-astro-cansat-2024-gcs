@@ -1,8 +1,8 @@
 <script lang="ts">
-  import Prompt from './Prompt.svelte';
-  import terminalStore from '@/stores/terminal/terminal.store';
   import commandHistoryStore from '@/stores/command.history.store';
+  import terminalStore from '@/stores/terminal/terminal.store';
   import { uiStore } from '@/stores/ui.store';
+  import Prompt from './Prompt.svelte';
 
   type KEvent = KeyboardEvent & {
     currentTarget: EventTarget & HTMLSpanElement;

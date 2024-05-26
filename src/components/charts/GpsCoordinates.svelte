@@ -1,6 +1,6 @@
 <script lang="ts">
-  import * as echarts from 'echarts';
   import { gpsCoordinatesStore } from '@/stores/sensor.data.store';
+  import * as echarts from 'echarts';
 
   export let width: string = '600px';
   export let height: string = '450px';
