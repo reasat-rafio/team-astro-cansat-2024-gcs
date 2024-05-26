@@ -20,14 +20,25 @@
     return `${hours.toString().padStart(2, '0')}:${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
   }
 
-  $: if ($uiStore.startClock) startStopwatch();
-  else resetStopwatch();
+  $: {
+    if ($uiStore.clockState === 'start') {
+      startStopwatch();
+    } else if ($uiStore.clockState === 'paused') {
+      pauseStopwatch();
+    } else if ($uiStore.clockState === 'reset') {
+      resetStopwatch();
+    }
+  }
 
   function startStopwatch() {
     if (!isRunning) {
       startTime = Date.now() - elapsedTime;
       isRunning = true;
-    } else {
+    }
+  }
+
+  function pauseStopwatch() {
+    if (isRunning) {
       isRunning = false;
       elapsedTime = Date.now() - startTime;
     }

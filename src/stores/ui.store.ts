@@ -4,7 +4,7 @@ interface UIStore {
   navbarHeight: number;
   showNotification: boolean;
   lockLog: boolean;
-  startClock: boolean;
+  clockState: 'paused' | 'start' | 'reset';
   terminalInputEl: HTMLSpanElement | null;
 }
 
@@ -13,7 +13,7 @@ function createUiStore() {
     navbarHeight: 0,
     showNotification: true,
     lockLog: true,
-    startClock: false,
+    clockState: 'paused',
     terminalInputEl: null,
   });
 
@@ -25,12 +25,12 @@ function createUiStore() {
     update((state) => ({ ...state, lockLog: lock }));
   }
 
-  function setStartClock(start: boolean) {
-    update((state) => ({ ...state, startClock: start }));
-  }
-
   function setTerminalInputEl(el: HTMLSpanElement) {
     update((state) => ({ ...state, terminalInputEl: el }));
+  }
+
+  function setClockState(clockState: 'paused' | 'start' | 'reset') {
+    update((state) => ({ ...state, clockState }));
   }
 
   return {
@@ -38,9 +38,9 @@ function createUiStore() {
     update,
     subscribe,
     setLockLog,
-    setStartClock,
     setTerminalInputEl,
     setNavbarHeight,
+    setClockState,
   };
 }
 

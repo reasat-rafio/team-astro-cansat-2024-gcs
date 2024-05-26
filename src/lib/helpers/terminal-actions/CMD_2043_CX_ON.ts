@@ -13,7 +13,7 @@ interface Type {
 export default function CMD_2043_CX_ON({ $state, command }: Type) {
   const successMessage = getSuccessOutput(command.value);
   mqttHandler.client.publish('ground_station/commands', 'CX/ON');
-  uiStore.setStartClock(true);
+  uiStore.setClockState('start');
 
   addLog({
     value: `${command.value} executed successfully. ${successMessage}.`,

@@ -1,7 +1,7 @@
 <script lang="ts">
   import * as Sheet from '@/components/ui/sheet/index.js';
   import Button from '../ui/button/button.svelte';
-  import { MenuIcon, Trash2Icon, RefreshCcw } from 'lucide-svelte';
+  import { MenuIcon, Trash2Icon, RefreshCcw, Clock } from 'lucide-svelte';
   import Switch from '../ui/switch/switch.svelte';
   import { Label } from '../ui/label';
   import { uiStore } from '@/stores/ui.store';
@@ -101,6 +101,13 @@
             class="w-full space-x-2">
             <span>Clear Storage</span>
             <RefreshCcw size={18} />
+          </Button>
+          <Button
+            on:click={() => uiStore.setClockState('reset')}
+            variant="outline"
+            class="w-full space-x-2">
+            <span>Reset Clock</span>
+            <Clock size={18} />
           </Button>
         </div>
       </Sheet.Footer>

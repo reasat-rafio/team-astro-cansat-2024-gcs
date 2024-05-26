@@ -14,6 +14,7 @@ interface Type {
 export default function CMD_2043_CX_OFF({ $state, command }: Type) {
   const successMessage = getSuccessOutput(command.value);
   mqttHandler.client.publish('ground_station/commands', 'CX/OFF');
+  uiStore.setClockState('paused');
 
   addLog({
     value: `${command.value} executed successfully. ${successMessage}.`,
