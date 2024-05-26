@@ -1,12 +1,7 @@
 <script lang="ts">
-  import BatteryIcon from '@/components/icons/BatteryIcon.svelte';
   import H5 from '@/components/ui/H5.svelte';
   import H6 from '@/components/ui/H6.svelte';
-  import Button from '@/components/ui/button/button.svelte';
   import outputStore from '@/stores/output.store';
-  import { onMount } from 'svelte';
-
-  export let batteryLevel = 20;
 </script>
 
 <div class="space-y-3">
@@ -19,11 +14,6 @@
         </H6>
       </span>
     </header>
-
-    <Button variant="outline" class="pointer-events-none space-x-2">
-      <BatteryIcon />
-      <span>{batteryLevel}%</span>
-    </Button>
   </div>
 
   <div class="flex space-x-3">

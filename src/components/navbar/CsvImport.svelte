@@ -29,7 +29,7 @@
 
 <Button
   on:click={() => importCSVEl.click()}
-  class="flex gap-2"
+  class="flex gap-2 "
   variant="outline">
   <span>Import CSV</span>
   <Upload size={18} />
