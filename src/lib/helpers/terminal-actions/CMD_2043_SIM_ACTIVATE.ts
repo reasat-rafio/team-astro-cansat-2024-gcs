@@ -63,13 +63,13 @@ const processLine = (csvData: string[][]) => {
     if (currentIndex !== 0) {
       if (get(uiStore)?.terminalInputEl) {
         const terminalInputEl = get(uiStore)?.terminalInputEl;
-        if (terminalInputEl) {
-          terminalStore.setCurrentCommand({
-            value: `CMD,2043,SIMP,${currentLine[1]}`,
-            time: new Date(),
-          });
-          terminalInputEl.scrollIntoView({ behavior: 'smooth' });
-        }
+
+        terminalInputEl?.scrollIntoView({ behavior: 'smooth' });
+
+        terminalStore.setCurrentCommand({
+          value: `CMD,2043,SIMP,${currentLine[1]}`,
+          time: new Date(),
+        });
       }
     }
 
