@@ -63,7 +63,7 @@ export function parseTelemetryData(dataString: string): TelemetryData | null {
     AIR_SPEED: parseFloat(dataParts[6]),
     HS_DEPLOYED: dataParts[7],
     PC_DEPLOYED: dataParts[8],
-    TEMPERATURE: parseInt(dataParts[9]),
+    TEMPERATURE: parseFloat(dataParts[9]),
     VOLTAGE: parseFloat(dataParts[10]),
     PRESSURE: parseFloat(dataParts[11]),
     GPS_TIME: dataParts[12],

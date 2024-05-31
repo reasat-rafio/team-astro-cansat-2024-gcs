@@ -1,12 +1,12 @@
 import type { CommandHistory } from '@/lib/@types/app.types';
-import { derived, writable } from 'svelte/store';
+import { derived, get, writable } from 'svelte/store';
 
 interface CommandHistoryStore {
   commandHistory: CommandHistory[];
 }
 
 function createCommandHistoryStore() {
-  const { subscribe, update } = writable<CommandHistoryStore>({
+  const { subscribe, update, set } = writable<CommandHistoryStore>({
     commandHistory: [],
   });
 
@@ -44,10 +44,18 @@ function createCommandHistoryStore() {
     });
   }
 
+  function getCommandHistoryById(id: string) {
+    return get(commandHistoryStore).commandHistory.find(
+      (command) => command.id === id,
+    );
+  }
+
   return {
+    set,
     subscribe,
     setCommandHistory,
     clearHistory,
+    getCommandHistoryById,
     updateLastCommandStatus,
     setLatestCommandOutput,
   };

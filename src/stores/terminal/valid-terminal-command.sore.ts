@@ -15,6 +15,14 @@ function createValidTerminalCommandStore() {
   const { set, subscribe, update } = writable<TerminalType[]>([
     {
       id: nanoid(),
+      cmd: 'CMD,2043,ECHO',
+      format: 'CMD,<TEAM_ID>,ECHO',
+      description: 'Echo the command',
+      successMessage: '',
+      state: 'notStarted',
+    },
+    {
+      id: nanoid(),
       cmd: 'CMD,2043,CX,ON',
       format: 'CMD,<TEAM_ID>,CX,<ON_OFF>',
       description: 'Activate container telemetry transmission',

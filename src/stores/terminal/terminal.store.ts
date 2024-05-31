@@ -17,7 +17,7 @@ import CMD_2043_BCN_OFF from '@/lib/helpers/terminal-actions/CMD_2043_BCN_OFF';
 import CMD_2043_CAL from '@/lib/helpers/terminal-actions/CMD_2043_CAL';
 import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_TIME__GPS';
 import { addLog } from '../log.store';
-import mqttHandler from '@/lib/mqtt';
+import CMD_2043_ECHO from '@/lib/helpers/terminal-actions/CMD_2043_ECHO';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
@@ -34,10 +34,6 @@ function createTerminalStore() {
     update(($state) => {
       const { value } = command;
       const commandParts = value.split(',');
-
-      // const isValidId = get(validTerminalCommandStoreStore).some(
-      //   (asd) => asd.id === id,
-      // );
 
       switch (command.value) {
         case 'clear':
@@ -80,6 +76,9 @@ function createTerminalStore() {
       const lastParam = commandParts[3];
 
       switch (commandType) {
+        case 'ECHO':
+          return CMD_2043_ECHO({ $state, command });
+
         case 'CX':
           if (lastParam !== 'ON' && lastParam !== 'OFF') {
             addLog({
