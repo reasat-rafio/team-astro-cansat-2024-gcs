@@ -52,13 +52,16 @@
       </button>
     </div>
   </button>
-  {#if $terminalStore.terminalUiState === 'maximize'}
     <div bind:this={maximizeBlockEl} transition:slide class="backdrop-blur-md">
-      <ScrollArea class="h-[450px] space-y-2 p-2 pb-5 pr-5">
+      <ScrollArea class={cn(" space-y-2 p-2 pb-5 pr-5 transition-all duration-300",
+        {
+          'h-[20px]': $terminalStore.terminalUiState === 'minimize',
+          'h-[450px]': $terminalStore.terminalUiState === 'maximize',
+        }
+      )}>
         <History />
 
         <Input />
       </ScrollArea>
     </div>
-  {/if}
 </aside>

@@ -27,7 +27,7 @@ import {
 // MQTT handler
 const createMqttHandler = () => {
   const mqttClient = mqtt.connect('ws://127.0.0.1:8080');
-  // const mqttClient = mqtt.connect('ws://192.168.152.30:8080');
+  // const mqttClient = mqtt.connect('ws://192.168.43.173:8080');
 
   mqttClient.on('error', (err) => {
     toast.error(`Error: ${err}`);
