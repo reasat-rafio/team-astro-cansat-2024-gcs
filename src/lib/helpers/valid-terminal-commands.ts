@@ -23,6 +23,14 @@ function createValidTerminalCommandStore() {
     },
     {
       id: nanoid(),
+      cmd: 'CMD,2043,RESET',
+      format: 'CMD,<TEAM_ID>,ECHO',
+      description: 'Reset microcontroller memory',
+      successMessage: '',
+      state: 'notStarted',
+    },
+    {
+      id: nanoid(),
       cmd: 'CMD,2043,CX,ON',
       format: 'CMD,<TEAM_ID>,CX,<ON_OFF>',
       description: 'Activate container telemetry transmission',
