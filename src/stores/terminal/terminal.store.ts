@@ -1,8 +1,4 @@
 import type { TerminalCommand, TerminalType } from '@/lib/@types/app.types';
-import { get, writable } from 'svelte/store';
-import commandHistoryStore from '../command.history.store';
-import updateCommandHistory from './helpers/update-command-history';
-import validTerminalCommandStoreStore from './valid-terminal-command.sore';
 import { escapeAngleBrackets } from '@/lib/helpers/helper';
 import {
   CMD_2043_CX_ON,
@@ -10,19 +6,23 @@ import {
   CMD_2043_SIM_DISABLE,
   CMD_2043_SIM_ENABLE,
 } from '@/lib/helpers/terminal-actions';
-import CMD_2043_CX_OFF from '@/lib/helpers/terminal-actions/CMD_2043_CX_OFF';
-import CMD_2043_SIMP_PRESSURE from '@/lib/helpers/terminal-actions/CMD_2043_SIMP_PRESSURE';
-import CMD_2043_BCN_ON from '@/lib/helpers/terminal-actions/CMD_2043_BCN_ON';
 import CMD_2043_BCN_OFF from '@/lib/helpers/terminal-actions/CMD_2043_BCN_OFF';
+import CMD_2043_BCN_ON from '@/lib/helpers/terminal-actions/CMD_2043_BCN_ON';
 import CMD_2043_CAL from '@/lib/helpers/terminal-actions/CMD_2043_CAL';
-import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_TIME__GPS';
-import { addLog } from '../log.store';
+import CMD_2043_CX_OFF from '@/lib/helpers/terminal-actions/CMD_2043_CX_OFF';
 import CMD_2043_ECHO from '@/lib/helpers/terminal-actions/CMD_2043_ECHO';
-import CMD_2043_RESET from '@/lib/helpers/terminal-actions/CMD_2043_RESET';
-import CMD_2043_HS_ON from '@/lib/helpers/terminal-actions/CMD_2043_HS_ON';
 import CMD_2043_HS_OFF from '@/lib/helpers/terminal-actions/CMD_2043_HS_OFF';
-import CMD_2043_PC_ON from '@/lib/helpers/terminal-actions/CMD_2043_PC_ON';
+import CMD_2043_HS_ON from '@/lib/helpers/terminal-actions/CMD_2043_HS_ON';
 import CMD_2043_PC_OFF from '@/lib/helpers/terminal-actions/CMD_2043_PC_OFF';
+import CMD_2043_PC_ON from '@/lib/helpers/terminal-actions/CMD_2043_PC_ON';
+import CMD_2043_RESET from '@/lib/helpers/terminal-actions/CMD_2043_RESET';
+import CMD_2043_SIMP_PRESSURE from '@/lib/helpers/terminal-actions/CMD_2043_SIMP_PRESSURE';
+import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_TIME__GPS';
+import { get, writable } from 'svelte/store';
+import commandHistoryStore from '../command.history.store';
+import { addLog } from '../log.store';
+import updateCommandHistory from './helpers/update-command-history';
+import validTerminalCommandStoreStore from './valid-terminal-command.sore';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({

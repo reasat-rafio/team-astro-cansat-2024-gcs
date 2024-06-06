@@ -112,27 +112,27 @@ const createMqttHandler = () => {
           });
 
           altitudeStore.updateAltitude({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: String(t.ALTITUDE),
           });
 
           airPressureStore.updateAirPressure({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: String(t.PRESSURE),
           });
 
           temperatureStore.updateTemperature({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: String(t.TEMPERATURE),
           });
 
           batteryVoltageStore.updateBatteryVoltage({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: String(t.VOLTAGE),
           });
 
           tiltAngleStore.updateTiltAngle({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: {
               x: String(t.TILT_X),
               y: String(t.TILT_Y),
@@ -141,12 +141,12 @@ const createMqttHandler = () => {
           });
 
           airSpeedStore.updateAirSpeed({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: String(t.AIR_SPEED),
           });
 
           gpsCoordinatesStore.updateGpsCoordinates({
-            time: t.GPS_TIME,
+            time: t.MISSION_TIME,
             value: {
               x: t.GPS_LATITUDE,
               y: t.GPS_LONGITUDE,

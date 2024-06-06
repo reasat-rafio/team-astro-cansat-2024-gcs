@@ -55,7 +55,7 @@ export function parseTelemetryData(dataString: string): TelemetryData | null {
 
   const telemetryData: TelemetryData = {
     TEAM_ID: dataParts[0],
-    MISSION_TIME: parseInt(dataParts[1]),
+    MISSION_TIME: dataParts[1],
     PACKET_COUNT: parseInt(dataParts[2]),
     MODE: dataParts[3],
     STATE: dataParts[4],

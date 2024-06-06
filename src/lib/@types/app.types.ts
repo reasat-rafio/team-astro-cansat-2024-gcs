@@ -351,7 +351,7 @@ export type ValidCommand =
 
 export interface TelemetryData {
   TEAM_ID: string;
-  MISSION_TIME: number;
+  MISSION_TIME: string;
   PACKET_COUNT: number;
   MODE: string;
   STATE: string;
