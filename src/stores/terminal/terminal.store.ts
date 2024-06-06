@@ -19,6 +19,10 @@ import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_
 import { addLog } from '../log.store';
 import CMD_2043_ECHO from '@/lib/helpers/terminal-actions/CMD_2043_ECHO';
 import CMD_2043_RESET from '@/lib/helpers/terminal-actions/CMD_2043_RESET';
+import CMD_2043_HS_ON from '@/lib/helpers/terminal-actions/CMD_2043_HS_ON';
+import CMD_2043_HS_OFF from '@/lib/helpers/terminal-actions/CMD_2043_HS_OFF';
+import CMD_2043_PC_ON from '@/lib/helpers/terminal-actions/CMD_2043_PC_ON';
+import CMD_2043_PC_OFF from '@/lib/helpers/terminal-actions/CMD_2043_PC_OFF';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
@@ -196,6 +200,53 @@ function createTerminalStore() {
               return CMD_2043_BCN_ON({ $state, command });
             case 'OFF':
               return CMD_2043_BCN_OFF({ $state, command });
+          }
+          break;
+          case 'HS': // Added case for heatshield
+          if (lastParam !== 'ON' && lastParam !== 'OFF') {
+            addLog({
+              value: `Invalid command: HS command must be followed by ON or OFF - ${command.value}`,
+              time: command.time,
+              state: 'error',
+            });
+
+            return updateCommandHistory({
+              command,
+              $state,
+              status: 'error',
+              output: `<p class="text-destructive">Invalid command: HS command must be followed by ON or OFF</p>`,
+            });
+          }
+
+          switch (lastParam) {
+            case 'ON':
+              return CMD_2043_HS_ON({ $state, command });
+            case 'OFF':
+              return CMD_2043_HS_OFF({ $state, command });
+          }
+          break;
+
+        case 'PC': // Added case for parachute
+          if (lastParam !== 'ON' && lastParam !== 'OFF') {
+            addLog({
+              value: `Invalid command: PC command must be followed by ON or OFF - ${command.value}`,
+              time: command.time,
+              state: 'error',
+            });
+
+            return updateCommandHistory({
+              command,
+              $state,
+              status: 'error',
+              output: `<p class="text-destructive">Invalid command: PC command must be followed by ON or OFF</p>`,
+            });
+          }
+
+          switch (lastParam) {
+            case 'ON':
+              return CMD_2043_PC_ON({ $state, command });
+            case 'OFF':
+              return CMD_2043_PC_OFF({ $state, command });
           }
           break;
           case "RESET":
