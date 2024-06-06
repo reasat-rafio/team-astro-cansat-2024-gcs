@@ -18,6 +18,7 @@ import CMD_2043_CAL from '@/lib/helpers/terminal-actions/CMD_2043_CAL';
 import CMD_2043_UTC_TIME__GPS from '@/lib/helpers/terminal-actions/CMD_2043_UTC_TIME__GPS';
 import { addLog } from '../log.store';
 import CMD_2043_ECHO from '@/lib/helpers/terminal-actions/CMD_2043_ECHO';
+import CMD_2043_RESET from '@/lib/helpers/terminal-actions/CMD_2043_RESET';
 
 function createTerminalStore() {
   const { subscribe, update } = writable<TerminalType>({
@@ -197,6 +198,9 @@ function createTerminalStore() {
               return CMD_2043_BCN_OFF({ $state, command });
           }
           break;
+          case "RESET":
+              return CMD_2043_RESET({ $state, command })
+             break;
 
         default:
           addLog({

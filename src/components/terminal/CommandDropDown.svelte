@@ -21,10 +21,10 @@
   onSelectedChange={(currCmd) => {
     if (currCmd) selectedCmd = currCmd;
   }}>
-  <Select.Trigger class="w-[300px] ">
+  <Select.Trigger class="w-[300px]">
     <Select.Value placeholder="Commands" />
   </Select.Trigger>
-  <Select.Content>
+  <Select.Content class="max-h-[250px] overflow-auto">
     {#each $validTerminalCommandStoreStore as { cmd, id }}
       <Select.Item class="cursor-pointer" value={{ cmd, id }}>
         {cmd}

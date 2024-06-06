@@ -55,11 +55,11 @@ function createOutputStore() {
     cmdEcho: '0',
   });
 
-  function updatePacketCount(data: string) {
+  function updatePacketCount(packetCount: string) {
     update((store) => {
       return {
         ...store,
-        packetCount: data,
+        packetCount,
       };
     });
   }

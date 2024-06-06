@@ -112,27 +112,27 @@ const createMqttHandler = () => {
           });
 
           altitudeStore.updateAltitude({
-            time,
+            time: t.GPS_TIME,
             value: String(t.ALTITUDE),
           });
 
           airPressureStore.updateAirPressure({
-            time,
+            time: t.GPS_TIME,
             value: String(t.PRESSURE),
           });
 
           temperatureStore.updateTemperature({
-            time,
+            time: t.GPS_TIME,
             value: String(t.TEMPERATURE),
           });
 
           batteryVoltageStore.updateBatteryVoltage({
-            time,
+            time: t.GPS_TIME,
             value: String(t.VOLTAGE),
           });
 
           tiltAngleStore.updateTiltAngle({
-            time,
+            time: t.GPS_TIME,
             value: {
               x: String(t.TILT_X),
               y: String(t.TILT_Y),
@@ -141,12 +141,12 @@ const createMqttHandler = () => {
           });
 
           airSpeedStore.updateAirSpeed({
-            time,
+            time: t.GPS_TIME,
             value: String(t.AIR_SPEED),
           });
 
           gpsCoordinatesStore.updateGpsCoordinates({
-            time,
+            time: t.GPS_TIME,
             value: {
               x: t.GPS_LATITUDE,
               y: t.GPS_LONGITUDE,
@@ -261,7 +261,6 @@ const createMqttHandler = () => {
                     systemStepsStore.setSimulationEnable('error');
                     break;
                 }
-
                 break;
 
               case 'SIM/DISABLE':
@@ -295,6 +294,60 @@ const createMqttHandler = () => {
                 }
 
                 break;
+
+              case "BCN/ON":
+                switch(response.data.status){
+                  
+                  case 'SUCCESS':
+                    const { currentCommand } = get(terminalStore);
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+                  break;
+                case 'FAILED':
+                  break;
+                }
+              case "RESET/ALL":
+                switch(response.data.status){
+                  
+                  case 'SUCCESS':
+                    const { currentCommand } = get(terminalStore);
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    outputStore.updatePacketCount("0");
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+                  break;
+                case 'FAILED':
+                  break;
+                } 
             }
           }
 
