@@ -202,6 +202,7 @@ function createTerminalStore() {
               return CMD_2043_BCN_OFF({ $state, command });
           }
           break;
+         
           case 'HS': // Added case for heatshield
           if (lastParam !== 'ON' && lastParam !== 'OFF') {
             addLog({

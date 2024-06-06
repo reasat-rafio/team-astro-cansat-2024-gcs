@@ -321,6 +321,99 @@ const createMqttHandler = () => {
                 case 'FAILED':
                   break;
                 }
+
+                case 'HS/ON':
+                  switch (response.data.status) {
+                      case 'SUCCESS':
+                          if (!currentCommand) return;
+      
+                          const successMessage = getSuccessOutput(currentCommand.value);
+      
+                          commandHistoryStore.setCommandHistory({
+                              ...currentCommand,
+                              status: 'success',
+                              output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                          });
+      
+                          addLog({
+                              value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                              time: new Date(),
+                              state: 'success',
+                          });
+                          break;
+                      case 'FAILED':
+                          break;
+                  }
+                  break;
+                  case 'HS/OFF':
+                    switch (response.data.status) {
+                        case 'SUCCESS':
+                            if (!currentCommand) return;
+        
+                            const successMessage = getSuccessOutput(currentCommand.value);
+        
+                            commandHistoryStore.setCommandHistory({
+                                ...currentCommand,
+                                status: 'success',
+                                output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                            });
+        
+                            addLog({
+                                value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                                time: new Date(),
+                                state: 'success',
+                            });
+                            break;
+                        case 'FAILED':
+                            break;
+                    }
+                    break;
+                    case 'PC/ON':
+                      switch (response.data.status) {
+                          case 'SUCCESS':
+                              if (!currentCommand) return;
+          
+                              const successMessage = getSuccessOutput(currentCommand.value);
+          
+                              commandHistoryStore.setCommandHistory({
+                                  ...currentCommand,
+                                  status: 'success',
+                                  output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                              });
+          
+                              addLog({
+                                  value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                                  time: new Date(),
+                                  state: 'success',
+                              });
+                              break;
+                          case 'FAILED':
+                              break;
+                      }
+                      break;
+                    case 'PC/OFF':
+                      switch (response.data.status) {
+                          case 'SUCCESS':
+                              if (!currentCommand) return;
+          
+                              const successMessage = getSuccessOutput(currentCommand.value);
+          
+                              commandHistoryStore.setCommandHistory({
+                                  ...currentCommand,
+                                  status: 'success',
+                                  output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                              });
+          
+                              addLog({
+                                  value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                                  time: new Date(),
+                                  state: 'success',
+                              });
+                              break;
+                          case 'FAILED':
+                              break;
+                      }
+                      break;
               case "RESET/ALL":
                 switch(response.data.status){
                   
@@ -348,6 +441,7 @@ const createMqttHandler = () => {
                 case 'FAILED':
                   break;
                 } 
+            
             }
           }
 
