@@ -47,7 +47,7 @@ function createValidTerminalCommandStore() {
     },
     {
       id: nanoid(),
-      cmd: `CMD,2043,ST,<UTC_TIME>|GPS`,
+      cmd: `CMD,2043,ST,GPS`,
       format: 'CMD,<TEAM_ID>,ST,<UTC_TIME>|GPS',
       description: 'Set mission time to 12:00:00',
       successMessage: 'Mission time set to 12:00:00',
@@ -168,20 +168,3 @@ function createValidTerminalCommandStore() {
 
 const validTerminalCommandStoreStore = createValidTerminalCommandStore();
 export default validTerminalCommandStoreStore;
-
-// function currentTime() {
-//   return readable<Date | null>(null, (set) => {
-//     // the update function sets the latest date
-//     const update = () => set(new Date());
-
-//     // force an update to initialize the store with a non-null value
-//     update();
-
-//     // setup an interval timer to update the store's value repeatedly over time
-//     const interval = setInterval(update, 1000);
-
-//     // return unsubscribe callback:
-//     // it will stop the timer when the store is destroyed
-//     return () => clearInterval(interval);
-//   });
-// }
