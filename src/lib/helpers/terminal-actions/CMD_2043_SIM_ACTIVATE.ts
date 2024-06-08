@@ -44,7 +44,7 @@ export default function CMD_2043_SIM_ACTIVATE({ $state, command }: Type) {
 
   // Start processing lines from the CSV file
   const csvData = get(csvStore).rawData;
-  intervalId = setInterval(() => processLine(csvData), 500); // 1 Hz interval
+  intervalId = setInterval(() => processLine(csvData), 1000); // 1 Hz interval
 
   return {
     ...$state,

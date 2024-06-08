@@ -2,7 +2,7 @@
   import { uiStore } from '@/stores/ui.store';
   import CsvImport from './CsvImport.svelte';
   import Button from '@/components/ui/button/button.svelte';
-  import { ScrollTextIcon, Home, Activity, BatteryIcon } from 'lucide-svelte';
+  import { ScrollTextIcon, Home, Activity, BatteryFull } from 'lucide-svelte';
   import ThemeSwitcher from '../ThemeSwitcher.svelte';
   import Sidebar from './Sidebar.svelte';
   import CsvExport from './CsvExport.svelte';
@@ -42,8 +42,8 @@
     <Button
       variant="ghost"
       class="pointer-events-none space-x-2 text-green-600">
-      <BatteryIcon />
-      <span>20%</span>
+      <BatteryFull />
+      <span>90%</span>
     </Button>
     <CsvImport />
     <CsvExport />

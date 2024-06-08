@@ -26,8 +26,8 @@ import {
 
 // MQTT handler
 const createMqttHandler = () => {
-  const mqttClient = mqtt.connect('ws://127.0.0.1:8080');
   // const mqttClient = mqtt.connect('ws://10.42.0.174:8080');
+  const mqttClient = mqtt.connect('ws://127.0.0.1:8080');
 
   mqttClient.on('error', (err) => {
     toast.error(`Error: ${err}`);
@@ -295,9 +295,8 @@ const createMqttHandler = () => {
 
                 break;
 
-              case "BCN/ON":
-                switch(response.data.status){
-                  
+              case 'BCN/ON':
+                switch (response.data.status) {
                   case 'SUCCESS':
                     const { currentCommand } = get(terminalStore);
                     if (!currentCommand) return;
@@ -317,115 +316,20 @@ const createMqttHandler = () => {
                       time: new Date(),
                       state: 'success',
                     });
-                  break;
-                case 'FAILED':
-                  break;
+                    break;
+                  case 'FAILED':
+                    break;
                 }
 
-                case 'HS/ON':
-                  switch (response.data.status) {
-                      case 'SUCCESS':
-                          if (!currentCommand) return;
-      
-                          const successMessage = getSuccessOutput(currentCommand.value);
-      
-                          commandHistoryStore.setCommandHistory({
-                              ...currentCommand,
-                              status: 'success',
-                              output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
-                          });
-      
-                          addLog({
-                              value: `${currentCommand.value} executed successfully. ${successMessage}`,
-                              time: new Date(),
-                              state: 'success',
-                          });
-                          break;
-                      case 'FAILED':
-                          break;
-                  }
-                  break;
-                  case 'HS/OFF':
-                    switch (response.data.status) {
-                        case 'SUCCESS':
-                            if (!currentCommand) return;
-        
-                            const successMessage = getSuccessOutput(currentCommand.value);
-        
-                            commandHistoryStore.setCommandHistory({
-                                ...currentCommand,
-                                status: 'success',
-                                output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
-                            });
-        
-                            addLog({
-                                value: `${currentCommand.value} executed successfully. ${successMessage}`,
-                                time: new Date(),
-                                state: 'success',
-                            });
-                            break;
-                        case 'FAILED':
-                            break;
-                    }
-                    break;
-                    case 'PC/ON':
-                      switch (response.data.status) {
-                          case 'SUCCESS':
-                              if (!currentCommand) return;
-          
-                              const successMessage = getSuccessOutput(currentCommand.value);
-          
-                              commandHistoryStore.setCommandHistory({
-                                  ...currentCommand,
-                                  status: 'success',
-                                  output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
-                              });
-          
-                              addLog({
-                                  value: `${currentCommand.value} executed successfully. ${successMessage}`,
-                                  time: new Date(),
-                                  state: 'success',
-                              });
-                              break;
-                          case 'FAILED':
-                              break;
-                      }
-                      break;
-                    case 'PC/OFF':
-                      switch (response.data.status) {
-                          case 'SUCCESS':
-                              if (!currentCommand) return;
-          
-                              const successMessage = getSuccessOutput(currentCommand.value);
-          
-                              commandHistoryStore.setCommandHistory({
-                                  ...currentCommand,
-                                  status: 'success',
-                                  output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
-                              });
-          
-                              addLog({
-                                  value: `${currentCommand.value} executed successfully. ${successMessage}`,
-                                  time: new Date(),
-                                  state: 'success',
-                              });
-                              break;
-                          case 'FAILED':
-                              break;
-                      }
-                      break;
-              case "RESET/ALL":
-                switch(response.data.status){
-                  
+              case 'HS/ON':
+                switch (response.data.status) {
                   case 'SUCCESS':
-                    const { currentCommand } = get(terminalStore);
                     if (!currentCommand) return;
 
                     const successMessage = getSuccessOutput(
                       currentCommand.value,
                     );
 
-                    outputStore.updatePacketCount("0");
                     commandHistoryStore.setCommandHistory({
                       ...currentCommand,
                       status: 'success',
@@ -437,11 +341,112 @@ const createMqttHandler = () => {
                       time: new Date(),
                       state: 'success',
                     });
-                  break;
-                case 'FAILED':
-                  break;
-                } 
-            
+                    break;
+                  case 'FAILED':
+                    break;
+                }
+                break;
+              case 'HS/OFF':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+                    break;
+                  case 'FAILED':
+                    break;
+                }
+                break;
+              case 'PC/ON':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+                    break;
+                  case 'FAILED':
+                    break;
+                }
+                break;
+              case 'PC/OFF':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+                    break;
+                  case 'FAILED':
+                    break;
+                }
+                break;
+              case 'RESET/ALL':
+                switch (response.data.status) {
+                  case 'SUCCESS':
+                    const { currentCommand } = get(terminalStore);
+                    if (!currentCommand) return;
+
+                    const successMessage = getSuccessOutput(
+                      currentCommand.value,
+                    );
+
+                    outputStore.updatePacketCount('0');
+                    commandHistoryStore.setCommandHistory({
+                      ...currentCommand,
+                      status: 'success',
+                      output: `<p class="text-green-600">${currentCommand.value} executed successfully. ${successMessage}</p>`,
+                    });
+
+                    addLog({
+                      value: `${currentCommand.value} executed successfully. ${successMessage}`,
+                      time: new Date(),
+                      state: 'success',
+                    });
+                    break;
+                  case 'FAILED':
+                    break;
+                }
             }
           }
 
