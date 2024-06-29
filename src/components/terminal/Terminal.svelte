@@ -1,19 +1,21 @@
 <script lang="ts">
-  import type { TerminalActorContext } from '@/lib/@types/app.types';
   import { cn } from '@/lib/cn';
-  import { getContext } from 'svelte';
+  import terminalStore from '@/stores/terminal/terminal.store';
+  import { Maximize, Minus, Terminal } from 'lucide-svelte';
   import { slide } from 'svelte/transition';
-  import ExpendIcon from '../icons/ExpendIcon.svelte';
-  import MinimizeIcon from '../icons/MinimizeIcon.svelte';
-  import TerminalIcon from '../icons/TerminalIcon.svelte';
+  import CommandDropDown from './CommandDropDown.svelte';
   import History from './History.svelte';
   import Input from './Input.svelte';
-  import terminalStore from '@/stores/terminal.store';
+  import commandHistoryStore from '@/stores/command.history.store';
+  import { ScrollArea } from '@/components/ui/scroll-area/index.js';
+  import { uiStore } from '@/stores/ui.store';
 
-  let inputEl: HTMLSpanElement;
-  let activeSuggestedCommand: string | null = null;
+  // let inputEl: HTMLSpanElement;
+  let maximizeBlockEl: HTMLDivElement;
 
-  const { send, snapshot } = $terminalStore;
+  $: if ($commandHistoryStore?.commandHistory?.length && maximizeBlockEl) {
+    maximizeBlockEl.scrollIntoView({ behavior: 'smooth', block: 'end' });
+  }
 </script>
 
 <!-- svelte-ignore a11y-no-noninteractive-element-to-interactive-role -->
@@ -21,32 +23,45 @@
 <aside
   role="button"
   tabindex="0"
-  on:click={() => inputEl.focus()}
+  on:click={() => $uiStore.terminalInputEl?.focus()}
   class={cn(
-    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md transition-all duration-300',
+    'fixed bottom-0 right-0 z-50 w-full overflow-hidden rounded-md border border-primary bg-popover transition-all duration-300',
     {
-      'max-w-xs': $snapshot.matches('minimize'),
-      'max-w-4xl': $snapshot.matches('maximize'),
+      'max-w-xs': $terminalStore.terminalUiState === 'minimize',
+      'max-w-4xl': $terminalStore.terminalUiState === 'maximize',
     },
   )}>
-  <div class="flex justify-between bg-surface-500 p-2">
-    <TerminalIcon />
-    <div class="flex gap-4">
-      <button on:click={() => send({ type: 'MINIMIZE' })}>
-        <MinimizeIcon />
-      </button>
-      <button on:click={() => send({ type: 'MAXIMIZE' })}>
-        <ExpendIcon />
-      </button>
+  <button
+    on:click={() => terminalStore.setUiState('maximize')}
+    class="flex w-full items-center justify-between bg-secondary p-1">
+    <div class="flex items-center gap-2">
+      <Terminal size={20} />
+      {#if $terminalStore.terminalUiState === 'maximize'}
+        <CommandDropDown />
+      {/if}
     </div>
-  </div>
-  {#if $snapshot.matches('maximize')}
-    <div
-      transition:slide
-      class="h-[450px] space-y-2 overflow-y-auto bg-black/40 p-2 backdrop-blur-lg">
-      <History />
 
-      <Input bind:inputEl bind:activeSuggestedCommand />
+    <div class="flex gap-4 text-popover-foreground">
+      <button
+        on:click|stopPropagation={() => terminalStore.setUiState('minimize')}>
+        <Minus size={18} />
+      </button>
+      <button
+        on:click|stopPropagation={() => terminalStore.setUiState('maximize')}>
+        <Maximize size={18} />
+      </button>
     </div>
-  {/if}
+  </button>
+    <div bind:this={maximizeBlockEl} transition:slide class="backdrop-blur-md">
+      <ScrollArea class={cn(" space-y-2 p-2 pb-5 pr-5 transition-all duration-300",
+        {
+          'h-[20px]': $terminalStore.terminalUiState === 'minimize',
+          'h-[450px]': $terminalStore.terminalUiState === 'maximize',
+        }
+      )}>
+        <History />
+
+        <Input />
+      </ScrollArea>
+    </div>
 </aside>

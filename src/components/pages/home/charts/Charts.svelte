@@ -1,25 +1,65 @@
 <script lang="ts">
-  import VisualIcon from '@/components/icons/VisualIcon.svelte';
+  import AirPressure from '@/components/charts/AirPressure.svelte';
+  import AirSpeed from '@/components/charts/AirSpeed.svelte';
+  import Altitude from '@/components/charts/Altitude.svelte';
+  import BatteryVoltage from '@/components/charts/BatteryVoltage.svelte';
+  import GpsCoordinates from '@/components/charts/GpsCoordinates.svelte';
+  import Temperature from '@/components/charts/Temperature.svelte';
+  import TiltAngle from '@/components/charts/TiltAngle.svelte';
+  import { BarChart4 } from 'lucide-svelte';
+  import VirtualList from 'svelte-tiny-virtual-list';
   import Header from '../Header.svelte';
-  import Altitude from '../../visualization/charts/Altitude.svelte';
-  import AirPressure from '../../visualization/charts/AirPressure.svelte';
-  import Temperature from '../../visualization/charts/Temperature.svelte';
-  import AirSpeed from '../../visualization/charts/AirSpeed.svelte';
-  import BatteryVoltage from '../../visualization/charts/BatteryVoltage.svelte';
-  import GpsCoordinates from '../../visualization/charts/GpsCoordinates.svelte';
-  import TiltAngle from '../../visualization/charts/TiltAngle.svelte';
+
+  let headerEl: HTMLDivElement;
+  let innerWidth = 0;
+  let innerHeight = 0;
+  let headerHeight = 0;
+
+  $: if (innerWidth && innerHeight && headerEl) {
+    headerHeight = headerEl.offsetHeight;
+  }
 </script>
 
-<section class="col-span-6 col-start-7 row-span-1 row-start-1 overflow-auto">
-  <Header icon={VisualIcon} title="Charts" />
+<svelte:window bind:innerWidth bind:innerHeight />
 
-  <div class="flex gap-x-4 overflow-auto [&>*]:!w-[500px]">
-    <Altitude />
-    <AirPressure />
-    <Temperature />
-    <AirSpeed />
-    <BatteryVoltage />
-    <GpsCoordinates />
-    <TiltAngle />
+<div class="flex h-full w-full flex-col p-4">
+  <div bind:this={headerEl}>
+    <Header icon={BarChart4} title="Charts" />
   </div>
-</section>
+
+  <VirtualList
+    height="100%"
+    width="100%"
+    scrollDirection="horizontal"
+    itemCount={1}
+    itemSize={600}>
+    <svelte:fragment slot="item">
+      <Altitude />
+      <AirPressure />
+      <Temperature />
+      <AirSpeed />
+      <BatteryVoltage />
+      <GpsCoordinates />
+      <TiltAngle />
+    </svelte:fragment>
+  </VirtualList>
+
+  <!-- <VirtualList
+    width="100%"
+    height={600}
+    scrollDirection="horizontal"
+    itemCount={7}
+    itemSize={450}>
+    <div
+      style="height: calc(100% - {headerHeight}px);"
+      class="mt-5 flex w-full">
+      <Altitude />
+      <AirPressure />
+      <Temperature />
+      <AirSpeed />
+      <BatteryVoltage />
+      <GpsCoordinates />
+      <TiltAngle />
+    </div>
+  </VirtualList> -->
+</div>

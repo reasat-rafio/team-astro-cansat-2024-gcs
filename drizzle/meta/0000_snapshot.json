@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "d809c822-7332-4549-bc6e-867ed4dc79e1",
-  "prevId": "00000000-0000-0000-0000-000000000000",
   "tables": {
     "sensor_data": {
       "name": "sensor_data",
@@ -122,8 +120,9 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "d809c822-7332-4549-bc6e-867ed4dc79e1",
+  "prevId": "00000000-0000-0000-0000-000000000000"
 }

@@ -1,49 +1,32 @@
 <script lang="ts">
   import Navbar from '@/components/navbar/Navbar.svelte';
   import Terminal from '@/components/terminal/Terminal.svelte';
-  import csvProcessingMachine from '@/machines/csv-machine';
-  import gcsMachine from '@/machines/gcs-machine';
-  import terminalMachine from '@/machines/terminal-machine';
-  import csvStore from '@/stores/csv.store';
-  import gcsStore from '@/stores/gcs.store';
-  import terminalStore from '@/stores/terminal.store';
-  import { AppShell } from '@skeletonlabs/skeleton';
-  import { useActor } from '@xstate/svelte';
+  import { Toaster } from '@/components/ui/sonner';
   import { onMount } from 'svelte';
   import '../app.css';
+  import mqttHandler from '@/lib/mqtt';
+  import { uiStore } from '@/stores/ui.store';
 
-  const csvService = useActor(csvProcessingMachine);
-  const gcsService = useActor(gcsMachine, {
-    // snapshot: JSON.parse(
-    //   localStorage?.getItem('gcs_persisted_state') as string,
-    // ),
-  });
-  const terminalService = useActor(terminalMachine, {
-    snapshot: JSON.parse(
-      localStorage?.getItem('terminal_persisted_state') as string,
-    ),
-  });
+  async function detectSWUpdate() {
+    const registration = await navigator.serviceWorker.ready;
 
-  gcsStore.setStore(gcsService);
-  terminalStore.setStore(terminalService);
-  csvStore.setStore(csvService);
+    registration.addEventListener('updatefound', () => {
+      const newSw = registration.installing;
+      newSw?.addEventListener('statechange', () => {
+        if (newSw?.state === 'installed') {
+          if (navigator.serviceWorker.controller) {
+            if (confirm('New version available. Reload to update?')) {
+              newSw.postMessage({ type: 'SKIP_WAITING' });
+              window.location.reload();
+            }
+          }
+        }
+      });
+    });
+  }
 
   onMount(() => {
-    // LOGGER
-    const gcsSub = $gcsStore.actorRef.subscribe((state) => {
-      console.log({ gcs: state });
-    });
-    const terminalSub = $terminalStore.actorRef.subscribe((state) => {
-      console.log({ terminal: state });
-    });
-    const csvSub = $csvStore.actorRef.subscribe((state) => {
-      console.log({ csv: state });
-    });
-    return () => {
-      gcsSub.unsubscribe();
-      terminalSub.unsubscribe();
-      csvSub.unsubscribe();
-    };
+    detectSWUpdate();
   });
 
   onMount(() => {
@@ -58,36 +41,21 @@
   });
 
   onMount(() => {
-    const terminalStoreRef = terminalService.actorRef.subscribe(() => {
-      const persistedState = terminalService.actorRef.getPersistedSnapshot();
-      localStorage.setItem(
-        'terminal_persisted_state',
-        JSON.stringify(persistedState),
-      );
-    });
-    // const gcsStoreRef = gcsService.actorRef.subscribe(() => {
-    //   const persistedState = gcsService.actorRef.getPersistedSnapshot();
-    //   localStorage.setItem(
-    //     'gcs_persisted_state',
-    //     JSON.stringify(persistedState),
-    //   );
-    // });
-
-    return () => {
-      terminalStoreRef.unsubscribe();
-      // gcsStoreRef.unsubscribe();
-    };
+    mqttHandler.client.subscribe('telemetry/data');
+    mqttHandler.client.subscribe('ground_station/commands_response');
   });
 </script>
 
 <svelte:head>
-  <title>CANSAT GCS</title>
-  <html lang="en" />
+  <title>Team Astro</title>
 </svelte:head>
-<AppShell>
-  <svelte:fragment slot="header">
-    <Navbar />
-  </svelte:fragment>
-  <slot />
-  <Terminal />
-</AppShell>
+
+<Toaster
+  class={!$uiStore.showNotification ? 'hidden' : ''}
+  richColors
+  closeButton
+  position="bottom-left" />
+
+<Navbar />
+<slot />
+<Terminal />

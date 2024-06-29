@@ -1,18 +1,40 @@
 <script lang="ts">
   import Charts from '@/components/pages/home/charts/Charts.svelte';
-  import DataGroups from '@/components/pages/home/data-groups/DataGroups.svelte';
+  import Logs from '@/components/pages/home/logs/Logs.svelte';
+  import SystemSteps from '@/components/pages/home/operation-status/OperationStatus .svelte';
   import Outputs from '@/components/pages/home/outputs/Outputs.svelte';
-  import Streams from '@/components/pages/home/streams/Streams.svelte';
-  import SystemSteps from '@/components/pages/home/system-steps/SystemSteps.svelte';
-  import { navbarHeight } from '@/stores/ui.store.';
+  import * as Resizable from '@/components/ui/resizable';
+  import { uiStore } from '@/stores/ui.store';
+
+  let logPlaneSize = 0;
 </script>
 
-<section
-  style="height: calc(100vh - {$navbarHeight}px);"
-  class="grid grid-cols-12 grid-rows-2 gap-5 px-5 py-5">
-  <DataGroups />
-  <Outputs />
-  <SystemSteps />
-  <Streams />
-  <Charts />
+<section style="height: calc(100vh - {$uiStore.navbarHeight}px);">
+  <Resizable.PaneGroup direction="horizontal" class="w-full rounded-lg border">
+    <Resizable.Pane defaultSize={25}>
+      <SystemSteps />
+    </Resizable.Pane>
+    <Resizable.Handle withHandle />
+
+    <Resizable.Pane defaultSize={15}>
+      <Outputs />
+    </Resizable.Pane>
+
+    <Resizable.Handle withHandle />
+    <Resizable.Pane defaultSize={60}>
+      <Resizable.PaneGroup direction="vertical">
+        <Resizable.Pane defaultSize={60}>
+          <Charts />
+        </Resizable.Pane>
+        <Resizable.Handle withHandle />
+        <Resizable.Pane
+          defaultSize={40}
+          onResize={(size) => (logPlaneSize = size)}>
+          {#key logPlaneSize}
+            <Logs />
+          {/key}
+        </Resizable.Pane>
+      </Resizable.PaneGroup>
+    </Resizable.Pane>
+  </Resizable.PaneGroup>
 </section>

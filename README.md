@@ -1,38 +1,48 @@
-# create-svelte
+# Cansat 2024 Ground Control System
 
-Everything you need to build a Svelte project, powered by [`create-svelte`](https://github.com/sveltejs/kit/tree/master/packages/create-svelte).
+The Cansat 2024 Ground Control System is designed to facilitate communication and data exchange with CanSat modules. Developed with SvelteKit, it leverages the power of [`create-svelte`](https://kit.svelte.dev/) for a seamless development experience.
 
-## Creating a project
+## Authors
 
-If you're seeing this, you've probably already done this step. Congrats!
-
-```bash
-# create a new project in the current directory
-npm create svelte@latest
-
-# create a new project in my-app
-npm create svelte@latest my-app
-```
+- Al Reasat Rafio
+- Anika Tabassum Orchi
 
 ## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```bash
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
-```
-
-## Building
-
-To create a production version of your app:
+After setting up the project and installing dependencies with `pnpm install`, you can start the development server using:
 
 ```bash
-npm run build
+pnpm run dev
+
+# Or start the server and open the app in a new browser tab
+pnpm run dev -- --open
+
 ```
 
-You can preview the production build with `npm run preview`.
+## Features
+- Real-time data communication with CanSat modules.
+- Intuitive user interface for monitoring and controlling the CanSat.
+- Data visualization tools for analysis and reporting.
+- PWA
 
-> To deploy your app, you may need to install an [adapter](https://kit.svelte.dev/docs/adapters) for your target environment.
+## Installation
+Ensure you have Node.js installed, then follow these steps:
+
+```bash
+# Clone the repository
+git clone <repository-url>
+
+# Navigate to the project directory
+cd <repository-name>
+
+# Install dependencies
+pnpm install
+```
+
+## Usage
+To use the Cansat 2024 Ground Control System, start the development server:
+
+```bash
+pnpm run dev
+```
+Navigate to `http://localhost:5173` to access the system.
+

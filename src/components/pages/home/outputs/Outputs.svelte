@@ -1,85 +1,50 @@
 <script lang="ts">
-  import ZapIcon from '@/components/icons/ZapIcon.svelte';
-  import gcsStore from '@/stores/gcs.store';
-  import { onMount } from 'svelte';
   import Header from '../Header.svelte';
   import Item from './Item.svelte';
-
-  let _teamId = '';
-  let missionTime = '';
-  let hsDeployed = false;
-  let pcDeployed = false;
-  let packetCount = '';
-  let activeMode = '';
-  let activeState = '';
-  let latestAltitude = '';
-  let temperature = '';
-  let latestTilt = { x: '', y: '' };
-  let latestGps = {
-    time: '',
-    altitude: '',
-    latitude: '',
-    longitude: '',
-    // sats: '',
-  };
-
-  onMount(() => {
-    const subscriber = $gcsStore.actorRef.subscribe(
-      ({ context: { sensorData, mode, state, teamId } }) => {
-        const altitude = sensorData.altitude.values;
-        const tilt = sensorData.tiltAngle.values;
-        const gpsCoords = sensorData.gpsCoordinates.values;
-        const gpsTime = sensorData.gpsTime;
-        const mtime = sensorData.missionTime;
-        const temp = sensorData.temperature.values;
-
-        _teamId = teamId;
-        hsDeployed = sensorData.hSDeployed;
-        pcDeployed = sensorData.pcDeployed;
-        missionTime = mtime[mtime?.length - 1];
-        latestAltitude = altitude[altitude?.length - 1];
-        packetCount = sensorData.packetCount;
-        activeMode = mode;
-        activeState = state;
-        temperature = temp[temp.length - 1];
-        latestTilt = {
-          x: tilt[tilt?.length - 1].x,
-          y: tilt[tilt?.length - 1].y,
-        };
-        latestGps = {
-          time: gpsTime[gpsTime?.length - 1],
-          altitude: gpsCoords[gpsCoords?.length - 1].z,
-          latitude: gpsCoords[gpsCoords?.length - 1].y,
-          longitude: gpsCoords[gpsCoords?.length - 1].x,
-        };
-      },
-    );
-
-    return () => subscriber.unsubscribe();
-  });
+  import { Zap } from 'lucide-svelte';
+  import { ScrollArea } from '@/components/ui/scroll-area/index.js';
+  import outputStore from '@/stores/output.store';
 </script>
 
-<section class="col-span-3 col-start-1 row-start-2 overflow-auto">
-  <Header icon={ZapIcon} title="Outputs" />
+<ScrollArea class="h-full w-full p-4">
+  <Header icon={Zap} title="Outputs" />
 
-  <div class="flex flex-col gap-y-4">
-    <Item formatKey="Team Id" value={_teamId} />
-    <Item formatKey="Mission Time" value={missionTime} />
-    <Item formatKey="Packet Count" value={packetCount} />
-    <Item formatKey="Mode" value={activeMode} />
-    <Item formatKey="State" value={activeState} />
-    <Item formatKey="Altitude" value={latestAltitude} />
-    <Item formatKey="Hs Deployed" value={String(hsDeployed)} />
-    <Item formatKey="Pc Deployed" value={String(pcDeployed)} />
-    <Item formatKey="Mast Raised" value="True" />
-    <Item formatKey="Temperature" value={temperature} />
-    <Item formatKey="Voltage" value="12V" />
-    <Item formatKey="Gps Time" value={latestGps.time} />
-    <Item formatKey="Gps Altitude" value={latestGps.altitude} />
-    <Item formatKey="Gps Latitude" value={latestGps.latitude} />
-    <Item formatKey="Gps Longitude" value={latestGps.longitude} />
-    <Item formatKey="Gps Sats" value="8" />
-    <Item formatKey="Tilt X" value={latestTilt.x} />
-    <Item formatKey="Tilt Y" value={latestTilt.y} />
+  <div class="mt-5 flex flex-col gap-y-4">
+    <Item formatKey="TEAM_ID" value={$outputStore.teamId} />
+    <Item formatKey="MISSION_TIME" value={$outputStore.missionTime} />
+    <Item formatKey="PACKET_COUNT" value={$outputStore.packetCount} />
+    <Item
+      formatKey="HEALTHY_PACKET"
+      value={String(
+        parseInt($outputStore.packetCount) -
+          (parseInt($outputStore.unhealthyPacket) +
+            parseInt($outputStore.packetLoss)),
+      )} />
+    <Item
+      formatKey="UNHEALTHY_PACKET"
+      color="error"
+      value={$outputStore.unhealthyPacket} />
+    <Item
+      formatKey="PACKET_LOSS"
+      color="error"
+      value={$outputStore.packetLoss} />
+    <Item formatKey="MODE" value={$outputStore.activeMode} />
+    <Item formatKey="STATE" value={$outputStore.activeState} />
+    <Item formatKey="ALTITUDE" value={$outputStore.altitude} />
+    <Item formatKey="AIR_SPEED" value={String($outputStore.airSpeed)} />
+    <Item formatKey="HS_DEPLOYED" value={String($outputStore.hsDeployed)} />
+    <Item formatKey="PC_DEPLOYED" value={String($outputStore.pcDeployed)} />
+    <Item formatKey="TEMPERATURE" value={$outputStore.temperature} />
+    <Item formatKey="VOLTAGE" value={$outputStore.voltage} />
+    <Item formatKey="PRESSURE" value={$outputStore.pressure} />
+    <Item formatKey="GPS_TIME" value={$outputStore.gpsTime} />
+    <Item formatKey="GPS_ALTITUDE" value={$outputStore.gpsAltitude} />
+    <Item formatKey="GPS_LATITUDE" value={$outputStore.gpsLatitude} />
+    <Item formatKey="GPS_LONGITUDE" value={$outputStore.gpsLongitude} />
+    <Item formatKey="GPS_SATS" value={$outputStore.gpsStas} />
+    <Item formatKey="TILT_X" value={$outputStore.tiltX} />
+    <Item formatKey="TILT_Y" value={$outputStore.tiltY} />
+    <Item formatKey="ROT_Z" value={$outputStore.rotZ} />
+    <Item formatKey="CMD" value={$outputStore.cmdEcho} />
   </div>
-</section>
+</ScrollArea>

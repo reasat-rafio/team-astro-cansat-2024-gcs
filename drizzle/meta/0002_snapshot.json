@@ -1,8 +1,6 @@
 {
-  "version": "5",
+  "version": "6",
   "dialect": "sqlite",
-  "id": "45070117-18df-46ec-a5e5-9119405c6037",
-  "prevId": "6f708f5e-8fca-45b4-9df3-7a8db7f221dd",
   "tables": {
     "acceleration": {
       "name": "acceleration",
@@ -56,15 +54,15 @@
         "acceleration_operation_id_operation_id_fk": {
           "name": "acceleration_operation_id_operation_id_fk",
           "tableFrom": "acceleration",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -108,15 +106,15 @@
         "air_pressure_operation_id_operation_id_fk": {
           "name": "air_pressure_operation_id_operation_id_fk",
           "tableFrom": "air_pressure",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -160,15 +158,15 @@
         "air_speed_operation_id_operation_id_fk": {
           "name": "air_speed_operation_id_operation_id_fk",
           "tableFrom": "air_speed",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -212,15 +210,15 @@
         "altitude_operation_id_operation_id_fk": {
           "name": "altitude_operation_id_operation_id_fk",
           "tableFrom": "altitude",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -264,15 +262,15 @@
         "battery_voltage_operation_id_operation_id_fk": {
           "name": "battery_voltage_operation_id_operation_id_fk",
           "tableFrom": "battery_voltage",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -316,15 +314,15 @@
         "gps_coordinates_operation_id_operation_id_fk": {
           "name": "gps_coordinates_operation_id_operation_id_fk",
           "tableFrom": "gps_coordinates",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -382,15 +380,15 @@
         "gyroscope_operation_id_operation_id_fk": {
           "name": "gyroscope_operation_id_operation_id_fk",
           "tableFrom": "gyroscope",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -434,15 +432,15 @@
         "longitude_operation_id_operation_id_fk": {
           "name": "longitude_operation_id_operation_id_fk",
           "tableFrom": "longitude",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -509,15 +507,15 @@
         "satellites_tracked_operation_id_operation_id_fk": {
           "name": "satellites_tracked_operation_id_operation_id_fk",
           "tableFrom": "satellites_tracked",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -561,15 +559,15 @@
         "temperature_operation_id_operation_id_fk": {
           "name": "temperature_operation_id_operation_id_fk",
           "tableFrom": "temperature",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -613,15 +611,15 @@
         "tilt_angle_operation_id_operation_id_fk": {
           "name": "tilt_angle_operation_id_operation_id_fk",
           "tableFrom": "tilt_angle",
-          "tableTo": "operation",
           "columnsFrom": [
             "operation_id"
           ],
+          "tableTo": "operation",
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
-          "onUpdate": "no action"
+          "onUpdate": "no action",
+          "onDelete": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -630,8 +628,9 @@
   },
   "enums": {},
   "_meta": {
-    "schemas": {},
     "tables": {},
     "columns": {}
-  }
+  },
+  "id": "45070117-18df-46ec-a5e5-9119405c6037",
+  "prevId": "6f708f5e-8fca-45b4-9df3-7a8db7f221dd"
 }

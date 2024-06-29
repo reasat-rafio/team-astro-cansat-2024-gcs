@@ -1,15 +1,9 @@
-import type csvProcessingMachine from '@/machines/csv-machine';
-import type gcsMachine from '@/machines/gcs-machine';
-import type terminalMachine from '@/machines/terminal-machine';
-import type { Readable } from 'svelte/store';
-import type { ActorRefFrom, EventFrom, SnapshotFrom } from 'xstate';
-
-interface StringArrayData {
+export interface StringArrayData {
   values: string[];
   time: string[];
 }
 
-interface XYZStringArrayData {
+export interface XYZStringArrayData {
   values: { x: string; y: string; z: string }[];
   time: string[];
 }
@@ -33,39 +27,93 @@ export interface XYStringData {
   time: string;
 }
 
-export type Status = 'notStarted' | 'inProgress' | 'done' | 'error';
+export type SystemStatus = 'notStarted' | 'inProgress' | 'done' | 'error';
 export interface MachineContext {
   state: string;
   mode: string;
   output: string;
   teamId: string;
-  steps: {
-    importCSV: Status;
-    telemetryStarted: Status;
-    calibrateTelemetry: Status;
-    currentTimeSetFromGPS: Status;
-    simulationEnable: Status;
-    simulationActivate: Status;
-    flightEnable: Status;
+  steps: SystemSteps;
+  sensorData: SensorData;
+}
+
+export interface SystemSteps {
+  simulationMode: {
+    importCSV: SystemStatus;
+    simulationEnable: SystemStatus;
+    simulationActivate: SystemStatus;
+    gettingPressureDataFromCSV: SystemStatus;
+    calculatingAltitudeAndSpeed: SystemStatus;
   };
-  sensorData: {
-    acceleration: XYZStringArrayData;
-    airPressure: StringArrayData;
-    airSpeed: StringArrayData;
-    altitude: StringArrayData;
-    temperature: StringArrayData;
-    batteryVoltage: StringArrayData;
-    gpsCoordinates: XYZStringArrayData;
-    gpsTime: string[];
-    missionTime: string[];
-    gyroscope: XYZStringArrayData;
-    longitude: StringArrayData;
-    satellitesTracked: StringArrayData;
-    tiltAngle: XYZStringArrayData;
-    packetCount: string;
-    pcDeployed: boolean;
-    hSDeployed: boolean;
+
+  groundMode: {
+    powerOnIdle: SystemStatus;
+    debuggingSystemStarted: SystemStatus;
+    communicationModuleOn: SystemStatus;
   };
+  flightReadyMode: {
+    activateSensorAndSystemCalibrationStart: SystemStatus;
+    telemetryStarted: SystemStatus;
+  };
+  launchMode: {
+    sensorCalibration: SystemStatus;
+    setMissionTime: SystemStatus;
+    launch: SystemStatus;
+  };
+  ascentMode: {
+    ejectionDelay: SystemStatus;
+  };
+
+  cansatDeploymentMode: {
+    tiltCorrection: SystemStatus;
+    heatShieldDeployed: SystemStatus;
+  };
+  arrowBreakingDecentMode: {
+    heatShieldReleasePreparation: SystemStatus;
+    heatShieldReleased: SystemStatus;
+  };
+
+  landingMode: {
+    parachuteDeployment: SystemStatus;
+    bonusCameraStarted: SystemStatus;
+    recoveryPreparation: SystemStatus;
+    landed: SystemStatus;
+  };
+
+  recoveryMode: {
+    recoveryMechanismRunning: SystemStatus;
+    GPSLocationPinning: SystemStatus;
+    audioBuzzerPinning: SystemStatus;
+    deviceFound: SystemStatus;
+    telemetryOff: SystemStatus;
+  };
+
+  importCSV: SystemStatus;
+  telemetryStarted: SystemStatus;
+  calibrateTelemetry: SystemStatus;
+  currentTimeSetFromGPS: SystemStatus;
+  simulationEnable: SystemStatus;
+  simulationActivate: SystemStatus;
+  flightEnable: SystemStatus;
+}
+
+export interface SensorData {
+  acceleration: XYZStringArrayData;
+  airPressure: StringArrayData;
+  airSpeed: StringArrayData;
+  altitude: StringData;
+  temperature: StringArrayData;
+  batteryVoltage: StringArrayData;
+  gpsCoordinates: XYZStringArrayData;
+  gpsTime: string[];
+  missionTime: string[];
+  gyroscope: XYZStringArrayData;
+  longitude: StringArrayData;
+  satellitesTracked: StringArrayData;
+  tiltAngle: XYZStringArrayData;
+  packetCount: string;
+  pcDeployed: boolean;
+  hsDeployed: boolean;
 }
 
 export type UpdateAltitude = {
@@ -139,7 +187,7 @@ export type SetTeamId = {
 
 export type ImportCsv = {
   type: 'IMPORT_CSV';
-  status: Status;
+  status: SystemStatus;
 };
 
 export type MachineEvent =
@@ -205,23 +253,13 @@ export type TerminalEvent =
 export interface Command {
   text: string;
   timestamp: Date;
-  output: string;
+  output?: string;
 }
 
 export interface TerminalContext {
   commandHistory: Command[];
   currentCommand: string;
 }
-
-export type ActorContext<T> = {
-  snapshot: Readable<SnapshotFrom<T>>;
-  send: (event: EventFrom<T>) => void;
-  actorRef: ActorRefFrom<T>;
-};
-
-export type TerminalActorContext = ActorContext<typeof terminalMachine>;
-export type GCSActorContext = ActorContext<typeof gcsMachine>;
-export type CSVActorContext = ActorContext<typeof csvProcessingMachine>;
 
 export interface MissionData {
   TEAM_ID: string;
@@ -246,4 +284,92 @@ export interface MissionData {
   TILT_Y: string;
   ROT_Z: string;
   CMD_ECHO: string;
+}
+
+export type CommandStatus = 'success' | 'error' | 'pending';
+export interface TerminalCommand {
+  id?: string;
+  time: Date;
+  value: string;
+}
+export interface UpdateCommandHistory {
+  $state: TerminalType;
+  command: TerminalCommand;
+  output: string;
+  status: CommandStatus;
+}
+export interface CommandHistory extends TerminalCommand {
+  output: string;
+  status: CommandStatus;
+}
+
+export interface TerminalType {
+  terminalUiState: 'minimize' | 'maximize';
+  currentCommand?: TerminalCommand;
+  previousCommand?: TerminalCommand;
+  currentCommandIdx: null | number;
+}
+export type CSV_HEAD =
+  | 'TEAM_ID'
+  | 'MISSION_TIME'
+  | 'PACKET_COUNT'
+  | 'MODE'
+  | 'STATE'
+  | 'ALTITUDE'
+  | 'AIR_SPEED'
+  | 'HS_DEPLOYED'
+  | 'PC_DEPLOYED'
+  | 'TEMPERATURE'
+  | 'VOLTAGE'
+  | 'PRESSURE'
+  | 'GPS_TIME'
+  | 'GPS_ALTITUDE'
+  | 'GPS_LATITUDE'
+  | 'GPS_LONGITUDE'
+  | 'GPS_SATS'
+  | 'TILT_X'
+  | 'TILT_Y'
+  | 'ROT_Z'
+  | 'CMD_ECHO'
+  | 'ATMOSPHERIC_PRESSURE';
+
+export type MqttPayloadTopic =
+  | 'telemetry/data'
+  | 'ground_station/commands_response';
+
+export type ValidCommand =
+  | 'CMD,2043,CX,ON'
+  | 'CMD,2043,CX,OFF'
+  | 'CMD,2043,ST,<UTC_TIME>|GPS'
+  | 'CAL'
+  | 'CMD,2043,SIM,ENABLE'
+  | 'CMD,2043,SIM,ACTIVATE'
+  | 'CMD,2043,SIM,<~PRESSURE~>'
+  | 'CMD,2043,SIM,DISABLE'
+  | 'help'
+  | 'clear';
+
+export interface TelemetryData {
+  TEAM_ID: string;
+  MISSION_TIME: string;
+  PACKET_COUNT: number;
+  MODE: string;
+  STATE: string;
+  ALTITUDE: number;
+  AIR_SPEED: number;
+  HS_DEPLOYED: string;
+  PC_DEPLOYED: string;
+  TEMPERATURE: number;
+  VOLTAGE: number;
+  PRESSURE: number;
+  GPS_TIME: string;
+  GPS_ALTITUDE: string;
+  GPS_LATITUDE: string;
+  GPS_LONGITUDE: string;
+  GPS_SATS: string;
+  TILT_X: number;
+  TILT_Y: number;
+  ROT_Z: number;
+  CMD_ECHO: string;
+  OPTIONAL_DATA?: string[];
 }
